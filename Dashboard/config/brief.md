@@ -10,7 +10,7 @@ What the numbers showed:
 - **Player Impact (goals).** Best: Kevin Stenlund (+0.84), Lawson Crouse (+0.50), Daniil But (+0.47). Lowest: Sebastian Cossa (-1.74), Dylan Guenther (-0.42), Anders Lee (-0.25).
 - **Process vs. results.** 14 points vs. 14.0 expected from shot quality; expected goals 35.9 for, 25.6 against.
 
-**Where Utah stands:** 7th in the power rankings (likely 2nd-18th), Tier 2, rated +10.0 standings points per 84 games vs. an average team. Projected 106 points (80% range 90-122), 86% playoff odds, previously 82%.
+**Where Utah stands:** 7th in the power rankings (likely 3rd-18th), Tier 2, rated +9.8 standings points per 84 games vs. an average team. Projected 106 points (80% range 90-121), 86% playoff odds, previously 82%.
 
 **What to watch next:** Thursday at Seattle Kraken (Utah 57%); Saturday vs. Tampa Bay Lightning (Utah 57%); Tuesday vs. Minnesota Wild (Utah 57%).
 
