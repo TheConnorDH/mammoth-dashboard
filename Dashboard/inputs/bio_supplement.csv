@@ -27,3 +27,17 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8478911,Matt Roy,D,WSH,1995-03-01,220.0,"6' 2""",USA,R,3,D,NHL API player landing 2026-10-04
 8486025,Viggo Bjorck,C,WPG,2008-03-12,177.0,"5' 9""",SWE,R,61,C,NHL API player landing 2026-10-04
 8486103,Ivar Stenberg,L,SJS,2007-09-30,185.0,"5' 11""",SWE,L,41,L,NHL API player landing 2026-10-04
+8484409,Hoyt Stanley,D,OTT,2005-02-04,212,"6' 3""",CAN,R,73,D,NHL API player landing 2026-10-21
+8484220,David Reinbacher,D,MTL,2004-10-25,207,"6' 3""",AUT,R,64,D,NHL API player landing 2026-10-21
+8482171,William Wallinder,D,DET,2002-07-28,210,"6' 5""",SWE,L,54,D,NHL API player landing 2026-10-21
+8484154,Jonathan Castagna,C,CGY,2005-04-20,183,"6' 1""",CAN,L,38,C,NHL API player landing 2026-10-21
+8486052,Nikita Klepov,R,ANA,2008-06-27,192,"6' 0""",USA,L,40,R,NHL API player landing 2026-10-21
+8483478,Rieger Lorenz,L,MIN,2004-03-30,184,"6' 1""",CAN,L,61,L,NHL API player landing 2026-10-21
+8484148,Oliver Bonk,D,PHI,2005-01-09,180,"6' 2""",CAN,R,59,D,NHL API player landing 2026-10-21
+8484392,Felix Unger Srum,R,CAR,2005-09-14,190,"6' 0""",NOR,R,36,R,NHL API player landing 2026-10-21
+8485400,Roger McQueen,C,ANA,2006-10-02,206,"6' 5""",CAN,R,95,C,NHL API player landing 2026-10-21
+8482121,Dylan Peterson,C,STL,2002-01-08,209,"6' 4""",USA,R,32,C,NHL API player landing 2026-10-21
+8483787,Cole Knuble,R,PHI,2004-07-01,184,"5' 10""",USA,R,54,R,NHL API player landing 2026-10-21
+8484786,Cole Beaudoin,C,NYR,2006-04-24,212,"6' 2""",CAN,L,53,C,NHL API player landing 2026-10-21
+8483760,Hunter McDonald,D,PHI,2002-05-11,238,"6' 4""",USA,L,19,D,NHL API player landing 2026-10-21
+8486189,Vitali Pinchuk,C,NSH,2002-01-11,203,"6' 3""",BLR,L,51,C,NHL API player landing 2026-10-21

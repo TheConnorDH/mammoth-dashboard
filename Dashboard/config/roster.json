@@ -1,6 +1,24 @@
 {
- "source": "ESPN roster supplied by Connor, Oct 3 2026",
+ "source": "NHL API roster, 2026-10-21",
  "players": [
+  {
+   "name": "Daniil But",
+   "pos": "L",
+   "number": 50,
+   "shoots": "R",
+   "height": "6' 5\"",
+   "weight": 203,
+   "playerId": "8484388"
+  },
+  {
+   "name": "Michael Carcone",
+   "pos": "L",
+   "number": 53,
+   "shoots": "L",
+   "height": "5' 9\"",
+   "weight": 182,
+   "playerId": "8479619"
+  },
   {
    "name": "Logan Cooley",
    "pos": "C",
@@ -11,6 +29,24 @@
    "playerId": "8483431"
   },
   {
+   "name": "Lawson Crouse",
+   "pos": "L",
+   "number": 67,
+   "shoots": "L",
+   "height": "6' 4\"",
+   "weight": 214,
+   "playerId": "8478474"
+  },
+  {
+   "name": "Dylan Guenther",
+   "pos": "R",
+   "number": 11,
+   "shoots": "R",
+   "height": "6' 1\"",
+   "weight": 191,
+   "playerId": "8482699"
+  },
+  {
    "name": "Barrett Hayton",
    "pos": "C",
    "number": 27,
@@ -18,6 +54,24 @@
    "height": "6' 1\"",
    "weight": 200,
    "playerId": "8480849"
+  },
+  {
+   "name": "Clayton Keller",
+   "pos": "R",
+   "number": 9,
+   "shoots": "L",
+   "height": "5' 10\"",
+   "weight": 175,
+   "playerId": "8479343"
+  },
+  {
+   "name": "Anders Lee",
+   "pos": "L",
+   "number": 72,
+   "shoots": "L",
+   "height": "6' 3\"",
+   "weight": 234,
+   "playerId": "8475314"
   },
   {
    "name": "Jack McBain",
@@ -65,60 +119,6 @@
    "playerId": "8476389"
   },
   {
-   "name": "Daniil But",
-   "pos": "L",
-   "number": 50,
-   "shoots": "R",
-   "height": "6' 5\"",
-   "weight": 203,
-   "playerId": "8484388"
-  },
-  {
-   "name": "Michael Carcone",
-   "pos": "L",
-   "number": 53,
-   "shoots": "L",
-   "height": "5' 9\"",
-   "weight": 182,
-   "playerId": "8479619"
-  },
-  {
-   "name": "Lawson Crouse",
-   "pos": "L",
-   "number": 67,
-   "shoots": "L",
-   "height": "6' 4\"",
-   "weight": 214,
-   "playerId": "8478474"
-  },
-  {
-   "name": "Anders Lee",
-   "pos": "L",
-   "number": 72,
-   "shoots": "L",
-   "height": "6' 3\"",
-   "weight": 234,
-   "playerId": "8475314"
-  },
-  {
-   "name": "Dylan Guenther",
-   "pos": "R",
-   "number": 11,
-   "shoots": "R",
-   "height": "6' 1\"",
-   "weight": 191,
-   "playerId": "8482699"
-  },
-  {
-   "name": "Clayton Keller",
-   "pos": "R",
-   "number": 9,
-   "shoots": "L",
-   "height": "5' 10\"",
-   "weight": 175,
-   "playerId": "8479343"
-  },
-  {
    "name": "Kailer Yamamoto",
    "pos": "R",
    "number": 56,
@@ -142,7 +142,7 @@
    "number": 10,
    "shoots": "R",
    "height": "6' 6\"",
-   "weight": 196,
+   "weight": 224,
    "playerId": "8483472"
   },
   {

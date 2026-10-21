@@ -1,18 +1,17 @@
-## 5-4 over Pittsburgh: dominated the chances, sweated the finish
+## Utah won 5-4 vs. Pittsburgh Penguins
 
-Utah is 7-3-0 after a 5-4 home win over Pittsburgh, still 1st in the Central and holding 7th in the power rankings. The process was one of Utah's best of the season: 29 shots to 19, about 3.8 to 2.3 in expected goals (3.1 to 1.8 at 5v5), and 16 dangerous shots (10%+ chance) to 6. Replaying every shot by its quality, Utah wins this game about 75% of the time. It was closer than it should have been because Pittsburgh scored twice on the power play and twice more in the third period.
+Utah is 7-3-0, 1st in the Central. Game 10 (Oct 19, home): Utah won 5-4; shots on goal Utah 29, PIT 19. Expected goals Utah 3.8, PIT 2.3 (5v5: Utah 3.1, PIT 1.8); replaying every shot by its quality, Utah wins 75% of the time.
 
 What the numbers showed:
 
-- **Lineup change on defense.** Marino was out; DeSimone played 15:39 alongside Simashev, and Schmidt moved up with Peeke. Forwards were unchanged.
-- **Depth scoring again.** Stenlund (1G 1A), Schmidt (1G 1A), Yamamoto, Keller and Schmaltz (power play) scored. The fourth line (But-Stenlund-McBain) set up or scored two goals.
-- **Cossa started and won, but it wasn't his night.** He allowed four goals on 19 shots, on chances worth about 2.3, roughly 1.7 goals worse than expected. Arturs Silovs allowed five on 29, slightly worse than expected.
-- **Discipline cost two goals.** Pittsburgh's power play scored on both of its full power plays (Karlsson, Rakell).
-- **Top and bottom by Player Impact (Game 10):** Stenlund (+0.84 goals), Crouse (+0.50) and But (+0.47) led. Lowest: Cossa (−1.74), Guenther (−0.42) and Lee (−0.25).
-- **Process vs. results, ten games in:** 14 points against exactly 14.0 expected from shot quality. Utah has 36.0 expected goals for and 25.7 against, back up to 3rd-best per game in the league.
+- **Scoring.** Nick Schmaltz (1G 1A, 1 PPG), Clayton Keller (1G 1A), Kailer Yamamoto (1G 0A), Kevin Stenlund (1G 1A), Nate Schmidt (1G 1A).
+- **In net.** Arturs Silovs (PIT): allowed 5 on 29 shots worth 3.8 expected goals, 1.2 goals worse than expected.
+- **In net.** Sebastian Cossa (UTA): allowed 4 on 19 shots worth 2.3 expected goals, 1.7 goals worse than expected.
+- **Player Impact (goals).** Best: Kevin Stenlund (+0.84), Lawson Crouse (+0.50), Daniil But (+0.47). Lowest: Sebastian Cossa (-1.74), Dylan Guenther (-0.42), Anders Lee (-0.25).
+- **Process vs. results.** 14 points vs. 14.0 expected from shot quality; expected goals 35.9 for, 25.6 against.
 
-**Where Utah stands:** 7th in the power rankings (likely range 3rd-18th), Tier 2, rated +9.8 points per 84 games. Projected 106 points (80% range 90-121), 86% playoff odds, up from 82%.
+**Where Utah stands:** 7th in the power rankings (likely 2nd-18th), Tier 2, rated +10.0 standings points per 84 games vs. an average team. Projected 106 points (80% range 90-122), 86% playoff odds, previously 82%.
 
-**What to watch next:** at Seattle Thursday (Utah about 57%), Tampa Bay at home Saturday (57%; Tampa plays the night before), then Minnesota at home Tuesday (57%), the team just behind Utah in the Central.
+**What to watch next:** Thursday at Seattle Kraken (Utah 57%); Saturday vs. Tampa Bay Lightning (Utah 57%); Tuesday vs. Minnesota Wild (Utah 57%).
 
-*Data note: MoneyPuck files (season, game-by-game and shots) are complete through Oct 19. Standings, projections and odds use the NHL's results through Oct 19.*
+*Data note: MoneyPuck data through Oct 19; NHL results through Oct 20. Brief generated automatically from the numbers on this page.*
