@@ -1,0 +1,86 @@
+{
+ "yoy": {
+  "chances_for_5v5": 0.65,
+  "chances_against_5v5": 0.62,
+  "slot_shots_for_5v5": 0.68,
+  "slot_shots_against_5v5": 0.66,
+  "possession_5v5": 0.67,
+  "pp_chances": 0.57,
+  "pk_chances_against": 0.43,
+  "pp_finishing": 0.15,
+  "penalties_drawn": 0.66,
+  "penalties_taken": 0.71,
+  "finishing": 0.32,
+  "team_saves": 0.26,
+  "faceoffs": 0.57,
+  "hits": 0.67
+ },
+ "split": {
+  "chances_for": 0.6,
+  "chances_against": 0.65,
+  "finishing": -0.07,
+  "team_saves": 0.12,
+  "goal_diff": 0.55,
+  "chance_diff": 0.68
+ },
+ "win_by_xg_share": [
+  [
+   0,
+   0.35,
+   0.182,
+   242
+  ],
+  [
+   0.35,
+   0.4,
+   0.284,
+   275
+  ],
+  [
+   0.4,
+   0.45,
+   0.368,
+   307
+  ],
+  [
+   0.45,
+   0.5,
+   0.437,
+   371
+  ],
+  [
+   0.5,
+   0.55,
+   0.564,
+   367
+  ],
+  [
+   0.55,
+   0.6,
+   0.631,
+   309
+  ],
+  [
+   0.6,
+   0.65,
+   0.718,
+   273
+  ],
+  [
+   0.65,
+   1.0,
+   0.818,
+   242
+  ]
+ ],
+ "xg_winner_wins": 0.668,
+ "n_games": 1312,
+ "gd_on": {
+  "chances_for_5v5": 0.966,
+  "chances_against_5v5": -0.981,
+  "pp_chances": 0.125,
+  "pk_chances_against": -0.112,
+  "faceoffs": -1.098
+ },
+ "note": "yoy = season-to-season team r (2010-26); split = odd/even games within 2025-26; finishing and team saves barely carry over, so they describe the past, not a plan."
+}

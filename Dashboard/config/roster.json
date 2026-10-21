@@ -1,0 +1,231 @@
+{
+ "source": "ESPN roster supplied by Connor, Oct 3 2026",
+ "players": [
+  {
+   "name": "Logan Cooley",
+   "pos": "C",
+   "number": 92,
+   "shoots": "L",
+   "height": "6' 0\"",
+   "weight": 191,
+   "playerId": "8483431"
+  },
+  {
+   "name": "Barrett Hayton",
+   "pos": "C",
+   "number": 27,
+   "shoots": "L",
+   "height": "6' 1\"",
+   "weight": 200,
+   "playerId": "8480849"
+  },
+  {
+   "name": "Jack McBain",
+   "pos": "C",
+   "number": 22,
+   "shoots": "L",
+   "height": "6' 4\"",
+   "weight": 219,
+   "playerId": "8480855"
+  },
+  {
+   "name": "Liam O'Brien",
+   "pos": "C",
+   "number": 38,
+   "shoots": "L",
+   "height": "6' 1\"",
+   "weight": 215,
+   "playerId": "8477070"
+  },
+  {
+   "name": "Nick Schmaltz",
+   "pos": "C",
+   "number": 8,
+   "shoots": "R",
+   "height": "6' 0\"",
+   "weight": 184,
+   "playerId": "8477951"
+  },
+  {
+   "name": "Kevin Stenlund",
+   "pos": "C",
+   "number": 82,
+   "shoots": "R",
+   "height": "6' 3\"",
+   "weight": 213,
+   "playerId": "8478831"
+  },
+  {
+   "name": "Vincent Trocheck",
+   "pos": "C",
+   "number": 16,
+   "shoots": "R",
+   "height": "5' 11\"",
+   "weight": 187,
+   "playerId": "8476389"
+  },
+  {
+   "name": "Daniil But",
+   "pos": "L",
+   "number": 50,
+   "shoots": "R",
+   "height": "6' 5\"",
+   "weight": 203,
+   "playerId": "8484388"
+  },
+  {
+   "name": "Michael Carcone",
+   "pos": "L",
+   "number": 53,
+   "shoots": "L",
+   "height": "5' 9\"",
+   "weight": 182,
+   "playerId": "8479619"
+  },
+  {
+   "name": "Lawson Crouse",
+   "pos": "L",
+   "number": 67,
+   "shoots": "L",
+   "height": "6' 4\"",
+   "weight": 214,
+   "playerId": "8478474"
+  },
+  {
+   "name": "Anders Lee",
+   "pos": "L",
+   "number": 72,
+   "shoots": "L",
+   "height": "6' 3\"",
+   "weight": 234,
+   "playerId": "8475314"
+  },
+  {
+   "name": "Dylan Guenther",
+   "pos": "R",
+   "number": 11,
+   "shoots": "R",
+   "height": "6' 1\"",
+   "weight": 191,
+   "playerId": "8482699"
+  },
+  {
+   "name": "Clayton Keller",
+   "pos": "R",
+   "number": 9,
+   "shoots": "L",
+   "height": "5' 10\"",
+   "weight": 175,
+   "playerId": "8479343"
+  },
+  {
+   "name": "Kailer Yamamoto",
+   "pos": "R",
+   "number": 56,
+   "shoots": "R",
+   "height": "5' 9\"",
+   "weight": 178,
+   "playerId": "8479977"
+  },
+  {
+   "name": "Nick DeSimone",
+   "pos": "D",
+   "number": 57,
+   "shoots": "R",
+   "height": "6' 2\"",
+   "weight": 194,
+   "playerId": "8480084"
+  },
+  {
+   "name": "Maveric Lamoureux",
+   "pos": "D",
+   "number": 10,
+   "shoots": "R",
+   "height": "6' 6\"",
+   "weight": 196,
+   "playerId": "8483472"
+  },
+  {
+   "name": "John Marino",
+   "pos": "D",
+   "number": 6,
+   "shoots": "R",
+   "height": "6' 1\"",
+   "weight": 200,
+   "playerId": "8478507"
+  },
+  {
+   "name": "Andrew Peeke",
+   "pos": "D",
+   "number": 20,
+   "shoots": "R",
+   "height": "6' 3\"",
+   "weight": 214,
+   "playerId": "8479369"
+  },
+  {
+   "name": "Nate Schmidt",
+   "pos": "D",
+   "number": 88,
+   "shoots": "L",
+   "height": "6' 0\"",
+   "weight": 197,
+   "playerId": "8477220"
+  },
+  {
+   "name": "Mikhail Sergachev",
+   "pos": "D",
+   "number": 98,
+   "shoots": "L",
+   "height": "6' 3\"",
+   "weight": 212,
+   "playerId": "8479410"
+  },
+  {
+   "name": "Dmitri Simashev",
+   "pos": "D",
+   "number": 26,
+   "shoots": "L",
+   "height": "6' 4\"",
+   "weight": 198,
+   "playerId": "8484386"
+  },
+  {
+   "name": "MacKenzie Weegar",
+   "pos": "D",
+   "number": 52,
+   "shoots": "R",
+   "height": "6' 0\"",
+   "weight": 206,
+   "playerId": "8477346"
+  },
+  {
+   "name": "Sebastian Cossa",
+   "pos": "G",
+   "number": 33,
+   "shoots": "L",
+   "height": "6' 6\"",
+   "weight": 221,
+   "playerId": "8482657"
+  },
+  {
+   "name": "Karel Vejmelka",
+   "pos": "G",
+   "number": 70,
+   "shoots": "R",
+   "height": "6' 4\"",
+   "weight": 221,
+   "playerId": "8478872"
+  },
+  {
+   "name": "Brandon Tanev",
+   "pos": "L",
+   "number": null,
+   "shoots": null,
+   "height": null,
+   "weight": null,
+   "playerId": "8479293",
+   "status": "Tucson (AHL)"
+  }
+ ]
+}

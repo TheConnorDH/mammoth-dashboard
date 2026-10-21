@@ -1,0 +1,229 @@
+{
+ "features": [
+  "roster_prev",
+  "gd",
+  "xgd",
+  "prevgd"
+ ],
+ "checkpoints": [
+  {
+   "gp": 4.008264462809917,
+   "coef": [
+    -0.05962712814796492,
+    0.45897826170145034,
+    0.04813604589665889,
+    0.09147210017676594,
+    0.3300309432465798
+   ],
+   "true_var": 0.09928001789702781,
+   "coverage_rest": 0.95,
+   "n": 242
+  },
+  {
+   "gp": 13.84,
+   "coef": [
+    -0.033341508129275624,
+    0.3438801490627123,
+    0.17969574514743472,
+    0.18401729683461518,
+    0.30418720341650124
+   ],
+   "true_var": 0.09042261567618981,
+   "coverage_rest": 0.952,
+   "n": 250
+  },
+  {
+   "gp": 27.552,
+   "coef": [
+    -0.02208821434198856,
+    0.2565147330251015,
+    0.32502362879009694,
+    0.2471769342119298,
+    0.24170809567318977
+   ],
+   "true_var": 0.0830514902650824,
+   "coverage_rest": 0.948,
+   "n": 250
+  },
+  {
+   "gp": 44.792,
+   "coef": [
+    -0.02039053959893488,
+    0.2650527502898793,
+    0.4336953676237204,
+    0.23159842405961875,
+    0.1771684758458404
+   ],
+   "true_var": 0.05662998610953343,
+   "coverage_rest": 0.956,
+   "n": 250
+  },
+  {
+   "gp": 60.368,
+   "coef": [
+    -0.027690782939565707,
+    0.39559571877715966,
+    0.5527692066631582,
+    0.05964148900420148,
+    0.16998956159684703
+   ],
+   "true_var": 0.05467720211927518,
+   "coverage_rest": 0.956,
+   "n": 250
+  }
+ ],
+ "sigma2_game": 4.894922497227082,
+ "true_var": [
+  0.09928001789702781,
+  0.09042261567618981,
+  0.0830514902650824,
+  0.05662998610953343,
+  0.05467720211927518
+ ],
+ "coverage_rest_of_season": 0.952,
+ "backtest": {
+  "0": {
+   "gp": 4.0,
+   "n": 242,
+   "r": {
+    "lineup (adopted)": 0.526,
+    "standings GD": 0.203,
+    "xGD": 0.284,
+    "roster (current lineup)": 0.472,
+    "last season GD": 0.572,
+    "GD+xGD": 0.323,
+    "GD+xGD+last season": 0.596,
+    "roster+GD+xGD": 0.497,
+    "FULL: roster+GD+xGD+last season": 0.607,
+    "FULL with prior-only roster": 0.626,
+    "+ two seasons ago": 0.628,
+    "+ recent form (last 10)": 0.626,
+    "+ both": 0.628
+   },
+   "coef": {
+    "icpt": -0.0002,
+    "roster": 0.3039,
+    "gd": 0.035,
+    "xgd": 0.1151,
+    "prevgd": 0.3818
+   },
+   "true_sd": 0.2867
+  },
+  "1": {
+   "gp": 13.8,
+   "n": 250,
+   "r": {
+    "lineup (adopted)": 0.509,
+    "standings GD": 0.439,
+    "xGD": 0.456,
+    "roster (current lineup)": 0.509,
+    "last season GD": 0.568,
+    "GD+xGD": 0.54,
+    "GD+xGD+last season": 0.649,
+    "roster+GD+xGD": 0.594,
+    "FULL: roster+GD+xGD+last season": 0.654,
+    "FULL with prior-only roster": 0.661,
+    "+ two seasons ago": 0.66,
+    "+ recent form (last 10)": 0.661,
+    "+ both": 0.661
+   },
+   "coef": {
+    "icpt": -0.0009,
+    "roster": 0.2587,
+    "gd": 0.1575,
+    "xgd": 0.2136,
+    "prevgd": 0.3361
+   },
+   "true_sd": 0.2555
+  },
+  "2": {
+   "gp": 27.6,
+   "n": 250,
+   "r": {
+    "lineup (adopted)": 0.485,
+    "standings GD": 0.589,
+    "xGD": 0.546,
+    "roster (current lineup)": 0.474,
+    "last season GD": 0.545,
+    "GD+xGD": 0.634,
+    "GD+xGD+last season": 0.68,
+    "roster+GD+xGD": 0.642,
+    "FULL: roster+GD+xGD+last season": 0.679,
+    "FULL with prior-only roster": 0.684,
+    "+ two seasons ago": 0.684,
+    "+ recent form (last 10)": 0.683,
+    "+ both": 0.683
+   },
+   "coef": {
+    "icpt": -0.0024,
+    "roster": 0.0881,
+    "gd": 0.3142,
+    "xgd": 0.2886,
+    "prevgd": 0.2868
+   },
+   "true_sd": 0.2392
+  },
+  "3": {
+   "gp": 44.8,
+   "n": 250,
+   "r": {
+    "lineup (adopted)": 0.498,
+    "standings GD": 0.646,
+    "xGD": 0.575,
+    "roster (current lineup)": 0.541,
+    "last season GD": 0.524,
+    "GD+xGD": 0.668,
+    "GD+xGD+last season": 0.69,
+    "roster+GD+xGD": 0.675,
+    "FULL: roster+GD+xGD+last season": 0.691,
+    "FULL with prior-only roster": 0.693,
+    "+ two seasons ago": 0.691,
+    "+ recent form (last 10)": 0.689,
+    "+ both": 0.687
+   },
+   "coef": {
+    "icpt": -0.0058,
+    "roster": 0.1767,
+    "gd": 0.3918,
+    "xgd": 0.2859,
+    "prevgd": 0.2109
+   },
+   "true_sd": 0.1469
+  },
+  "4": {
+   "gp": 60.4,
+   "n": 250,
+   "r": {
+    "lineup (adopted)": 0.526,
+    "standings GD": 0.621,
+    "xGD": 0.5,
+    "roster (current lineup)": 0.549,
+    "last season GD": 0.498,
+    "GD+xGD": 0.624,
+    "GD+xGD+last season": 0.643,
+    "roster+GD+xGD": 0.635,
+    "FULL: roster+GD+xGD+last season": 0.647,
+    "FULL with prior-only roster": 0.65,
+    "+ two seasons ago": 0.651,
+    "+ recent form (last 10)": 0.639,
+    "+ both": 0.639
+   },
+   "coef": {
+    "icpt": -0.0165,
+    "roster": 0.3472,
+    "gd": 0.4556,
+    "xgd": 0.1501,
+    "prevgd": 0.22
+   },
+   "true_sd": 0.001
+  }
+ },
+ "_note": "8 seasons (2015-16..2018-19, 2021-22..2024-25), 5 in-season checkpoints. Coefficients: weighted least squares on all seasons; correlations and coverage: leave-one-season-out. true_var = out-of-sample residual variance minus game-to-game noise (empirical single-game GD variance / games remaining).",
+ "sim_sd_mult": [
+  1.6,
+  1.03,
+  1.0,
+  0.97,
+  1.0
+ ]
+}

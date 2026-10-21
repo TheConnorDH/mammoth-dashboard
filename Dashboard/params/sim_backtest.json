@@ -1,0 +1,37 @@
+{
+ "0": {
+  "rmse_model": 14.01,
+  "rmse_pace": 41.26,
+  "rmse_avg_rest": 15.27,
+  "coverage95": 0.955,
+  "n": 242
+ },
+ "1": {
+  "rmse_model": 10.84,
+  "rmse_pace": 18.36,
+  "rmse_avg_rest": 13.95,
+  "coverage95": 0.948,
+  "n": 250
+ },
+ "2": {
+  "rmse_model": 9.13,
+  "rmse_pace": 11.32,
+  "rmse_avg_rest": 12.0,
+  "coverage95": 0.948,
+  "n": 250
+ },
+ "3": {
+  "rmse_model": 6.74,
+  "rmse_pace": 7.25,
+  "rmse_avg_rest": 8.91,
+  "coverage95": 0.952,
+  "n": 250
+ },
+ "4": {
+  "rmse_model": 4.54,
+  "rmse_pace": 4.74,
+  "rmse_avg_rest": 5.95,
+  "coverage95": 0.964,
+  "n": 250
+ }
+}

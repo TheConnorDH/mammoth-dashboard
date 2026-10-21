@@ -1,0 +1,256 @@
+{
+ "F": {
+  "a": 46.32098205180118,
+  "c": 0.00133615071802326,
+  "cov_season": 0.948,
+  "cov_talent": 0.933,
+  "by_minutes": {
+   "150-400": [
+    499,
+    0.944,
+    0.926
+   ],
+   "400-800": [
+    1184,
+    0.951,
+    0.938
+   ],
+   "800-5000": [
+    64,
+    0.922,
+    0.891
+   ]
+  },
+  "n": 1747,
+  "old": {
+   "n": 1747,
+   "season_interval_coverage": 0.971,
+   "z_sd": 0.89,
+   "talent_interval_coverage": 0.957,
+   "zt_sd": 0.954,
+   "by_minutes": {
+    "150-400": [
+     499,
+     0.968,
+     0.95
+    ],
+    "400-800": [
+     1184,
+     0.975,
+     0.962
+    ],
+    "800-5000": [
+     64,
+     0.938,
+     0.922
+    ]
+   }
+  },
+  "crossfit": {
+   "n": 1747,
+   "cov_season": 0.95,
+   "cov_talent": 0.941,
+   "n_heavy": 306,
+   "cov_season_heavy": 0.938,
+   "cov_talent_heavy": 0.915
+  },
+  "talent_mult": 1.49,
+  "prior_w": 0.5,
+  "prior_w_test": {
+   "0.0": [
+    0.5972,
+    0.3832
+   ],
+   "0.25": [
+    0.6386,
+    0.3694
+   ],
+   "0.5": [
+    0.6464,
+    0.3645
+   ],
+   "0.75": [
+    0.6441,
+    0.3634
+   ],
+   "1.0": [
+    0.6389,
+    0.364
+   ],
+   "1.25": [
+    0.6333,
+    0.3654
+   ]
+  }
+ },
+ "D": {
+  "a": 18.51459424896007,
+  "c": 0.0016821502424017752,
+  "cov_season": 0.952,
+  "cov_talent": 0.937,
+  "by_minutes": {
+   "150-400": [
+    235,
+    0.957,
+    0.928
+   ],
+   "400-800": [
+    497,
+    0.956,
+    0.944
+   ],
+   "800-5000": [
+    234,
+    0.94,
+    0.932
+   ]
+  },
+  "n": 966,
+  "old": {
+   "n": 966,
+   "season_interval_coverage": 0.969,
+   "z_sd": 0.921,
+   "talent_interval_coverage": 0.953,
+   "zt_sd": 0.984,
+   "by_minutes": {
+    "150-400": [
+     235,
+     0.974,
+     0.953
+    ],
+    "400-800": [
+     497,
+     0.974,
+     0.962
+    ],
+    "800-5000": [
+     234,
+     0.953,
+     0.936
+    ]
+   }
+  },
+  "crossfit": {
+   "n": 966,
+   "cov_season": 0.952,
+   "cov_talent": 0.948,
+   "n_heavy": 386,
+   "cov_season_heavy": 0.953,
+   "cov_talent_heavy": 0.943
+  },
+  "talent_mult": 1.38,
+  "prior_w": 0.5,
+  "prior_w_test": {
+   "0.0": [
+    0.5564,
+    0.2212
+   ],
+   "0.25": [
+    0.5923,
+    0.2153
+   ],
+   "0.5": [
+    0.5989,
+    0.213
+   ],
+   "0.75": [
+    0.5964,
+    0.2124
+   ],
+   "1.0": [
+    0.5912,
+    0.2126
+   ],
+   "1.25": [
+    0.5855,
+    0.2131
+   ]
+  }
+ },
+ "G": {
+  "a": 140.0707451496488,
+  "c": 0.024363285410696777,
+  "cov_season": 0.965,
+  "cov_talent": 0.943,
+  "by_minutes": {
+   "150-400": [
+    48,
+    1.0,
+    0.938
+   ],
+   "400-800": [
+    96,
+    0.969,
+    0.927
+   ],
+   "800-5000": [
+    172,
+    0.953,
+    0.953
+   ]
+  },
+  "n": 316,
+  "old": {
+   "n": 316,
+   "season_interval_coverage": 0.978,
+   "z_sd": 0.91,
+   "talent_interval_coverage": 0.943,
+   "zt_sd": 0.976,
+   "by_minutes": {
+    "150-400": [
+     48,
+     1.0,
+     0.958
+    ],
+    "400-800": [
+     96,
+     0.979,
+     0.948
+    ],
+    "800-5000": [
+     172,
+     0.971,
+     0.936
+    ]
+   }
+  },
+  "crossfit": {
+   "n": 316,
+   "cov_season": 0.968,
+   "cov_talent": 0.965,
+   "n_heavy": 200,
+   "cov_season_heavy": 0.96,
+   "cov_talent_heavy": 0.975
+  },
+  "talent_mult": 1.15,
+  "prior_w": 0.25,
+  "prior_w_test": {
+   "0.0": [
+    0.2129,
+    0.4504
+   ],
+   "0.25": [
+    0.2238,
+    0.4493
+   ],
+   "0.5": [
+    0.2176,
+    0.4488
+   ],
+   "0.75": [
+    0.2057,
+    0.4487
+   ],
+   "1.0": [
+    0.1935,
+    0.4488
+   ],
+   "1.25": [
+    0.1827,
+    0.4492
+   ]
+  }
+ },
+ "_note": "a, c fitted on split halves (odd/even games) of 2021-22..2024-25 (team-average relative baseline). crossfit = coverage of the shipped intervals with a, c fitted on two seasons and tested on the other two. c is extra variation the a/minutes formula misses.",
+ "_note2": "talent intervals recalibrated for 3-season pooling (config/talent_weights.json); prior_w is legacy (unused when talent_weights.json exists)."
+}

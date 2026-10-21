@@ -1,0 +1,9 @@
+{
+ "games": 1312,
+ "b2b_team_games": 430,
+ "win_logit_per_rest_edge": 0.307,
+ "win_se": 0.13,
+ "win_pct_points_at_50": 7.6,
+ "xg_share_per_rest_edge": 0.0223,
+ "xg_se": 0.0063
+}

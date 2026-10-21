@@ -1,0 +1,126 @@
+{
+ "comp": {
+  "F": {
+   "ev": {
+    "r": 0.597,
+    "T": 826,
+    "k": 557,
+    "var_true": 0.11619486312806168,
+    "newcomer": -0.1776007340739207,
+    "n": 5731
+   },
+   "pp": {
+    "r": 0.334,
+    "T": 153,
+    "k": 305,
+    "var_true": 0.1451396260548866,
+    "newcomer": -0.32322305697979736,
+    "n": 3749
+   },
+   "pk": {
+    "r": 0.091,
+    "T": 108,
+    "k": 1075,
+    "var_true": 0.002494880986095385,
+    "newcomer": 0.0165912941209414,
+    "n": 2517
+   },
+   "pf": {
+    "r": 0.485,
+    "T": 1016,
+    "k": 1080,
+    "var_true": 0.0027097277241564252,
+    "newcomer": -0.003946459132226959,
+    "n": 5876
+   }
+  },
+  "D": {
+   "ev": {
+    "r": 0.514,
+    "T": 1010,
+    "k": 955,
+    "var_true": 0.024979094561536783,
+    "newcomer": -0.0323852685230621,
+    "n": 3203
+   },
+   "pp": {
+    "r": 0.246,
+    "T": 148,
+    "k": 456,
+    "var_true": 0.09009665946451939,
+    "newcomer": -0.14390771677341002,
+    "n": 1404
+   },
+   "pk": {
+    "r": 0.006,
+    "T": 133,
+    "k": 1000000,
+    "var_true": 3.245760257658787e-06,
+    "newcomer": 0.00585982916582697,
+    "n": 2304
+   },
+   "pf": {
+    "r": 0.488,
+    "T": 1218,
+    "k": 1277,
+    "var_true": 0.001491407286872866,
+    "newcomer": 0.005104153301038911,
+    "n": 3278
+   }
+  }
+ },
+ "standard": {
+  "F": {
+   "m5": 12.460154383669762,
+   "mpp": 1.4914495843167601,
+   "mpk": 0.7745825936310539,
+   "mall": 15.300097575217045
+  },
+  "D": {
+   "m5": 16.434845498723806,
+   "mpp": 0.8565908745882629,
+   "mpk": 1.5349558436508304,
+   "mall": 19.49688258731256
+  },
+  "G": {
+   "games": 51.7,
+   "mall": 60.0
+  }
+ },
+ "validation": {
+  "all": {
+   "old": [
+    0.6613,
+    0.2539,
+    8622
+   ],
+   "new": [
+    0.6533,
+    0.2563,
+    8622
+   ]
+  },
+  "pp_role_changed": {
+   "old": [
+    0.4696,
+    0.2821,
+    1428
+   ],
+   "new": [
+    0.4514,
+    0.2848,
+    1428
+   ]
+  }
+ },
+ "role_test": {
+  "ev_rate_change_per_extra_min": {
+   "F": 0.0955,
+   "D": 0.0203
+  },
+  "adopted": false,
+  "why": "Rates rise, not fall, when a player's minutes rise (coaches give minutes to players who are playing well), so a 'harder minutes' penalty can't be identified from this data; no role adjustment is applied."
+ },
+ "components_adopted": false,
+ "components_why": "Separate 5v5/PP/PK/penalty talent re-weighted to next season's role predicted next-season Impact per 60 at r 0.6533 vs 0.6613 for the single all-situations rate (players whose power-play role changed: 0.4514 vs 0.4696). Adopted only if clearly better."
+}

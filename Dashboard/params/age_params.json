@@ -1,0 +1,83 @@
+{
+ "F": {
+  "oos": {
+   "base": [
+    0.6492,
+    0.4534
+   ],
+   "age": [
+    0.6579,
+    0.4489
+   ]
+  },
+  "coef": [
+   -0.00598959574046591,
+   0.6747868633629187,
+   -0.01675163608393341,
+   0.00043596584767191526
+  ],
+  "n": 6326
+ },
+ "D": {
+  "oos": {
+   "base": [
+    0.5799,
+    0.2688
+   ],
+   "age": [
+    0.5873,
+    0.267
+   ]
+  },
+  "coef": [
+   -0.006080754771253005,
+   0.5978878754891435,
+   -0.00864922178368116,
+   0.00025993807480917397
+  ],
+  "n": 3545
+ },
+ "G": {
+  "oos": {
+   "base": [
+    0.133,
+    0.3558
+   ],
+   "age": [
+    0.1766,
+    0.3534
+   ]
+  },
+  "coef": [
+   0.013240150718941333,
+   0.18238578165807925,
+   0.0004145095510990765,
+   -0.0014385814417450238
+  ],
+  "n": 1088
+ },
+ "_decision": {
+  "adopted": true,
+  "age_scale": 1.0,
+  "scope": "individual player talent only (rankings, league ranks, value vs. contract); NOT team strength (power rankings, roster strength)",
+  "why": "In-season player test (8 seasons x 5 checkpoints, leave-one-season-out), on top of the 3-season talent with experience prior: forwards r .634 -> .645, defensemen .621 -> .625, with young players improving ~0.02/60 per year below 27 and older forwards declining ~0.016/60 per year above 27. A player's OWN trend over past seasons added nothing (coef ~0). At the team level, every aging curve made roster/power predictions worse (selection: veterans still on rosters are the good ones), so team strength uses talent without the age adjustment."
+ },
+ "inseason": {
+  "F": [
+   -0.0158,
+   -0.0002
+  ]
+ },
+ "curve": {
+  "F": {
+   "peak": 27,
+   "up": 0.0203,
+   "down": 0.0164
+  },
+  "D": {
+   "peak": 27,
+   "up": 0.011,
+   "down": 0.0037
+  }
+ }
+}

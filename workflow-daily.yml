@@ -1,0 +1,82 @@
+name: Daily dashboard update
+
+on:
+  schedule:
+    - cron: "45 11 * * *"   # early attempt: 5:45 am MDT / 4:45 am MST
+    - cron: "0 14 * * *"    # final attempt: 8:00 am MDT / 7:00 am MST (publishes with whatever is available)
+  workflow_dispatch:         # "Run workflow" button for a manual update
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      status: ${{ steps.run.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install numpy
+
+      # big, unchanging inputs (last season + 2008-2024 history + the model's history cache): downloaded once, then reused
+      - uses: actions/cache@v4
+        with:
+          path: |
+            Source Data
+            Dashboard/inputs/history/moneypuck
+            ~/.mammoth_cache
+          key: mammoth-history-v1-${{ hashFiles('Dashboard/calibration/fit_impact.py') }}
+
+      - id: skip
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 14 * * *" ] && git log -1 --format=%s | grep -q "Daily update $(date -u +%F)"; then
+            echo "Already published this morning; nothing to do."; echo "status=skipped" >> "$GITHUB_OUTPUT"
+          fi
+
+      - id: run
+        if: steps.skip.outputs.status != 'skipped'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          FLAG=""
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ github.event.schedule }}" = "0 14 * * *" ]; then FLAG="--final-attempt"; fi
+          python automation/daily.py $FLAG
+
+      - if: steps.run.outputs.status == 'published'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Save state (box scores, lineup, brief, roster, trend history)
+        if: steps.run.outputs.status == 'published'
+        continue-on-error: true
+        run: |
+          git config user.name "mammoth-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Dashboard/config Dashboard/inputs/nhl Dashboard/inputs/bio_supplement.csv Dashboard/history/snapshots.json Dashboard/history/last_run.json
+          git diff --cached --quiet || git commit -m "Daily update $(date -u +%F)"
+          git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" || true
+          git push
+
+  deploy:
+    needs: update
+    if: needs.update.outputs.status == 'published'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

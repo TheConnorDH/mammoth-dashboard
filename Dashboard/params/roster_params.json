@@ -1,0 +1,31 @@
+{
+ "n_team_seasons": 486,
+ "r_roster_talent": 0.561,
+ "r_roster_talent_projected_minutes": 0.562,
+ "r_prior_season_gd": 0.548,
+ "slope": 1.066,
+ "newcomer60": {
+  "F": -0.15908030389891878,
+  "D": -0.03820550741689541,
+  "G": -0.15064002795159298
+ },
+ "resid_sd": 36.5,
+ "r_combined": 0.61,
+ "dashboard_def": {
+  "r": 0.596,
+  "r_baseline": 0.548,
+  "r_both": 0.634,
+  "slope": 1.083,
+  "icpt": -15.6,
+  "n": 486,
+  "r_F": 0.561,
+  "r_D": 0.324,
+  "r_G": 0.255,
+  "resid_sd": 35.4,
+  "newcomer_tpg": {
+   "F": 12.457786031853225,
+   "D": 16.87065324975257,
+   "G": 53.6832364009579
+  }
+ }
+}

@@ -1,0 +1,67 @@
+{
+ "n": 2988,
+ "games": 83,
+ "k_fin": 20,
+ "k_xg_hours": 6,
+ "brier": 0.11817,
+ "brier_base": 0.12486,
+ "brier_no_opp_no_fin": 0.11865,
+ "mean_pred": 0.1481,
+ "mean_obs": 0.1463,
+ "calibration_deciles": [
+  [
+   0.048,
+   0.027,
+   299
+  ],
+  [
+   0.064,
+   0.043,
+   299
+  ],
+  [
+   0.08,
+   0.097,
+   299
+  ],
+  [
+   0.096,
+   0.117,
+   298
+  ],
+  [
+   0.115,
+   0.114,
+   299
+  ],
+  [
+   0.139,
+   0.14,
+   299
+  ],
+  [
+   0.168,
+   0.198,
+   298
+  ],
+  [
+   0.201,
+   0.204,
+   299
+  ],
+  [
+   0.245,
+   0.204,
+   299
+  ],
+  [
+   0.325,
+   0.318,
+   299
+  ]
+ ],
+ "top10pct_pred": 0.325,
+ "top10pct_obs": 0.318,
+ "lg_rate60": 0.6311,
+ "note": "Prior-season data only for rates; TOI = last season per game blended with this season as 10 games; opponent factor = last season xGA per game / league."
+}

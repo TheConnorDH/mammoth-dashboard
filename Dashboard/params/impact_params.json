@@ -1,0 +1,270 @@
+{
+ "weights": {
+  "5on5|off|F": {
+   "rel_xgf": 0.22012947196651433,
+   "rel_cf": 0.02890864722089098,
+   "ixg": 0.14694447224076926,
+   "fin": 0.3022883298753757,
+   "a1": 0.33374073239126156,
+   "a2": 0.18154036787812083,
+   "tk": 0.05280634713050369
+  },
+  "5on5|off|D": {
+   "rel_xgf": 0.1383068773418003,
+   "rel_cf": 0.016039025745420796,
+   "ixg": 0.3437946574606964,
+   "fin": 0.10474100102772872,
+   "a1": 0.14804403780263006,
+   "a2": 0.09562710352999723,
+   "tk": 0.03699570160996949
+  },
+  "5on5|def|F": {
+   "rel_xga": 0.2305953394132969,
+   "rel_ca": 0.0042261197572394365,
+   "tk": 0.015658925337579597,
+   "gv": 0.03315099439083424,
+   "dzgv": 0.017802416017008767,
+   "blk": -0.04047009429200231
+  },
+  "5on5|def|D": {
+   "rel_xga": 0.1441592743970111,
+   "rel_ca": 0.011271561030508678,
+   "tk": 0.0040049511992812994,
+   "gv": -0.01148837813910329,
+   "dzgv": 0.014023187980343878,
+   "blk": -0.011327048979805522
+  },
+  "5on4|off|F": {
+   "rel_xgf": 0.3045871284588883,
+   "ixg": 0.11451255331996428,
+   "fin": 0.09609505189415554,
+   "a1": 0.09971485490664196,
+   "a2": 0.10364611293867246
+  },
+  "5on4|off|D": {
+   "rel_xgf": 0.2526268959800762,
+   "ixg": 0.05696418106652658,
+   "fin": 0.01775030165611405,
+   "a1": 0.11118904881075867,
+   "a2": 0.10541524626155643
+  },
+  "4on5|def|F": {
+   "rel_xga": 0.09833736322983086
+  },
+  "4on5|def|D": {
+   "rel_xga": 0.013920123644583327
+  }
+ },
+ "report": {
+  "5on5|off|F": {
+   "n": 6862,
+   "r_oos": 0.598,
+   "r_relxg_only": 0.509
+  },
+  "5on5|off|D": {
+   "n": 3842,
+   "r_oos": 0.36,
+   "r_relxg_only": 0.294
+  },
+  "5on5|def|F": {
+   "n": 6862,
+   "r_oos": 0.224,
+   "r_relxg_only": 0.192
+  },
+  "5on5|def|D": {
+   "n": 3842,
+   "r_oos": 0.187,
+   "r_relxg_only": 0.176
+  },
+  "5on4|off|F": {
+   "n": 4500,
+   "r_oos": 0.317,
+   "r_relxg_only": 0.295
+  },
+  "5on4|off|D": {
+   "n": 1716,
+   "r_oos": 0.242,
+   "r_relxg_only": 0.227
+  },
+  "4on5|def|F": {
+   "n": 3205,
+   "r_oos": 0.071,
+   "r_relxg_only": 0.071
+  },
+  "4on5|def|D": {
+   "n": 2818,
+   "r_oos": -0.025,
+   "r_relxg_only": -0.025
+  }
+ },
+ "zs": {
+  "F": {
+   "rel_xgf": 0.0079,
+   "rel_cf": 0.1736
+  },
+  "D": {
+   "rel_xgf": 0.0038,
+   "rel_cf": 0.1696
+  }
+ },
+ "rel_teamavg": true,
+ "pen_w": 1.0,
+ "fo_w": 1.0,
+ "goalie_w": 1.0,
+ "scale": {
+  "F": 1.623,
+  "D": 1.843
+ },
+ "reliability": {
+  "F": {
+   "r_yoy": 0.633,
+   "k_min": 634,
+   "var_true60": 0.0935807821601684,
+   "T": 1094,
+   "n": 5084
+  },
+  "D": {
+   "r_yoy": 0.576,
+   "k_min": 961,
+   "var_true60": 0.02377934339948278,
+   "T": 1308,
+   "n": 2896
+  },
+  "G": {
+   "r_yoy": 0.171,
+   "k_min": 10272,
+   "var_true60": 0.018439797153079286,
+   "T": 2116,
+   "n": 947
+  }
+ },
+ "box": {
+  "F": {
+   "w": {
+    "g": 0.2879,
+    "a1": 0.3506,
+    "a2": 0.2785,
+    "sog": 0.0251,
+    "hits": -0.0049,
+    "blk": 0.049,
+    "gv": -0.0005,
+    "tk": 0.0399,
+    "pm": 0.1033,
+    "pd": 0.1852,
+    "pt": -0.2009
+   },
+   "mean": {
+    "g": 0.8854837896325702,
+    "a1": 0.7112456862773764,
+    "a2": 0.4884311700979376,
+    "sog": 7.197905776590399,
+    "hits": 4.7620161797805975,
+    "blk": 1.9734297177900715,
+    "gv": 2.083943646326253,
+    "tk": 1.4113053329278478,
+    "pm": 0.025142695550288786,
+    "pd": 0.7935614732540685,
+    "pt": 0.7117635584823256
+   },
+   "r2": 0.716
+  },
+  "D": {
+   "w": {
+    "g": 0.1892,
+    "a1": 0.2437,
+    "a2": 0.209,
+    "sog": 0.0241,
+    "hits": -0.0048,
+    "blk": 0.0086,
+    "gv": 0.0054,
+    "tk": 0.078,
+    "pm": 0.0597,
+    "pd": 0.1894,
+    "pt": -0.1659
+   },
+   "mean": {
+    "g": 0.23294185771896692,
+    "a1": 0.39717884189305946,
+    "a2": 0.44564352317340666,
+    "sog": 4.274113815418296,
+    "hits": 3.8248773587068072,
+    "blk": 4.479669535280329,
+    "gv": 2.295126022642867,
+    "tk": 0.9869389214273009,
+    "pm": -0.00367277650559468,
+    "pd": 0.42189024033831063,
+    "pt": 0.6797830254050675
+   },
+   "r2": 0.653
+  }
+ },
+ "validation": {
+  "impact": {
+   "all": 0.415,
+   "F": 0.445,
+   "D": 0.309
+  },
+  "old_gaa": {
+   "all": 0.288,
+   "F": 0.299,
+   "D": 0.24
+  },
+  "points60": {
+   "all": 0.401,
+   "F": 0.441,
+   "D": 0.273
+  },
+  "n": 9901
+ },
+ "drivers": {
+  "defense": 4.0,
+  "faceoffs": 0.1,
+  "finishing": 9.8,
+  "penalties": 6.5,
+  "play_driving": 48.7,
+  "playmaking": 26.0,
+  "puck_battles": -0.3,
+  "shot_creation": 5.3
+ },
+ "seasons": [
+  "2008",
+  "2009",
+  "2010",
+  "2011",
+  "2012",
+  "2013",
+  "2014",
+  "2015",
+  "2016",
+  "2017",
+  "2018",
+  "2019",
+  "2020",
+  "2021",
+  "2022",
+  "2023",
+  "2024",
+  "2025"
+ ],
+ "log": [
+  "zone-start adjustment per net OZ start: {'F': {'rel_xgf': 0.0079, 'rel_cf': 0.1736}, 'D': {'rel_xgf': 0.0038, 'rel_cf': 0.1696}}",
+  "skater weights (target: on-ice goal differential relative to team in the season before and after):",
+  "  5on5|off|F: n=6862 out-of-sample r=0.598 (rel xG alone 0.509) weights rel_xgf +0.220, rel_cf +0.029, ixg +0.147, fin +0.302, a1 +0.334, a2 +0.182, tk +0.053",
+  "  5on5|off|D: n=3842 out-of-sample r=0.360 (rel xG alone 0.294) weights rel_xgf +0.138, rel_cf +0.016, ixg +0.344, fin +0.105, a1 +0.148, a2 +0.096, tk +0.037",
+  "  5on5|def|F: n=6862 out-of-sample r=0.224 (rel xG alone 0.192) weights rel_xga +0.231, rel_ca +0.004, tk +0.016, gv +0.033, dzgv +0.018, blk -0.040",
+  "  5on5|def|D: n=3842 out-of-sample r=0.187 (rel xG alone 0.176) weights rel_xga +0.144, rel_ca +0.011, tk +0.004, gv -0.011, dzgv +0.014, blk -0.011",
+  "  5on4|off|F: n=4500 out-of-sample r=0.317 (rel xG alone 0.295) weights rel_xgf +0.305, ixg +0.115, fin +0.096, a1 +0.100, a2 +0.104",
+  "  5on4|off|D: n=1716 out-of-sample r=0.242 (rel xG alone 0.227) weights rel_xgf +0.253, ixg +0.057, fin +0.018, a1 +0.111, a2 +0.105",
+  "  4on5|def|F: n=3205 out-of-sample r=0.071 (rel xG alone 0.071) weights rel_xga +0.098",
+  "  4on5|def|D: n=2818 out-of-sample r=-0.025 (rel xG alone -0.025) weights rel_xga +0.014",
+  "descriptive scale F: 1/0.616 (year-to-year r at ~1094 min, n=5084)",
+  "descriptive scale D: 1/0.543 (year-to-year r at ~1308 min, n=2896)",
+  "reliability F: r=0.633 at ~1094 min -> half-signal at 634 min; true spread sd 0.306 per 60 (n=5084)",
+  "reliability D: r=0.576 at ~1308 min -> half-signal at 961 min; true spread sd 0.154 per 60 (n=2896)",
+  "reliability G: r=0.171 at ~2116 min -> half-signal at 10272 min; true spread sd 0.136 per 60 (n=947)",
+  "out-of-sample r vs. relative on-ice goal differential in other seasons: {'impact': {'all': 0.415, 'F': 0.445, 'D': 0.309}, 'old_gaa': {'all': 0.288, 'F': 0.299, 'D': 0.24}, 'points60': {'all': 0.401, 'F': 0.441, 'D': 0.273}, 'n': 9901}",
+  "share of player-to-player differences by input (2025): {'defense': 4.0, 'faceoffs': 0.1, 'finishing': 9.8, 'penalties': 6.5, 'play_driving': 48.7, 'playmaking': 26.0, 'puck_battles': -0.3, 'shot_creation': 5.3}",
+  "box-score approximation F: R^2 vs. full Impact 0.72; weights g +0.288, a1 +0.351, a2 +0.279, sog +0.025, hits -0.005, blk +0.049, gv -0.001, tk +0.040, pm +0.103, pd +0.185, pt -0.201",
+  "box-score approximation D: R^2 vs. full Impact 0.65; weights g +0.189, a1 +0.244, a2 +0.209, sog +0.024, hits -0.005, blk +0.009, gv +0.005, tk +0.078, pm +0.060, pd +0.189, pt -0.166"
+ ]
+}

@@ -1,0 +1,8 @@
+{
+ "points_per_goal": 0.3228,
+ "r": 0.967,
+ "n_team_seasons": 222,
+ "seasons": 7,
+ "impact_goal_slope": 1.036,
+ "_note": "impact_goal_slope: summed same-season team Impact vs actual goal differential, 18 seasons (r 0.781). points_per_goal: standings points per goal of differential, 7 seasons."
+}

@@ -1,0 +1,98 @@
+{
+  "as_of": "Game 10 (Oct 19 vs PIT)",
+  "source": "Box scores; lines from MoneyPuck 5v5 ice time. Game 10: DeSimone in for Marino on defense; forwards unchanged since Game 6. Vejmelka started Games 1, 3, 4, 6-9; Cossa Games 2, 5, 10.",
+  "staff": {
+    "forwards": [
+      [
+        "Crouse",
+        "Schmaltz",
+        "Keller"
+      ],
+      [
+        "Cooley",
+        "Trocheck",
+        "Guenther"
+      ],
+      [
+        "Lee",
+        "Hayton",
+        "Yamamoto"
+      ],
+      [
+        "But",
+        "Stenlund",
+        "McBain"
+      ]
+    ],
+    "defense": [
+      [
+        "Sergachev",
+        "Weegar"
+      ],
+      [
+        "Schmidt",
+        "Peeke"
+      ],
+      [
+        "Simashev",
+        "DeSimone"
+      ]
+    ],
+    "goalie": "Vejmelka (Games 1, 3, 4, 6-9); Cossa (Games 2, 5, 10)",
+    "scratches": [
+      "Carcone",
+      "O'Brien",
+      "Marino (out)"
+    ]
+  },
+  "connor": {
+    "forwards": [
+      [
+        "But",
+        "Schmaltz",
+        "Keller"
+      ],
+      [
+        "Lee",
+        "Cooley",
+        "Guenther"
+      ],
+      [
+        "Crouse",
+        "Trocheck",
+        "Hayton"
+      ],
+      [
+        "Carcone",
+        "McBain",
+        "Yamamoto"
+      ]
+    ],
+    "defense": [
+      [
+        "Schmidt",
+        "Marino"
+      ],
+      [
+        "Sergachev",
+        "Weegar"
+      ],
+      [
+        "Simashev",
+        "Peeke"
+      ]
+    ],
+    "goalie": "Vejmelka",
+    "scratches": [
+      "Stenlund",
+      "O'Brien"
+    ]
+  },
+  "differences": [
+    "Line 1 wing: But (staff: Trocheck)",
+    "Trocheck at center on line 3 instead of the wing",
+    "Stenlund scratched, Yamamoto dressed",
+    "Schmidt-Marino as the matchup pair",
+    "One net-front per power-play unit: Lee on PP1, But on PP2"
+  ]
+}

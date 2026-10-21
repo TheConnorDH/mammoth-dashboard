@@ -1,0 +1,66 @@
+{
+ "F": {
+  "w": [
+   0.7,
+   0.4,
+   0.3
+  ],
+  "kscale": 0.5
+ },
+ "D": {
+  "w": [
+   0.6,
+   0.4,
+   0.4
+  ],
+  "kscale": 0.4
+ },
+ "G": {
+  "w": [
+   0.4,
+   0.4,
+   0.2
+  ],
+  "kscale": 0.4
+ },
+ "validation": {
+  "F": {
+   "old_r": 0.603,
+   "new_r_loso": 0.628,
+   "old_rmse": 0.365,
+   "new_rmse_loso": 0.352,
+   "old_slope": 1.3,
+   "new_slope_loso": 1.01
+  },
+  "D": {
+   "old_r": 0.589,
+   "new_r_loso": 0.618,
+   "old_rmse": 0.198,
+   "new_rmse_loso": 0.188,
+   "old_slope": 1.4,
+   "new_slope_loso": 1.04
+  },
+  "G": {
+   "old_r": 0.21,
+   "new_r_loso": 0.218,
+   "old_rmse": 0.395,
+   "new_rmse_loso": 0.391,
+   "old_slope": 2.16,
+   "new_slope_loso": 1.0
+  }
+ },
+ "_note": "Weights on the three previous seasons' minutes (current season = 1) and a multiplier on the shrinkage constant. Chosen in two stages on an in-season backtest (validation/tw_opt2.py; 8 seasons x 5 checkpoints, predicting each player's rest-of-season Impact per 60): season weights by correlation (monotone: last >= two ago >= three ago), then shrinkage by error so estimate levels are calibrated (slope ~1). Validation numbers are leave-one-season-out vs. the previous scheme (this season + last at half weight; goalies a quarter). Extra weight on the most recent games: no gain (F +.0006, D and G worse), not used.",
+ "prior_model": {
+  "F": {
+   "a": -0.2,
+   "b": 0.15,
+   "c": 0.0
+  },
+  "D": {
+   "a": -0.106,
+   "b": 0.0795,
+   "c": 0.0
+  }
+ },
+ "prior_model_note": "Experience-based prior (per 60): players with little previous NHL ice time are pulled toward a below-average level, veterans toward average: prior = a + b*ln(1 + weighted previous minutes/1000). Chosen to improve both the survivor-free team test (roster r .561 -> .586) and the player test (F r .630 -> .632, RMSE .351 -> .349; D neutral). An age term was tested in the prior and hurt the player test; not used. Goalies keep the plain newcomer prior."
+}

@@ -1,0 +1,6 @@
+{"note": "calibration/experiments/consensus_test.py: predict next-season on-ice goal differential relative to team (5v5), targets 2020-21..2025-26, 500+ min. Talent = model talent as of season start (prior seasons only). Points = prior two seasons' points/60 at 5v5 (1, 0.5).",
+ "F": {"n": 2029, "r_talent": 0.385, "r_points": 0.328, "top15_r_talent": 0.389, "top15_r_points": 0.185},
+ "D": {"n": 1105, "r_talent": 0.343, "r_points": 0.245, "top15_r_talent": 0.293, "top15_r_points": 0.113},
+ "all_situations": {"F": {"r_talent": 0.596, "r_points": 0.663}, "D": {"r_talent": 0.565, "r_points": 0.624}, "why": "power-play deployment persists and inflates both points and all-situation on-ice goals"},
+ "finishing": {"top_decile_retained_5v5": 0.42, "all_slope_5v5": 0.426, "decision": "elite finishers regress like everyone else; no change to finishing shrinkage"},
+ "decision": "no change: the model predicts real 5v5 goal impact better than a points view, most of all for top scorers"}
