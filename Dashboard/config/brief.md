@@ -14,4 +14,4 @@ What the numbers showed:
 
 **What to watch next:** Thursday at Seattle Kraken (Utah 57%); Saturday vs. Tampa Bay Lightning (Utah 57%); Tuesday vs. Minnesota Wild (Utah 57%).
 
-*Data note: MoneyPuck data through Oct 19; NHL results through Oct 20. Brief generated automatically from the numbers on this page.*
+*Data note: MoneyPuck data through Oct 19; NHL results through Oct 21. Brief generated automatically from the numbers on this page.*
