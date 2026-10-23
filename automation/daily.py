@@ -77,7 +77,7 @@ def main():
     d = build()
     a = brief_auto.run()
     summary(f"- Brief: {a['used']}" + (f" (checks: {a['attempts']})" if a.get("attempts") else "") + (f" error: {a['error']}" if a.get("error") else ""))
-    if a["used"] != "claude" and os.environ.get("ANTHROPIC_API_KEY"):
+    if a["used"] != "claude" and (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_FEDERATION_RULE_ID")):
         summary("- **Warning:** the Claude-written brief wasn't used today (see above); the page has the template brief.")
     d = build()
     bad = [c for c in d["checks"] if not c["ok"]]

@@ -2,7 +2,7 @@
 2) Ask Claude to write the brief from the packet only. 3) Check every number in the draft against the packet;
 one retry with the problems listed; otherwise fall back to a plain template brief built from the same packet.
 Writes config/brief.md and output/brief_audit.json."""
-import json, os, re, glob, datetime as dt, urllib.request
+import json, os, re, glob, datetime as dt, urllib.request, urllib.error
 from common import P, TEAM, log, write_text, write_json
 
 MODEL = os.environ.get("BRIEF_MODEL", "claude-sonnet-5-5")
@@ -153,16 +153,41 @@ def verify(draft, packet):
     return sorted(set(probs))
 
 
-def call_claude(packet, feedback=None):
+def _auth_headers():
+    """Workload Identity Federation (preferred: no stored key; GitHub's short-lived OIDC token is exchanged for a
+    short-lived Anthropic token) when ANTHROPIC_FEDERATION_RULE_ID is set; otherwise an ANTHROPIC_API_KEY."""
+    rule = os.environ.get("ANTHROPIC_FEDERATION_RULE_ID")
+    if rule:
+        req_url, req_tok = os.environ.get("ACTIONS_ID_TOKEN_REQUEST_URL"), os.environ.get("ACTIONS_ID_TOKEN_REQUEST_TOKEN")
+        if not req_url or not req_tok:
+            raise RuntimeError("federation set up but no GitHub OIDC token (workflow needs permissions: id-token: write)")
+        r = urllib.request.Request(req_url + "&audience=https://api.anthropic.com", headers={"Authorization": "Bearer " + req_tok})
+        with urllib.request.urlopen(r, timeout=30) as f:
+            jwt = json.loads(f.read())["value"]
+        body = {"grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer", "assertion": jwt, "federation_rule_id": rule,
+                "organization_id": os.environ.get("ANTHROPIC_ORGANIZATION_ID"), "service_account_id": os.environ.get("ANTHROPIC_SERVICE_ACCOUNT_ID")}
+        if os.environ.get("ANTHROPIC_WORKSPACE_ID"): body["workspace_id"] = os.environ["ANTHROPIC_WORKSPACE_ID"]
+        r = urllib.request.Request("https://api.anthropic.com/v1/oauth/token", data=json.dumps(body).encode(), method="POST",
+                                   headers={"content-type": "application/json"})
+        try:
+            with urllib.request.urlopen(r, timeout=30) as f:
+                tok = json.loads(f.read())["access_token"]
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"federation token exchange failed ({e.code}); see Console > Workload identity > history")
+        return {"authorization": "Bearer " + tok}
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
-        raise RuntimeError("no ANTHROPIC_API_KEY")
+        raise RuntimeError("no Claude credentials (federation variables or ANTHROPIC_API_KEY)")
+    return {"x-api-key": key}
+
+
+def call_claude(packet, feedback=None):
     msgs = [{"role": "user", "content": "Facts packet:\n```json\n" + json.dumps(packet, indent=1, ensure_ascii=False) + "\n```\nWrite today's brief."}]
     if feedback:
         msgs += [{"role": "assistant", "content": feedback[0]}, {"role": "user", "content": "Fix these problems and rewrite the whole brief: " + "; ".join(feedback[1])}]
     body = json.dumps({"model": MODEL, "max_tokens": 1500, "temperature": 0.2, "system": SYSTEM, "messages": msgs}).encode()
     req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=body, method="POST",
-                                 headers={"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"})
+                                 headers={**_auth_headers(), "anthropic-version": "2023-06-01", "content-type": "application/json"})
     with urllib.request.urlopen(req, timeout=180) as r:
         j = json.loads(r.read())
     return "".join(c.get("text", "") for c in j.get("content", []) if c.get("type") == "text").strip()
