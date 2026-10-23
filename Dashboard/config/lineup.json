@@ -1,17 +1,12 @@
 {
-  "as_of": "Game 10 (Oct 19 vs PIT)",
+  "as_of": "Game 11 (Oct 22 @ SEA)",
   "source": "Automated: lines and pairs from MoneyPuck 5v5 ice time in the last game; goalie starts from NHL box scores; scratches = roster skaters who didn't dress.",
   "staff": {
     "forwards": [
       [
-        "Crouse",
-        "Schmaltz",
-        "Keller"
-      ],
-      [
-        "Cooley",
+        "Guenther",
         "Trocheck",
-        "Guenther"
+        "Keller"
       ],
       [
         "Lee",
@@ -22,6 +17,11 @@
         "But",
         "Stenlund",
         "McBain"
+      ],
+      [
+        "Crouse",
+        "Schmaltz",
+        "Cooley"
       ]
     ],
     "defense": [
@@ -38,7 +38,7 @@
         "DeSimone"
       ]
     ],
-    "goalie": "Vejmelka (Games 1, 3, 4, 6-9); Cossa (Games 2, 5, 10)",
+    "goalie": "Vejmelka (Games 1, 3, 4, 6-9, 11); Cossa (Games 2, 5, 10)",
     "scratches": [
       "Carcone",
       "O'Brien",

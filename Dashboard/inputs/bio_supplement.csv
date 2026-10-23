@@ -41,3 +41,6 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8484786,Cole Beaudoin,C,NYR,2006-04-24,212,"6' 2""",CAN,L,53,C,NHL API player landing 2026-10-21
 8483760,Hunter McDonald,D,PHI,2002-05-11,238,"6' 4""",USA,L,19,D,NHL API player landing 2026-10-21
 8486189,Vitali Pinchuk,C,NSH,2002-01-11,203,"6' 3""",BLR,L,51,C,NHL API player landing 2026-10-21
+8484242,Brayden Yager,C,WPG,2005-01-03,180,"5' 11""",CAN,R,29,C,NHL API player landing 2026-10-23
+8485545,Michal Postava,G,DET,2002-02-28,222,"6' 1""",CZE,L,35,G,NHL API player landing 2026-10-23
+8484900,Cooper Black,G,FLA,2001-06-14,245,"6' 9""",USA,L,31,G,NHL API player landing 2026-10-23
