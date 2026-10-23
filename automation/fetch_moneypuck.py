@@ -71,22 +71,60 @@ def _current_once():
     return out
 
 
+def _distinct(path, col="playerId"):
+    with open(path, encoding="utf-8") as fh:
+        return len({r.get(col) for r in csv.DictReader(fh)})
+
+
+# minimum distinct players/teams a COMPLETE file has (full seasons are far above these)
+_MIN = {"skaters": 750, "goalies": 75, "lines": 2400, "teams": 32}
+
+
 def static():
-    """Last season (build reads ../Source Data) and 2008-2024 history (build + history cache). Skipped when present."""
+    """Last season (build reads ../Source Data) and 2008-2024 history (build + history cache). Downloaded when
+    missing OR incomplete: these are cached between runs, so a partial download must never be kept."""
+    redo = False
     for f in ("skaters", "goalies", "lines", "teams"):
         path = os.path.join(SRC, f"{f}.csv")
-        if not os.path.exists(path):
+        col = "team" if f == "teams" else ("lineId" if f == "lines" else "playerId")
+        ok = os.path.exists(path) and _distinct(path, col) >= _MIN[f]
+        for attempt in range(3):
+            if ok:
+                break
             t = get(f"{MP}/seasonSummary/{SEASON - 1}/regular/{f}.csv")
             _check_csv(t, ["season", "situation"], f"last season {f}")
-            write_text(path, t)
-            log("downloaded last season", f)
+            write_text(path, t); redo = True
+            ok = _distinct(path, col) >= _MIN[f]
+            log(f"downloaded last season {f}: {_distinct(path, col)} distinct {col}")
+        if not ok:
+            raise RuntimeError(f"last season {f} file incomplete after 3 downloads")
     for f in ("skaters", "goalies", "lines", "teams"):
         path = P("inputs", "history", "moneypuck", f"{f}_2008_to_2024.csv")
-        if not os.path.exists(path):
-            t = unzip_single_csv(get(f"{PT}/historicalOneRowPerSeason/{f}_2008_to_2024.zip", binary=True, timeout=600))
-            _check_csv(t, ["season", "situation"], f"history {f}", 1000)
-            write_text(path, t)
-            log("downloaded history", f)
+        col = "team" if f == "teams" else ("lineId" if f == "lines" else "playerId")
+        need = {"skaters": 2600, "goalies": 290, "lines": 100000, "teams": 32}[f]
+        if os.path.exists(path) and _distinct(path, col) >= need:
+            continue
+        t = unzip_single_csv(get(f"{PT}/historicalOneRowPerSeason/{f}_2008_to_2024.zip", binary=True, timeout=600))
+        _check_csv(t, ["season", "situation"], f"history {f}", 1000)
+        write_text(path, t); redo = True
+        log("downloaded history", f)
+    if redo:   # the model's history cache is built from these files; rebuild it
+        cache = os.path.join(os.environ.get("MAMMOTH_CACHE", os.path.join(os.path.expanduser("~"), ".mammoth_cache")), "hist_cache.pkl")
+        if os.path.exists(cache):
+            os.remove(cache); log("history cache cleared (rebuilt from fresh files)")
+
+
+def sizes():
+    """Distinct players/teams per input file, for the run summary."""
+    out = {}
+    for label, path, col in (("2026 skaters", P("inputs", "moneypuck", "skaters.csv"), "playerId"),
+                             ("2026 goalies", P("inputs", "moneypuck", "goalies.csv"), "playerId"),
+                             ("2026 game-by-game skaters", P("inputs", "moneypuck_games", "skaters_games.csv"), "playerId"),
+                             ("2025-26 skaters", os.path.join(SRC, "skaters.csv"), "playerId"),
+                             ("2025-26 goalies", os.path.join(SRC, "goalies.csv"), "playerId"),
+                             ("2008-24 skaters", P("inputs", "history", "moneypuck", "skaters_2008_to_2024.csv"), "playerId")):
+        out[label] = _distinct(path, col) if os.path.exists(path) else None
+    return out
 
 
 def game_ids():

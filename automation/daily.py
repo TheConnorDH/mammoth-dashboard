@@ -63,6 +63,7 @@ def main():
         fetch_moneypuck.current()
         added, waiting = fetch_nhl.boxscores(sched, players)
         fetch_nhl.bios()
+        summary("- Input sizes (distinct players): " + ", ".join(f"{k} {v}" for k, v in fetch_moneypuck.sizes().items()))
         selftest_box(players)
         # freshness: every finished league game should be in MoneyPuck's game file and shot file
         done = {g["id"] for g in sched if g["state"] == 7}
@@ -93,6 +94,11 @@ def main():
     import datetime as _dt
     write_text(P("history", "last_run.json"), json.dumps({"published_utc": _dt.datetime.utcnow().isoformat(timespec="seconds"), "record": d["team"]["rec"],
                                                           "checks_passed": sum(c["ok"] for c in d["checks"]), "checks": len(d["checks"]), "brief": a["used"]}))
+    pl = d.get("playersLeague") or []
+    summary(f"- Data size: {len(pl)} NHL players rated ({sum(1 for p in pl if p.get('g') == 'G')} goalies), "
+            f"{len(d.get('standings') or [])} teams in standings, {len((d.get('power') or {}).get('rows') or [])} in power rankings")
+    if len(pl) < 500:
+        summary("- **Warning:** fewer than 500 players rated; MoneyPuck's files look incomplete.")
     summary(f"- Published: {d['team']['rec']}, {sum(c['ok'] for c in d['checks'])}/{len(d['checks'])} checks passed.")
     return "published"
 
