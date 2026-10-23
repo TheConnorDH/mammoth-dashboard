@@ -19,16 +19,48 @@ def _check_csv(text, need_cols, what, min_rows=10):
     return n
 
 
-def current():
+def _players(text, col="playerId"):
+    return {r[col] for r in csv.DictReader(io.StringIO(text))}
+
+
+def current(tries=4, wait_s=600):
+    """MoneyPuck rewrites its files nightly; a download caught mid-rewrite can be partial but still valid CSV
+    (seen 2026-10-23: a season skater file with 71 players). So cross-check the files against each other and
+    retry; if they never agree, stop (the live page stays as it was)."""
+    import time
+    for i in range(tries):
+        try:
+            return _current_once()
+        except RuntimeError as e:
+            if i == tries - 1:
+                raise
+            log(f"MoneyPuck files incomplete ({e}); waiting {wait_s // 60} min and retrying ({i + 1}/{tries - 1})")
+            time.sleep(wait_s)
+
+
+def _current_once():
     out = {}
+    texts = {}
     for f in ("skaters", "goalies", "lines", "teams"):
         t = get(f"{MP}/seasonSummary/{SEASON}/regular/{f}.csv")
         out[f] = _check_csv(t, ["season", "situation", "team"], f"season {f}")
-        write_text(P("inputs", "moneypuck", f"{f}.csv"), t)
+        texts[f] = t
     for f in ("skaters", "goalies", "lines"):
         t = unzip_single_csv(get(f"{PT}/seasonPlayersSummary/{f}/{SEASON}.zip", binary=True, timeout=300))
         out[f + "_games"] = _check_csv(t, ["gameId", "situation", "playerTeam"], f"game-by-game {f}")
-        write_text(P("inputs", "moneypuck_games", f"{f}_games.csv"), t)
+        texts[f + "_games"] = t
+    # consistency: the season files must cover (nearly) everyone in the game-by-game files, and all 32 teams
+    for f in ("skaters", "goalies"):
+        ps, pg = _players(texts[f]), {r["playerId"] for r in csv.DictReader(io.StringIO(texts[f + "_games"])) if r.get("season") == str(SEASON)}
+        if pg and len(ps & pg) < 0.97 * len(pg):
+            raise RuntimeError(f"season {f} file has {len(ps & pg)} of the {len(pg)} players in the game-by-game file")
+    teams = {r["team"] for r in csv.DictReader(io.StringIO(texts["teams"]))}
+    if len(teams) < 32:
+        raise RuntimeError(f"season teams file has {len(teams)} teams")
+    for f in ("skaters", "goalies", "lines", "teams"):
+        write_text(P("inputs", "moneypuck", f"{f}.csv"), texts[f])
+    for f in ("skaters", "goalies", "lines"):
+        write_text(P("inputs", "moneypuck_games", f"{f}_games.csv"), texts[f + "_games"])
     t = unzip_single_csv(get(f"{PT}/shots_{SEASON}.zip", binary=True, timeout=300))
     out["shots"] = _check_csv(t, ["game_id", "xGoal", "teamCode", "event"], "shots")
     write_text(P("inputs", "moneypuck", f"shots_{SEASON}.csv"), t)
