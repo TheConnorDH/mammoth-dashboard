@@ -181,15 +181,35 @@ def _auth_headers():
     return {"x-api-key": key}
 
 
+_AUTH = {}
+
+
+def _post(payload):
+    if not _AUTH:
+        _AUTH.update(_auth_headers())          # one token exchange per run (token lasts 10 minutes)
+    req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=json.dumps(payload).encode(), method="POST",
+                                 headers={**_AUTH, "anthropic-version": "2023-06-01", "content-type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=180) as r:
+            return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", "replace")
+        raise RuntimeError(f"Messages API {e.code}: {body[:400]}")
+
+
 def call_claude(packet, feedback=None):
     msgs = [{"role": "user", "content": "Facts packet:\n```json\n" + json.dumps(packet, indent=1, ensure_ascii=False) + "\n```\nWrite today's brief."}]
     if feedback:
         msgs += [{"role": "assistant", "content": feedback[0]}, {"role": "user", "content": "Fix these problems and rewrite the whole brief: " + "; ".join(feedback[1])}]
-    body = json.dumps({"model": MODEL, "max_tokens": 1500, "temperature": 0.2, "system": SYSTEM, "messages": msgs}).encode()
-    req = urllib.request.Request("https://api.anthropic.com/v1/messages", data=body, method="POST",
-                                 headers={**_auth_headers(), "anthropic-version": "2023-06-01", "content-type": "application/json"})
-    with urllib.request.urlopen(req, timeout=180) as r:
-        j = json.loads(r.read())
+    payload = {"model": MODEL, "max_tokens": 1500, "temperature": 0.2, "system": SYSTEM, "messages": msgs}
+    try:
+        j = _post(payload)
+    except RuntimeError as e:
+        # some models don't accept sampling settings; retry once without them
+        if " 400:" in str(e) and "temperature" in str(e):
+            payload.pop("temperature"); j = _post(payload)
+        else:
+            raise
     return "".join(c.get("text", "") for c in j.get("content", []) if c.get("type") == "text").strip()
 
 
