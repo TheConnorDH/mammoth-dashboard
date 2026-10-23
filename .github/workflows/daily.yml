@@ -1,9 +1,13 @@
 name: Daily dashboard update
 
 on:
+  # GitHub often starts scheduled runs hours late (worst at the top of the hour), so: odd minutes, several early
+  # attempts, and the last one publishes with whatever is available. Times UTC (MDT = UTC-6, MST = UTC-7).
   schedule:
-    - cron: "45 11 * * *"   # early attempt: 5:45 am MDT / 4:45 am MST
-    - cron: "0 14 * * *"    # final attempt: 8:00 am MDT / 7:00 am MST (publishes with whatever is available)
+    - cron: "17 8 * * *"    # 2:17 am MDT
+    - cron: "47 9 * * *"    # 3:47 am MDT
+    - cron: "17 11 * * *"   # 5:17 am MDT
+    - cron: "47 12 * * *"   # 6:47 am MDT  (final attempt)
   workflow_dispatch:         # "Run workflow" button for a manual update
 
 permissions:
@@ -41,17 +45,22 @@ jobs:
 
       - id: skip
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" = "0 14 * * *" ] && git log -1 --format=%s | grep -q "Daily update $(date -u +%F)"; then
+          if [ "${{ github.event_name }}" = "schedule" ] && git log -1 --format=%s | grep -q "Daily update $(date -u +%F)"; then
             echo "Already published this morning; nothing to do."; echo "status=skipped" >> "$GITHUB_OUTPUT"
           fi
 
       - id: run
         if: steps.skip.outputs.status != 'skipped'
         env:
+          # Preferred: Workload Identity Federation (repository variables; no stored key). Fallback: an API key secret.
+          ANTHROPIC_FEDERATION_RULE_ID: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          ANTHROPIC_ORGANIZATION_ID: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          ANTHROPIC_SERVICE_ACCOUNT_ID: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          ANTHROPIC_WORKSPACE_ID: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           FLAG=""
-          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ github.event.schedule }}" = "0 14 * * *" ]; then FLAG="--final-attempt"; fi
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "${{ github.event.schedule }}" = "47 12 * * *" ]; then FLAG="--final-attempt"; fi
           python automation/daily.py $FLAG
 
       - if: steps.run.outputs.status == 'published'
