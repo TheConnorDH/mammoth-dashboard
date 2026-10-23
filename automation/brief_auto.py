@@ -136,7 +136,8 @@ def verify(draft, packet):
         if v not in vals or (m[0] in "+-" and m not in signed and m.replace("+", "") not in signed):
             probs.append(f"number {m} not in the packet")
     for w in re.findall(WORDNUM, draft, flags=re.I): probs.append(f"spelled-out number '{w}'")
-    ok_caps = {"Utah", "Mammoth", "MoneyPuck", "NHL", "Player", "Impact", "Tier", "Game", "Data", "Expected", "PP", "PPG", "SOG"}
+    ok_caps = {"Utah", "Mammoth", "MoneyPuck", "NHL", "Player", "Impact", "Tier", "Game", "Data", "Expected", "PP", "PPG", "SOG",
+               "Division", "Conference", "Western", "Eastern", "Central", "Pacific", "Metropolitan", "Atlantic"}
     for m in re.finditer(r"(?<![.!?:*#\n] )(?<![.!?:*#\n])\b([A-Z][a-zA-Z'\-]{2,})", _clean(draft)):
         start = m.start(); pre = _clean(draft)[max(0, start - 3):start]
         if re.search(r"[.!?:*#\n(\-]\s*$", pre) or start == 0: continue
