@@ -41,7 +41,7 @@ jobs:
             Source Data
             Dashboard/inputs/history/moneypuck
             ~/.mammoth_cache
-          key: mammoth-history-v1-${{ hashFiles('Dashboard/calibration/fit_impact.py') }}
+          key: mammoth-history-v2-${{ hashFiles('Dashboard/calibration/fit_impact.py') }}
 
       - id: skip
         run: |
