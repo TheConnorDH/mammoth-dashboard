@@ -10,7 +10,7 @@
 (function () { let t = 'light'; try { t = localStorage.getItem('mammoth-theme') || 'light'; } catch (e) {} document.documentElement.setAttribute('data-theme', t); })();
 </script>
 <style>
-:root { color-scheme: light;
+:root { --acc:#6CACE3; color-scheme: light;
   --ice:#6CACE3; --ice-d:#2B78B8; --ice-l:#EAF4FC;
   --green:#1E8E4E; --green-l:#E3F4EA; --red:#C0392B; --red-l:#FBE7E4; --amber:#C77C0E; --amber-l:#FCF1DF;
   --ink:#111418; --head:#000000; --mute:#5C6670; --line:#E3E7EB; --bg:#F4F6F8; --card:#FFFFFF; --soft:#F1F3F6; --chip:#EEF0F3; --tabbg:#FFFFFF; }
@@ -21,17 +21,20 @@
 * { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; font-size:15px; }
 a { color:var(--ice-d); }
-.hero { background:#000; color:#fff; padding:24px 22px 20px; border-bottom:5px solid var(--ice); position:relative; overflow:hidden; }
+.hero { background:#000; color:#fff; padding:24px 22px 20px; border-bottom:5px solid var(--acc); position:relative; overflow:hidden; }
 .hero::after { content:''; position:absolute; right:-60px; top:-40px; width:360px; height:360px; background:radial-gradient(circle, rgba(108,172,227,.28) 0%, rgba(108,172,227,0) 70%); pointer-events:none; }
 .hero > * { position:relative; z-index:1; }
-.hero .kick { color:#6CACE3; font-size:12px; letter-spacing:2.5px; font-weight:800; text-transform:uppercase; }
+.hero .kick { color:var(--acc); font-size:12px; letter-spacing:2.5px; font-weight:800; text-transform:uppercase; }
+.hero .hsel { background:transparent; color:var(--acc); border:1px solid var(--acc); border-radius:6px; font:inherit; letter-spacing:inherit; text-transform:uppercase; padding:3px 6px; cursor:pointer; }
+.hero .hsel option { color:#000; text-transform:none; letter-spacing:0; }
 .hero h1 { font-size:27px; font-weight:900; margin:4px 0 2px; }
 .hero .sub { color:#C7CDD3; font-size:13px; }
 .theme-btn { position:absolute; right:18px; top:18px; z-index:2; background:#111; color:#DDE3E8; border:1px solid #333; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:700; cursor:pointer; }
 .hero-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:16px; }
-.hstat { background:#111; border:1px solid #2A2F35; border-top:3px solid #6CACE3; border-radius:12px; padding:11px; min-width:0; }
+.hstat { background:#111; color:#fff; border:1px solid #2A2F35; border-top:3px solid var(--acc); border-radius:12px; padding:11px; min-width:0; }
+.hstat a { color:var(--acc); }
 .hstat .v { font-size:23px; font-weight:900; white-space:nowrap; }
-.hstat .l { font-size:11px; color:#6CACE3; text-transform:uppercase; letter-spacing:1px; }
+.hstat .l { font-size:11px; color:var(--acc); text-transform:uppercase; letter-spacing:1px; }
 .hstat .s { font-size:12px; color:#BFC6CD; margin-top:2px; }
 .tabbar { position:sticky; top:0; z-index:5; background:#0A0A0A; border-bottom:1px solid #222; overflow-x:auto; white-space:nowrap; padding:0 12px; }
 .tabbar button { background:none; border:none; padding:13px 12px; font-size:14px; font-weight:800; color:#AEB6BE; cursor:pointer; border-bottom:3px solid transparent; }
@@ -92,13 +95,13 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 <body>
 <div class="hero">
   <button class="theme-btn" id="theme-btn">Dark mode</button>
-  <div class="kick">Utah Mammoth &bull; 2026-27</div>
+  <div class="kick"><select id="h-sel" class="hsel" aria-label="Team"></select> &bull; 2026-27</div>
   <h1 id="h-title">Season Dashboard</h1>
   <div class="sub" id="h-sub"></div>
   <div class="hero-grid" id="h-grid"></div>
 </div>
 <div class="tabbar" id="tabbar">
-  <button data-t="overview" class="on">Overview</button><button data-t="league">League</button><button data-t="team">Team</button><button data-t="matchup">Matchup</button><button data-t="roster">Roster</button><button data-t="finder">Player Finder</button><button data-t="method">How It Works</button>
+  <button data-t="overview" class="on">Overview</button><button data-t="league">League</button><button data-t="playoffs">Playoffs</button><button data-t="team">Team</button><button data-t="matchup">Matchup</button><button data-t="roster">Roster</button><button data-t="finder">Player Finder</button><button data-t="method">How It Works</button>
 </div>
 <div class="wrap">
 
@@ -107,11 +110,11 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
   <section><h2>Executive Summary <span class="tag" id="exec-tag"></span></h2>
     <p class="lede">The key reads right now, each stated with how sure the data is.</p>
     <div class="grid3" id="exec-body"></div></section>
-  <section><div class="card brief" id="brief-body"></div></section>
+  <section id="brief-sec"><div class="card brief" id="brief-body"></div></section>
   <section><div class="card" id="rc-card"></div></section>
   <section><div class="grid2">
     <div class="card"><h3>Next 10 games</h3><p class="small">Win odds from the power ratings plus home ice, overtime included. Expected points: win = 2, overtime/shootout loss = 1.</p><div id="next10"></div></div>
-    <div class="card"><h3>Last game: best and worst</h3><div id="last-stars"></div><h3 style="margin-top:14px">Countdowns</h3><div id="countdowns"></div></div>
+    <div class="card"><h3>Last game: best and worst</h3><div id="last-stars"></div><div id="cd-wrap"><h3 style="margin-top:14px">Countdowns</h3><div id="countdowns"></div></div></div>
   </div></section>
 </div>
 
@@ -136,9 +139,20 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
   <section><h2>Standings</h2><div class="tabs" id="st-tabs"></div><div class="card" id="st-body"></div></section>
 </div>
 
+<!-- ================= PLAYOFFS ================= -->
+<div class="pane" id="p-playoffs">
+  <section><h2>Playoff Picture <span class="tag">10,000 SIMULATED SEASONS + PLAYOFFS</span></h2>
+    <p class="lede">Every remaining regular-season game is simulated with the power ratings, then the playoffs are played out under the NHL format (top three in each division plus two wild cards per conference). Each series goes to the stronger team by the backtested series model: <b>power rating plus elite skaters</b> (top-10% talent at the position), the best of nine measures at picking past series winners. <b>Playoff strength</b> = chance of beating an average playoff team in a seven-game series, with its 80% range given how unsure we are about the team's true strength. Odds after round one are deliberately modest: the playoffs are close to a coin flip series by series, and even the favorite usually doesn't win the Cup.</p>
+    <div class="ctl">Show <select id="po-filter"><option value="">All teams</option><option value="Eastern">Eastern Conference</option><option value="Western">Western Conference</option></select>
+      Sort by <select id="po-sort"><option value="cup">Win Cup</option><option value="strength">Playoff strength</option><option value="make">Make playoffs</option><option value="cupIfIn">Cup if they make it</option></select></div>
+    <div class="card" id="po-table"></div></section>
+  <section><div class="grid2"><div class="card" id="po-path"></div><div class="card" id="po-conf"></div></div></section>
+  <section><h2>What Predicts Playoff Success</h2><div class="grid2"><div class="card" id="po-pred"></div><div class="card" id="po-notes"></div></div></section>
+</div>
+
 <!-- ================= TEAM ================= -->
 <div class="pane" id="p-team">
-  <section><div class="teambar"><select id="tm-sel" class="teamsel" aria-label="Team"></select><span class="small">Applies to the Team and Roster tabs.</span><a href="#roster" class="tab" onclick="setTeam(TM,'roster');return false;">Open roster &rarr;</a></div>
+  <section><div class="teambar"><select id="tm-sel" class="teamsel" aria-label="Team"></select><span class="small">The selected team follows you across every tab (also set at the top of the page).</span><a href="#roster" class="tab" onclick="setTeam(TM,'roster');return false;">Open roster &rarr;</a></div>
     <p class="lede">How the selected team is built, how it plays, where its season is headed, and what its numbers say so far.</p>
     <div class="hero-grid" id="tm-head" style="margin-top:0"></div>
     <div class="grid2" style="margin-top:14px"><div class="card" id="tm-style"></div><div class="card" id="tm-roster"></div></div>
@@ -195,7 +209,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 
 <!-- ================= ROSTER ================= -->
 <div class="pane" id="p-roster">
-  <section><div class="teambar"><select id="ro-sel" class="teamsel" aria-label="Team"></select><span class="small">Applies to the Team and Roster tabs.</span><a href="#team" class="tab" onclick="setTeam(TM,'team');return false;">Open team page &rarr;</a></div>
+  <section><div class="teambar"><select id="ro-sel" class="teamsel" aria-label="Team"></select><span class="small">The selected team follows you across every tab (also set at the top of the page).</span><a href="#team" class="tab" onclick="setTeam(TM,'team');return false;">Open team page &rarr;</a></div>
     <h2 id="ro-title">Roster</h2>
     <p class="lede"><b>Impact</b> = what he has contributed this season in his actual minutes. <b>Talent</b> = how good he is regardless of ice time, at a standard workload. Both are in standings points vs. an average NHL player at his position (2 points = 1 win). Bars show the likely range (dark, 50%) and the 90% range (light). <b>Tier</b> groups players the data can't confidently tell apart (a new tier starts when the tier's best is better with 75% probability). Hover style tags for detail.</p>
     <div class="card" id="roster-table"></div></section>
@@ -220,7 +234,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 <!-- ================= PLAYER FINDER ================= -->
 <div class="pane" id="p-finder">
   <section><h2>Player Finder <span class="tag">EVERY NHL PLAYER, SAME MODEL</span></h2>
-    <p class="lede">Every NHL player who has appeared this season, plus Utah's full roster, rated exactly the same way. <b>NHL caliber</b> = talent percentile at his position: Superstar (top 2%), Elite (top 10%), Top of lineup (top third), Middle (middle third), Depth (bottom third), Fringe (bottom 10%). Each step is a real one: a player at the top of a group beats one at the top of the next group down about 80% of the time. Goalies are different: their talent is too hard to pin down to split into five groups (even a top-third starter beats a bottom-third one only about 2 times in 3), so a goalie is <b>Likely above avg</b> or <b>Likely below avg</b> only when the model is at least 75% sure, otherwise <b>Avg range</b>. Filter by team, conference, division, position or age to rank players within that group. Click a team code to open that team's roster.</p>
+    <p class="lede">Every NHL player who has appeared this season, plus every team's rostered players who haven't played yet (marked "no games", rated from past seasons), rated exactly the same way. <b>NHL caliber</b> = talent percentile at his position: Superstar (top 2%), Elite (top 10%), Top of lineup (top third), Middle (middle third), Depth (bottom third), Fringe (bottom 10%). Each step is a real one: a player at the top of a group beats one at the top of the next group down about 80% of the time. Goalies are different: their talent is too hard to pin down to split into five groups (even a top-third starter beats a bottom-third one only about 2 times in 3), so a goalie is <b>Likely above avg</b> or <b>Likely below avg</b> only when the model is at least 75% sure, otherwise <b>Avg range</b>. Filter by team, conference, division, position or age to rank players within that group. Click a team code to open that team's roster.</p>
     <div class="ctl">
       <select id="ex-team"></select><select id="ex-conf"></select><select id="ex-div"></select>
       <select id="ex-pos"><option value="">All positions</option><option value="F">Forwards</option><option value="C">C</option><option value="L">LW</option><option value="R">RW</option><option value="D">Defense</option><option value="G">Goalies</option></select>
@@ -311,6 +325,7 @@ const theme = document.documentElement.getAttribute('data-theme');
 $('theme-btn').textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
 $('theme-btn').onclick = () => { const n = DARK() ? 'light' : 'dark'; try { localStorage.setItem('mammoth-theme', n); } catch (e) {}
   document.documentElement.setAttribute('data-theme', n); $('theme-btn').textContent = n === 'dark' ? 'Light mode' : 'Dark mode';
+  try { applyTeamTheme(TM); } catch (e) {}
   if (typeof Chart !== 'undefined' && Chart.defaults) { Chart.defaults.color = css('--mute'); Chart.defaults.borderColor = css('--line'); }
   Object.keys(charts).forEach(k => { charts[k].destroy(); delete charts[k]; });
   Object.keys(done).forEach(k => delete done[k]);
@@ -323,7 +338,7 @@ function mkChart(id, cfg) { const el = $(id); if (!el || typeof Chart === 'undef
 
 // ---------------- tabs (each tab builds its charts the first time it is shown)
 const inits = {}, done = {};
-const TABS = ['overview', 'league', 'team', 'matchup', 'roster', 'finder', 'method'], ALIAS = {players: 'roster', explorer: 'finder'};
+const TABS = ['overview', 'league', 'playoffs', 'team', 'matchup', 'roster', 'finder', 'method'], ALIAS = {players: 'roster', explorer: 'finder'};
 // one selected team, shared by the Team and Roster tabs; each re-renders only when it is visible and stale
 let TM = 'UTA';
 const shown = {}, keepVals = {};
@@ -331,7 +346,7 @@ const renderers = {};
 function refresh(t) { if (renderers[t] && done[t] && shown[t] !== TM) { renderers[t](TM); shown[t] = TM; } }
 function showTab(t) {
   const hm = String(t || '').split('/'); t = ALIAS[hm[0]] || hm[0]; if (!TABS.includes(t)) t = 'overview';
-  if (hm[1] && S.some(s => s.abbr === hm[1].toUpperCase())) { TM = hm[1].toUpperCase(); ['tm-sel', 'ro-sel'].forEach(id => { const el = $(id); if (el) el.value = TM; }); }
+  if (hm[1] && S.some(s => s.abbr === hm[1].toUpperCase()) && hm[1].toUpperCase() !== TM) { TM = hm[1].toUpperCase(); ['tm-sel', 'ro-sel', 'h-sel'].forEach(id => { const el = $(id); if (el) el.value = TM; }); renderHero(TM); }
   document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.t === t));
   document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'p-' + t));
   if (!done[t] && inits[t]) { done[t] = true; delete shown[t]; inits[t]();
@@ -340,10 +355,11 @@ function showTab(t) {
     Object.keys(keepVals).forEach(id => { const el = $(id); if (el && pane && pane.contains && pane.contains(el)) { if (el.value !== keepVals[id]) { el.value = keepVals[id]; fire.add(el.onchange || el.oninput); } delete keepVals[id]; } });
     fire.forEach(f => f && f()); }
   refresh(t);
-  try { history.replaceState(null, '', '#' + t + ((t === 'team' || t === 'roster') && TM !== 'UTA' ? '/' + TM : '')); } catch (e) {}
+  try { history.replaceState(null, '', '#' + t + (TM !== 'UTA' ? '/' + TM : '')); } catch (e) {}
 }
 function setTeam(x, go) {
-  TM = x; ['tm-sel', 'ro-sel'].forEach(id => { const el = $(id); if (el) el.value = x; });
+  TM = x; ['tm-sel', 'ro-sel', 'h-sel'].forEach(id => { const el = $(id); if (el) el.value = x; });
+  renderHero(x);
   const cur = go || (document.querySelector('.tabbar button.on') || {dataset: {t: 'overview'}}).dataset.t;
   showTab(cur);
   if (go) { const tb = $('tabbar'); try { window.scrollTo({top: tb ? tb.offsetTop : 0, behavior: 'smooth'}); } catch (e) {} }
@@ -356,41 +372,90 @@ function teamOptions(id) {
 }
 document.querySelectorAll('.tabbar button').forEach(b => b.onclick = () => showTab(b.dataset.t));
 
-// ---------------- hero
-const uP = PW ? PW.rows.find(r => r.team === 'UTA') : null;
-const nxt = D.next10[0];
-$('h-title').textContent = `${T.rec}  •  ${T.pts} pts`;
-$('h-sub').innerHTML = `Updated ${D.built} &bull; ${gp} of ${D.seasonGames} games played &bull; standings through ${D.dataStatus.standingsDate || 'n/a'}`;
-const hs = [
-  ['Power rank', uP ? ord(uP.rank) : '&mdash;', uP ? `Tier ${uP.tier} of ${Math.max(...PW.rows.map(q => q.tier || 0))} &bull; ${(uP.neutralWin * 100).toFixed(1)}% vs. an average team; likely ${uP.r10}-${uP.r90}` : ''],
-  ['Projected points', T.proj, T.projLo80 != null ? `80% range ${T.projLo80}-${T.projHi80}` : ''],
-  ['Playoff odds', Math.round(T.pPlayoff * 100) + '%', 'Full-league simulation'],
-  ['Next game', nxt ? `${nxt.ha} ${nxt.opp}` : '&mdash;', nxt ? `${nxt.pWin != null ? Math.round(nxt.pWin * 100) + '% to win &bull; ' : ''}${new Date(nxt.start || nxt.date + 'T12:00').toLocaleString([], {weekday: 'short', month: 'short', day: 'numeric'})}` : ''],
-  ['Goal diff', (T.gf - T.ga > 0 ? '+' : '') + (T.gf - T.ga), T.xgf != null ? `xG ${fmt(T.xgf, 'f1')} for, ${fmt(T.xga, 'f1')} against` : ''],
-  ['Streak', T.streak || '&mdash;', D.last ? `Last: ${D.last.res} ${D.last.us}-${D.last.them} ${D.last.ha} ${D.last.opp}` : '']
-];
-$('h-grid').innerHTML = hs.map(h => `<div class="hstat"><div class="l">${h[0]}</div><div class="v">${h[1]}</div><div class="s">${h[2]}</div></div>`).join('');
 
-// ================= OVERVIEW =================
-const EX = D.exec || {items: []};
+// ---------------- team colors: the accent palette follows the selected team (Utah keeps its own palette)
+const _rgb = h => { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+const _hex = c => '#' + c.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+const _mix = (a, b, t) => { const A = _rgb(a), B = _rgb(b); return _hex(A.map((v, i) => v + (B[i] - v) * t)); };
+const _L = h => { const c = _rgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+const _toward = (h, target, ok) => { let t = 0, c = h; while (!ok(c) && t < 1) { t += 0.05; c = _mix(h, target, t); } return c; };
+function applyTeamTheme(x) {
+  const st = document.documentElement.style, dark = DARK();
+  if (x === 'UTA' || !TEAM_COL[x]) { ['--acc', '--ice', '--ice-d', '--ice-l'].forEach(k => st.removeProperty(k)); return; }
+  const base = TEAM_COL[x];
+  st.setProperty('--acc', _toward(base, '#FFFFFF', c => _L(c) >= 0.28));                 // readable on the black header
+  if (dark) { st.setProperty('--ice', _toward(base, '#FFFFFF', c => _L(c) >= 0.30)); st.setProperty('--ice-d', _toward(base, '#FFFFFF', c => _L(c) >= 0.42)); st.setProperty('--ice-l', _mix(base, '#10151B', 0.78)); }
+  else { st.setProperty('--ice', _toward(base, '#000000', c => _L(c) <= 0.45)); st.setProperty('--ice-d', _toward(base, '#000000', c => _L(c) <= 0.16)); st.setProperty('--ice-l', _mix(base, '#FFFFFF', 0.88)); }
+}
+// ---------------- hero (follows the selected team)
+const tmName = x => ((D.standings || []).find(s => s.abbr === x) || {}).name || x;
+function heroGames(x) { const st = (D.standings || []).find(s => s.abbr === x) || {}; return st; }
+function gameOdds(x, g) {   // g = [date, home, away, ...]: win odds and expected points for team x from the power ratings
+  const wp = PW && PW.winprob, lg = v => 1 / (1 + Math.exp(-v)), rr = t2 => { const q = PW ? PW.rows.find(r => r.team === t2) : null; return q ? q.r : null; };
+  const home = g[1] === x, opp = home ? g[2] : g[1], a = rr(x), b = rr(opp);
+  if (!wp || a == null || b == null) return {home, opp, p: null, e: null};
+  const d = a - b, p = home ? lg(wp.win[0] + wp.win[1] * d) : 1 - lg(wp.win[0] - wp.win[1] * d), pot = lg(wp.ot[0] + wp.ot[1] * Math.abs(d)), pw = home ? lg(wp.otwin[0] + wp.otwin[1] * d) : 1 - lg(wp.otwin[0] - wp.otwin[1] * d);
+  return {home, opp, p, e: 2 * p + pot * (1 - pw)};
+}
+function renderHero(x) {
+  const isU = x === 'UTA', pr = PW ? PW.rows.find(r => r.team === x) : null, st = (D.standings || []).find(s => s.abbr === x) || {}, po = pr && pr.po;
+  const hs_ = $('h-sel'); if (hs_ && hs_.value !== x) hs_.value = x;
+  try { applyTeamTheme(x); } catch (e) {}
+  document.title = `${tmName(x)} Season Dashboard`;
+  $('h-title').textContent = isU ? `${T.rec}  •  ${T.pts} pts` : (st.w != null ? `${st.w}-${st.l}-${st.otl}  •  ${st.pts} pts` : tmName(x));
+  $('h-sub').innerHTML = `Updated ${D.built} &bull; ${isU ? gp : (st.gp ?? '&mdash;')} of ${D.seasonGames} games played &bull; standings through ${D.dataStatus.standingsDate || 'n/a'}${D.version ? ` &bull; <a href="https://github.com/TheConnorDH/mammoth-dashboard/blob/main/CHANGELOG.md" target="_blank" rel="noopener" style="color:inherit">v${D.version}</a>` : ''}`;
+  const tg = teamGames(x), nx = isU ? D.next10[0] : (tg.next[0] ? (() => { const o = gameOdds(x, tg.next[0]); return {ha: o.home ? 'vs' : '@', opp: o.opp, pWin: o.p, date: tg.next[0][0]}; })() : null);
+  const lastG = isU ? D.last : (tg.log.length ? tg.log[tg.log.length - 1] : null);
+  let streak = isU ? T.streak : st.streak;
+  if (!streak && tg.log.length) { const w = g => g.res.endsWith('W'), l0 = tg.log[tg.log.length - 1]; let n = 0; for (let i = tg.log.length - 1; i >= 0 && w(tg.log[i]) === w(l0); i--) n++; streak = (w(l0) ? 'W' : 'L') + n; }
+  const proj = isU ? T.proj : (pr && pr.projPts != null ? Math.round(pr.projPts) : null), lo80 = isU ? T.projLo80 : pr && pr.projLo80, hi80 = isU ? T.projHi80 : pr && pr.projHi80;
+  const pPO = isU ? T.pPlayoff : pr && pr.pPlayoff, gd = isU ? T.gf - T.ga : st.gd;
+  const hs = [
+    ['Power rank', pr ? ord(pr.rank) : '&mdash;', pr ? `Tier ${pr.tier} of ${Math.max(...PW.rows.map(q => q.tier || 0))} &bull; ${(pr.neutralWin * 100).toFixed(1)}% vs. an average team; likely ${pr.r10}-${pr.r90}` : ''],
+    ['Projected points', proj ?? '&mdash;', lo80 != null ? `80% range ${lo80}-${hi80}` : ''],
+    ['Playoff odds', pPO != null ? Math.round(pPO * 100) + '%' : '&mdash;', po ? `Cup ${pc1(po.cup)} &bull; series strength ${pc1(po.strength)}` : 'Full-league simulation'],
+    ['Next game', nx ? `${nx.ha} ${nx.opp}` : '&mdash;', nx ? `${nx.pWin != null ? Math.round(nx.pWin * 100) + '% to win &bull; ' : ''}${new Date(nx.start || nx.date + 'T12:00').toLocaleString([], {weekday: 'short', month: 'short', day: 'numeric'})}` : ''],
+    ['Goal diff', gd != null ? (gd > 0 ? '+' : '') + gd : '&mdash;', isU && T.xgf != null ? `xG ${fmt(T.xgf, 'f1')} for, ${fmt(T.xga, 'f1')} against` : (st.gf != null ? `${st.gf} for, ${st.ga} against` : '')],
+    ['Streak', streak || '&mdash;', lastG ? `Last: ${lastG.res} ${lastG.us}-${lastG.them} ${lastG.ha} ${lastG.opp}` : '']
+  ];
+  $('h-grid').innerHTML = hs.map(h => `<div class="hstat"><div class="l">${h[0]}</div><div class="v">${h[1]}</div><div class="s">${h[2]}</div></div>`).join('');
+}
+
+// ================= OVERVIEW (follows the selected team) =================
 const toneC = {good: 'var(--green)', bad: 'var(--red)', warn: 'var(--amber)', neutral: 'var(--ice)'};
-$('exec-tag').innerHTML = `${EX.gp} GP &bull; ${EX.confidence} confidence`;
-$('exec-body').innerHTML = EX.items.map(x => `<div class="card exec-card" style="border-top-color:${toneC[x.tone] || toneC.neutral}"><span class="pill p-grey">${x.tag}</span><div style="font-size:16px;font-weight:850;margin:8px 0 4px;color:var(--head)">${x.head}</div><div class="small" style="font-size:13px">${x.body}</div></div>`).join('');
 function md(s) { const lines = s.split('\n'); let h = '', ul = false; const il = t => t.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*(.+?)\*/g, '<i>$1</i>');
   for (const ln of lines) { if (ln.startsWith('- ')) { if (!ul) { h += '<ul>'; ul = true; } h += `<li>${il(ln.slice(2))}</li>`; continue; } if (ul) { h += '</ul>'; ul = false; }
     if (ln.startsWith('## ')) h += `<h2>${il(ln.slice(3))}</h2>`; else if (ln.trim()) h += `<p>${il(ln)}</p>`; } if (ul) h += '</ul>'; return h; }
-$('brief-body').innerHTML = `<div class="small" style="margin-bottom:4px">THIS WEEK'S BRIEF</div>` + md(D.brief);
-$('next10').innerHTML = `<table><tr><th>Date</th><th></th><th>Opp</th><th>Opp power rank</th><th>Utah win odds</th><th>Exp. pts</th></tr>${D.next10.map(g => { const p = g.pWin, c = p == null ? '' : p >= 0.55 ? 'p-green' : p <= 0.45 ? 'p-red' : 'p-blue';
-  return `<tr><td>${new Date(g.date + 'T12:00').toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'})}</td><td>${g.ha}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${g.opp}');return false;">${g.opp}</a></b></td><td>${g.oppRank ?? '&mdash;'}</td><td>${p == null ? '&mdash;' : `<span class="pill ${c}">${Math.round(p * 100)}%</span>`}</td><td>${g.xPts ?? '&mdash;'}</td></tr>`; }).join('')}</table>
-  <p class="small" style="margin-top:6px">Odds use each team's recent goalie mix. Who starts moves them less than you might expect: in this model a team's starter vs. its backup is worth about half a point of win probability in a typical game (at most about 2 points), because goalie talent is hard to pin down. Try specific goalies in the matchup calculator (League tab).</p>
-  ${D.next10.some(g => g.xPts != null) ? `<p class="small" style="margin-top:6px">Expected: <b>${D.next10.reduce((s, g) => s + (g.xPts || 0), 0).toFixed(1)}</b> of ${2 * D.next10.length} possible points.</p>` : ''}`;
 const starPill = (i, good) => `<span class="pill ${good ? 'p-green' : 'p-red'}" style="min-width:42px;text-align:center">${['★★★', '★★', '★'][i]}</span>`;
 const starRow = (x, i, good) => `<div style="padding:3px 0">${starPill(i, good)} <b>${x.name}</b> <span class="small">${x.pos} &bull; <span title="${sp(x.score * PPI, 2)} standings points">${sp(x.score, 2)} goals</span> &bull; ${x.line}</span></div>`;
-const PG = D.perGame || [];
-const PGd = PG.filter(g => !g.pending), PGw = PG.filter(g => g.pending);
-$('last-stars').innerHTML = (PGw.length ? `<div class="lock" style="padding:8px 10px;margin-bottom:8px">${PGw.map(g => `${g.date.slice(5)} vs ${g.opp} (${g.score})`).join(', ')}: waiting for MoneyPuck's game-by-game data, so no player values yet.</div>` : '') + (PGd.length ? `<div class="small">${PGd[0].date.slice(5)} vs ${PGd[0].opp} (${PGd[0].score})</div><div class="small" style="font-weight:800;color:var(--green);margin-top:6px">BEST</div>${PGd[0].best.map((x, i) => starRow(x, i, true)).join('')}<div class="small" style="font-weight:800;color:var(--red);margin-top:6px">WORST</div>${PGd[0].worst.map((x, i) => starRow(x, i, false)).join('')}` : (PGw.length ? '' : '<div class="small">No games yet.</div>'));
 const today = new Date();
-$('countdowns').innerHTML = D.countdowns.map(c => { const d = Math.ceil((new Date(c.date + 'T12:00') - today) / 864e5); return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line)"><span class="small">${c.label}</span><b>${d > 0 ? d + ' days' : 'done'}</b></div>`; }).join('');
+function renderOverview(x) {
+  const isU = x === 'UTA', EX = isU ? (D.exec || {items: []}) : ((D.execAll || {})[x] || {items: [], gp: 0, confidence: 'low'});
+  $('exec-tag').innerHTML = `${tmName(x)} &bull; ${EX.gp} GP &bull; ${EX.confidence} confidence`;
+  $('exec-body').innerHTML = EX.items.length ? EX.items.map(q => `<div class="card exec-card" style="border-top-color:${toneC[q.tone] || toneC.neutral}"><span class="pill p-grey">${q.tag}</span><div style="font-size:16px;font-weight:850;margin:8px 0 4px;color:var(--head)">${q.head}</div><div class="small" style="font-size:13px">${q.body}</div></div>`).join('') : '<div class="small">Not enough data for this team yet.</div>';
+  // the written brief is Utah's (checked against the data each morning); other teams skip it
+  $('brief-sec').style.display = isU ? '' : 'none';
+  if (isU) $('brief-body').innerHTML = `<div class="small" style="margin-bottom:4px">THIS WEEK'S BRIEF</div>` + md(D.brief);
+  RC.team = x; RC.gid = null;
+  try { rcRender(); } catch (e) { const el_ = $('rc-card'); if (el_) el_.innerHTML = '<div class="lock">Recap image unavailable in this browser.</div>'; console.warn(e); }
+  // next 10
+  let rows, xp = 0;
+  if (isU) rows = D.next10.map(g => ({date: g.date, ha: g.ha, opp: g.opp, rank: g.oppRank, p: g.pWin, e: g.xPts}));
+  else rows = teamGames(x).next.map(g => { const o = gameOdds(x, g); return {date: g[0], ha: o.home ? 'vs' : '@', opp: o.opp, rank: PW ? (PW.rows.find(r => r.team === o.opp) || {}).rank : null, p: o.p, e: o.e != null ? +o.e.toFixed(2) : null}; });
+  rows.forEach(g => xp += g.e || 0);
+  $('next10').innerHTML = rows.length ? `<table><tr><th>Date</th><th></th><th>Opp</th><th>Opp power rank</th><th>${x} win odds</th><th>Exp. pts</th></tr>${rows.map(g => { const p = g.p, c = p == null ? '' : p >= 0.55 ? 'p-green' : p <= 0.45 ? 'p-red' : 'p-blue';
+    return `<tr><td>${new Date(g.date + 'T12:00').toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'})}</td><td>${g.ha}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${g.opp}');return false;">${g.opp}</a></b></td><td>${g.rank ?? '&mdash;'}</td><td>${p == null ? '&mdash;' : `<span class="pill ${c}">${Math.round(p * 100)}%</span>`}</td><td>${g.e ?? '&mdash;'}</td></tr>`; }).join('')}</table>
+    <p class="small" style="margin-top:6px">Odds use each team's recent goalie mix. Who starts moves them less than you might expect: a team's starter vs. its backup is worth about half a point of win probability in a typical game (at most about 2 points), because goalie talent is hard to pin down. Try specific goalies in the matchup calculator (League tab).</p>
+    ${rows.some(g => g.e != null) ? `<p class="small" style="margin-top:6px">Expected: <b>${xp.toFixed(1)}</b> of ${2 * rows.length} possible points.</p>` : ''}` : '<div class="small">No games scheduled.</div>';
+  // last game: best and worst
+  const PG = isU ? (D.perGame || []) : (((D.teamExtra || {})[x] || {}).perGame || []);
+  const PGd = PG.filter(g => !g.pending), PGw = PG.filter(g => g.pending);
+  $('last-stars').innerHTML = (PGw.length ? `<div class="lock" style="padding:8px 10px;margin-bottom:8px">${PGw.map(g => `${g.date.slice(5)} vs ${g.opp} (${g.score})`).join(', ')}: waiting for MoneyPuck's game-by-game data, so no player values yet.</div>` : '') + (PGd.length ? `<div class="small">${PGd[0].date.slice(5)} vs ${PGd[0].opp} (${PGd[0].score})</div><div class="small" style="font-weight:800;color:var(--green);margin-top:6px">BEST</div>${PGd[0].best.map((q, i) => starRow(q, i, true)).join('')}<div class="small" style="font-weight:800;color:var(--red);margin-top:6px">WORST</div>${PGd[0].worst.map((q, i) => starRow(q, i, false)).join('')}` : (PGw.length ? '' : '<div class="small">No games yet.</div>'));
+  $('cd-wrap').style.display = isU ? '' : 'none';
+  if (isU) $('countdowns').innerHTML = D.countdowns.map(c => { const d = Math.ceil((new Date(c.date + 'T12:00') - today) / 864e5); return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line)"><span class="small">${c.label}</span><b>${d > 0 ? d + ' days' : 'done'}</b></div>`; }).join('');
+}
+inits.overview = () => {};
+renderers.overview = renderOverview;
 
 // ================= TEAM =================
 const S = D.standings || [];
@@ -409,7 +474,7 @@ function renderPower() {
   const tp = r => r.tier ? ` <span class="pill" style="background:${tierCol(r.tier)};color:${tierInk(r.tier)}" title="League tier ${r.tier}">T${r.tier}</span>` : '';
   const rkCell = (r, i) => g ? `<td><b>${i + 1}</b>${tp(r)}<span class="sub">NHL ${r.rank}${mv(r)} (likely ${r.r10}-${r.r90})</span></td>` : `<td><b>${r.rank}</b>${tp(r)}${mv(r)}<span class="sub">likely ${r.r10}-${r.r90}</span></td>`;
   $('pw-table').innerHTML = `<p class="small" style="margin-bottom:6px">${g ? `<b>#</b> = rank within the ${groupName(g)}; NHL rank and its likely range (80% of simulations) underneath.` : 'Under each rank: where the team likely ranks (80% of simulations).'} Arrows = NHL move since the last update. <b>T</b> = league tier: a new tier starts where the tier's top team is better than a team with at least 75% probability (the same rule as player tiers). The rule compares each team with its tier's top team, not its neighbor, so teams on either side of a boundary can be nearly even. Early in the season ratings are uncertain, so tiers are broad; they split as games are played. Projected points shows the 80% range (hover for 95%). The four columns before "Team style" show where each rating comes from, in standings points per 84 games. <b>Top impact players</b> = the three skaters dressed in the last 5 games with the most expected impact in their role (talent x the ice time they actually get; the "In his role" column on the Roster page): who to watch in a game. <b>G</b> = goalies: the likely starter (most starts in those games) and the backup, each rated as if he starts (talent at a starter's workload), since a goalie plays all of a game or none of it.</p>
-  <table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Win % vs. avg</th><th>Record</th><th>Proj. points</th><th>Playoff %</th><th>Division %</th><th>Lineup</th><th>Results</th><th>Shot quality</th><th>Last season</th><th>Team style</th><th title="Skaters: expected impact in his role: talent x the ice time he actually gets (goalies by share of starts), standings points per 84 games. Same as the 'In his role' column on the Roster and Player Finder pages. Players dressed in the last 5 games.">Top impact players</th></tr>${rows.map((r, i) => `<tr${r.team === 'UTA' ? ' class="me"' : ''}>
+  <table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Win % vs. avg</th><th>Record</th><th>Proj. points</th><th>Playoff %</th><th>Division %</th><th>Lineup</th><th>Results</th><th>Shot quality</th><th>Last season</th><th>Team style</th><th title="Skaters: expected impact in his role: talent x the ice time he actually gets (goalies by share of starts), standings points per 84 games. Same as the 'In his role' column on the Roster and Player Finder pages. Players dressed in the last 5 games.">Top impact players</th></tr>${rows.map((r, i) => `<tr${r.team === TM ? ' class="me"' : ''}>
   ${rkCell(r, i)}<td><a class="tm" href="#team" onclick="pickTeam('${r.team}');return false;">${r.team}</a></td><td><b>${(r.neutralWin * 100).toFixed(1)}%</b></td>
   <td>${r.rec}</td><td title="95% range ${r.projLo}-${r.projHi}">${r.projPts != null ? Math.round(r.projPts) + ' <span class="small">(' + r.projLo80 + '-' + r.projHi80 + ')</span>' : '&mdash;'}</td>
   <td>${r.pPlayoff != null ? Math.round(r.pPlayoff * 100) + '%' : '&mdash;'}</td><td>${r.pDiv != null ? Math.round(r.pDiv * 100) + '%' : '&mdash;'}</td>
@@ -426,9 +491,9 @@ function renderGroups() {
     const avg = k => rs.reduce((s, r) => s + r[k], 0) / Math.max(rs.length, 1);
     return {kind, name, n: rs.length, win: avg('neutralWin'), rating: avg('rating'), t8: rs.filter(r => top8.has(r.team)).length, t16: rs.filter(r => top16.has(r.team)).length,
       pl: PW.rows.filter(r => f(r.team)).reduce((s, r) => s + (r.pPlayoff || 0), 0), best: rs[0] ? rs[0].team : '' }; });
-  $('cg-table').innerHTML = `<table><tr><th>Group</th><th>Teams counted</th><th>Avg win % vs. avg</th><th>Avg rating (pts / 84)</th><th>In league top 8</th><th>In top 16</th><th>Expected playoff teams</th><th>Best</th></tr>${stat.map(s => `<tr${s.name === confOf.UTA || s.name === divOf.UTA ? ' class="me"' : ''}><td><b>${s.name}</b> <span class="small">${s.kind}</span></td><td>${s.n}</td><td>${(s.win * 100).toFixed(1)}%</td><td>${sp(s.rating)}</td><td>${s.t8}</td><td>${s.t16}</td><td>${s.pl.toFixed(1)}</td><td>${s.best ? `<a class="tm" href="#team" onclick="pickTeam('${s.best}');return false;">${s.best}</a>` : ''}</td></tr>`).join('')}</table>
+  $('cg-table').innerHTML = `<table><tr><th>Group</th><th>Teams counted</th><th>Avg win % vs. avg</th><th>Avg rating (pts / 84)</th><th>In league top 8</th><th>In top 16</th><th>Expected playoff teams</th><th>Best</th></tr>${stat.map(s => `<tr${s.name === confOf[TM] || s.name === divOf[TM] ? ' class="me"' : ''}><td><b>${s.name}</b> <span class="small">${s.kind}</span></td><td>${s.n}</td><td>${(s.win * 100).toFixed(1)}%</td><td>${sp(s.rating)}</td><td>${s.t8}</td><td>${s.t16}</td><td>${s.pl.toFixed(1)}</td><td>${s.best ? `<a class="tm" href="#team" onclick="pickTeam('${s.best}');return false;">${s.best}</a>` : ''}</td></tr>`).join('')}</table>
   <p class="small" style="margin-top:6px">Expected playoff teams = summed playoff odds of every team in the group (always all teams). Average win % uses the teams counted.</p>`;
-  mkChart('c-groups', { type: 'bar', data: { labels: stat.map(s => s.name), datasets: [{ data: stat.map(s => +(s.win * 100).toFixed(1)), backgroundColor: stat.map(s => (s.name === confOf.UTA || s.name === divOf.UTA) ? '#6CACE3' : (s.kind === 'Conference' ? (DARK() ? '#C9D1DA' : '#5C6670') : (DARK() ? '#7A8590' : '#9AA6B5'))) }] },
+  mkChart('c-groups', { type: 'bar', data: { labels: stat.map(s => s.name), datasets: [{ data: stat.map(s => +(s.win * 100).toFixed(1)), backgroundColor: stat.map(s => (s.name === confOf[TM] || s.name === divOf[TM]) ? css('--ice') : (s.kind === 'Conference' ? (DARK() ? '#C9D1DA' : '#5C6670') : (DARK() ? '#7A8590' : '#9AA6B5'))) }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + '% avg win vs. an average team' } } }, scales: { y: { title: { display: true, text: 'Avg win % vs. average' }, suggestedMin: 45, suggestedMax: 55 } } } });
 }
 function initLeague() {
@@ -449,7 +514,7 @@ function initLeague() {
       $('mc-out').innerHTML = `<p style="font-size:17px"><b>${a.team} ${(pA * 100).toFixed(1)}%</b> &nbsp;vs.&nbsp; <b>${b.team} ${((1 - pA) * 100).toFixed(1)}%</b></p><p class="small">${Math.round(pot * 100)}% chance it goes to overtime</p>`; };
     ['mc-a', 'mc-b', 'mc-v', 'mc-ga', 'mc-gb'].forEach(id => $(id).onchange = run); run();
     $('mc-note').innerHTML = `Home ice is worth about ${PW.hia ? PW.hia.home_reg_gd.toFixed(2) : '0.24'} goals a game (home teams won ${PW.hia ? (PW.hia.home_win * 100).toFixed(1) : '54.1'}% from 2014-15 to 2025-26). Team-specific home edges couldn't be told apart from chance, so one value applies everywhere. Goalie choice shifts a team's rating by the model's own goalie term (his talent vs. the team's recent goalie mix, at the weight the backtest gives the lineup); it's model-implied, not separately backtested, and usually small because goalie talent is hard to pin down.`;
-    mkChart('c-power', { type: 'bar', data: { labels: rows.map(r => r.team), datasets: [{ data: rows.map(r => +(r.neutralWin * 100).toFixed(1)), backgroundColor: rows.map(r => r.tier ? tierCol(r.tier) + (r.team === 'UTA' ? '' : '99') : '#7A8590'), borderColor: rows.map(r => r.team === 'UTA' ? css('--head') : 'transparent'), borderWidth: rows.map(r => r.team === 'UTA' ? 2 : 0) }] },
+    mkChart('c-power', { type: 'bar', data: { labels: rows.map(r => r.team), datasets: [{ data: rows.map(r => +(r.neutralWin * 100).toFixed(1)), backgroundColor: rows.map(r => r.tier ? tierCol(r.tier) + (r.team === TM ? '' : '99') : '#7A8590'), borderColor: rows.map(r => r.team === TM ? css('--head') : 'transparent'), borderWidth: rows.map(r => r.team === TM ? 2 : 0) }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { autoSkip: false, font: { size: 9 } } }, y: { title: { display: true, text: 'Win % vs. an average team' }, suggestedMin: 40, suggestedMax: 60 } } } });
   }
   $('cg-n').onchange = renderGroups; renderGroups();
@@ -457,6 +522,7 @@ function initLeague() {
   renderStandings();
 }
 inits.league = initLeague;
+renderers.league = () => { renderPower(); renderGroups(); renderLines(); renderStandings(); };
 function initTeam() { teamOptions('tm-sel'); }
 inits.team = initTeam;
 renderers.team = renderTeam;
@@ -494,11 +560,11 @@ function renderTeam() {
   // simulation
   const sh = (PW && PW.simAll && PW.simAll[x]) || [];
   $('sim-note').innerHTML = pr && pr.projPts != null ? `10,000 simulations of every remaining game. Middle 80%: <b>${pr.projLo80}-${pr.projHi80}</b> points (95%: ${pr.projLo}-${pr.projHi}). Blue = at or above ${T.playoffLineNow ? `this season's simulated West playoff line (~${T.playoffLine} points; 80% range ${T.playoffLineNow.lo80}-${T.playoffLineNow.hi80}). A typical West line over the last ${T.playoffLineN} full seasons was ~${T.playoffLineHist}` : `a typical playoff line (~${T.playoffLine})`}.` : '';
-  mkChart('c-sim', { type: 'bar', data: { labels: sh.map(b => b.x), datasets: [{ data: sh.map(b => b.n), backgroundColor: sh.map(b => b.x + 1 >= T.playoffLine ? 'rgba(108,172,227,.85)' : 'rgba(128,128,128,.35)') }] },
+  mkChart('c-sim', { type: 'bar', data: { labels: sh.map(b => b.x), datasets: [{ data: sh.map(b => b.n), backgroundColor: sh.map(b => b.x + 1 >= T.playoffLine ? css('--ice') : 'rgba(128,128,128,.35)') }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { title: c => c[0].label + '-' + (+c[0].label + 1) + ' points', label: c => (c.raw / 100).toFixed(1) + '% of simulations' } } }, scales: { x: { title: { display: true, text: 'Final points' }, ticks: { maxTicksLimit: 14 } }, y: { display: false } } } });
   const N = D.seasonGames, xs = Array.from({length: N + 1}, (_, i) => i), proj = pr && pr.projPts != null ? pr.projPts : null;
   mkChart('c-points', { type: 'line', data: { labels: xs, datasets: [
-    { label: x, data: [0, ...log.map(g => g.cum)], borderColor: '#6CACE3', backgroundColor: '#6CACE3', pointRadius: 3, borderWidth: 3 },
+    { label: x, data: [0, ...log.map(g => g.cum)], borderColor: css('--ice'), backgroundColor: css('--ice'), pointRadius: 3, borderWidth: 3 },
     ...(proj != null ? [{ label: 'Projection pace', data: xs.map(i => +(proj / N * i).toFixed(1)), borderColor: css('--mute'), borderDash: [5, 4], borderWidth: 1.5, pointRadius: 0 }] : []),
     { label: T.playoffLineNow ? 'Projected playoff line' : 'Typical playoff line', data: xs.map(i => +(T.playoffLine / N * i).toFixed(1)), borderColor: '#C0392B', borderDash: [2, 4], borderWidth: 1.5, pointRadius: 0 }] },
     options: { responsive: true, maintainAspectRatio: false, scales: { x: { title: { display: true, text: 'Games played' }, ticks: { maxTicksLimit: 12 } }, y: { title: { display: true, text: 'Points' } } }, plugins: { legend: { labels: { boxWidth: 10 } } } } });
@@ -519,16 +585,16 @@ function renderLines() {
   if (g) ['top', 'topF', 'topD', 'depth', 'depF', 'depD', 'goalie'].forEach(k => rows.slice().sort((a, b) => b[k] - a[k]).forEach((r, i) => (gr[r.team] ||= {})[k] = i + 1));
   const cell = (r, k, names) => { const rk = r['rk_' + k], show = g ? gr[r.team][k] : rk;
     return `<td title="${g ? `NHL rank ${ord(rk)} of ${LN.length}. ` : ''}${(names || []).join(', ')}"><b>${sp(r[k])}</b> <span class="small">${ord(show)}</span></td>`; };
-  $('ln-table').innerHTML = `<table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Top (6F + 4D)</th><th>Top F</th><th>Top D</th><th>Depth (6F + 2D)</th><th>Depth F</th><th>3rd pair</th><th>Starting G</th><th title="18 skaters + starting goalie, each counted equally">Total</th></tr>${rows.map((r, i) => `<tr${r.team === 'UTA' ? ' class="me"' : ''}>
+  $('ln-table').innerHTML = `<table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Top (6F + 4D)</th><th>Top F</th><th>Top D</th><th>Depth (6F + 2D)</th><th>Depth F</th><th>3rd pair</th><th>Starting G</th><th title="18 skaters + starting goalie, each counted equally">Total</th></tr>${rows.map((r, i) => `<tr${r.team === TM ? ' class="me"' : ''}>
     <td>${g ? `<b>${i + 1}</b><span class="sub">NHL ${r.rk_total}</span>` : r.rk_total}</td><td><a class="tm" href="#team" onclick="pickTeam('${r.team}');return false;">${r.team}</a>${r.incomplete ? `<span class="sub" title="Not enough players have appeared yet; ${r.incomplete} slot(s) filled at replacement level">incomplete*</span>` : ''}</td>${cell(r, 'top', r.topNames)}${cell(r, 'topF', r.topNames.slice(0, 6))}${cell(r, 'topD', r.topNames.slice(6))}${cell(r, 'depth', r.depNames)}${cell(r, 'depF', r.depNames.slice(0, 6))}${cell(r, 'depD', r.depNames.slice(6))}${cell(r, 'goalie', r.gName)}<td><b>${sp(r.total)}</b></td></tr>`).join('')}</table>
     <p class="small" style="margin-top:6px">${g ? `Ranks in this view are within the ${groupName(g)} (hover a value for its NHL rank).` : `Ranks are out of ${LN.length} teams. Total = the 18 skaters plus the starting goalie, each counted equally (unlike Power Rankings, which weight players by ice time). Teams that dress 11 forwards and 7 defensemen (Colorado so far) have the 7th defenseman counted in the 12th forward slot. *Incomplete: the team hasn't dressed enough players yet, so empty slots are filled at replacement level (the league's 10th percentile).`} Built from talent, not this week's deployment, so it shows what each roster could ice. Players who haven't played yet are left out.</p>`;
   const mxL = median(LN.map(r => r.top)), myL = median(LN.map(r => r.depth));
   const quadOf = r => (r.top >= mxL ? (r.depth >= myL ? 'Complete' : 'Top-heavy') : (r.depth >= myL ? 'Deep, no stars' : 'Thin'));
-  const qTeams = q => LN.filter(r => quadOf(r) === q).sort((a, b) => b.total - a.total).map(r => r.team === 'UTA' ? '<b>UTA</b>' : r.team).join(', ');
-  const uQ = LN.find(r => r.team === 'UTA');
-  $('ln-quad').innerHTML = `Dotted lines = the median team (half the league on each side; unlike the mean, one extreme roster can't drag it). <b>Complete</b> (top right): above-median top group and depth; the profile of most contenders. <b>Top-heavy</b> (bottom right): strong top six and top four, thin below; results lean on stars staying healthy. <b>Deep, no stars</b> (top left): a strong supporting cast without a high-end core; the top group plays the most minutes, and team strength tracks it far more closely than depth, so this profile usually wins less than its total suggests. <b>Thin</b> (bottom left): below median on both; usually rebuilding or injury-hit.${uQ ? ` Utah: <b>${quadOf(uQ)}</b>.` : ''}<br><span style="display:block;margin-top:4px">Complete: ${qTeams('Complete')}<br>Top-heavy: ${qTeams('Top-heavy')}<br>Deep, no stars: ${qTeams('Deep, no stars')}<br>Thin: ${qTeams('Thin')}</span>`;
-  mkChart('c-lines', { type: 'scatter', data: { datasets: [{ data: LN.map(r => ({x: r.top, y: r.depth, t: r.team})), pointRadius: LN.map(r => r.team === 'UTA' ? 8 : 5),
-    backgroundColor: LN.map(r => r.team === 'UTA' ? '#6CACE3' : (DARK() ? 'rgba(200,210,220,.6)' : 'rgba(90,100,110,.6)')) }] },
+  const qTeams = q => LN.filter(r => quadOf(r) === q).sort((a, b) => b.total - a.total).map(r => r.team === TM ? `<b>${TM}</b>` : r.team).join(', ');
+  const uQ = LN.find(r => r.team === TM);
+  $('ln-quad').innerHTML = `Dotted lines = the median team (half the league on each side; unlike the mean, one extreme roster can't drag it). <b>Complete</b> (top right): above-median top group and depth; the profile of most contenders. <b>Top-heavy</b> (bottom right): strong top six and top four, thin below; results lean on stars staying healthy. <b>Deep, no stars</b> (top left): a strong supporting cast without a high-end core; the top group plays the most minutes, and team strength tracks it far more closely than depth, so this profile usually wins less than its total suggests. <b>Thin</b> (bottom left): below median on both; usually rebuilding or injury-hit.${uQ ? ` ${TM}: <b>${quadOf(uQ)}</b>.` : ''}<br><span style="display:block;margin-top:4px">Complete: ${qTeams('Complete')}<br>Top-heavy: ${qTeams('Top-heavy')}<br>Deep, no stars: ${qTeams('Deep, no stars')}<br>Thin: ${qTeams('Thin')}</span>`;
+  mkChart('c-lines', { type: 'scatter', data: { datasets: [{ data: LN.map(r => ({x: r.top, y: r.depth, t: r.team})), pointRadius: LN.map(r => r.team === TM ? 8 : 5),
+    backgroundColor: LN.map(r => r.team === TM ? css('--ice') : (DARK() ? 'rgba(200,210,220,.6)' : 'rgba(90,100,110,.6)')) }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.t}: top ${sp(c.raw.x)}, depth ${sp(c.raw.y)}` } } },
       scales: { x: { title: { display: true, text: 'Top (6F + 4D), pts' } }, y: { title: { display: true, text: 'Depth (6F + 2D), pts' } } } },
     plugins: [quadPlugin(mxL, myL, ['Deep, no stars', 'Complete', 'Thin', 'Top-heavy']), { id: 'lab', afterDraw(ch) { const {ctx} = ch; ctx.save(); ctx.fillStyle = css('--ink'); ctx.font = '10px sans-serif'; ch.getDatasetMeta(0).data.forEach((p, i) => ctx.fillText(LN[i].team, p.x + 6, p.y + 3)); ctx.restore(); } }] });
@@ -538,15 +604,15 @@ const views = [['central', 'Central'], ['west', 'West wild card'], ['league', 'L
 let stView = 'central';
 const byPct = (a, b) => b.ptsPct - a.ptsPct || b.pts - a.pts || b.rw - a.rw, by321 = (a, b) => b.p321Pct - a.p321Pct || b.p321 - a.p321 || b.rw - a.rw;
 const stHead = `<tr><th>#</th><th>Team</th><th>GP</th><th>W-L-OTL</th><th>RW</th><th>PTS</th><th>P%</th><th>GD</th><th>L10</th><th>STRK</th></tr>`;
-const stRow = (t, i, x = '') => `<tr class="${t.abbr === 'UTA' ? 'me' : ''}${x}"><td>${i}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.gp}</td><td>${t.w}-${t.l}-${t.otl}</td><td>${t.rw}</td><td><b>${t.pts}</b></td><td>${t.ptsPct.toFixed(3).replace(/^0/, '')}</td><td>${t.gd > 0 ? '+' : ''}${t.gd}</td><td>${t.l10}</td><td>${t.streak}</td></tr>`;
+const stRow = (t, i, x = '') => `<tr class="${t.abbr === TM ? 'me' : ''}${x}"><td>${i}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.gp}</td><td>${t.w}-${t.l}-${t.otl}</td><td>${t.rw}</td><td><b>${t.pts}</b></td><td>${t.ptsPct.toFixed(3).replace(/^0/, '')}</td><td>${t.gd > 0 ? '+' : ''}${t.gd}</td><td>${t.l10}</td><td>${t.streak}</td></tr>`;
 function renderStandings() {
   let h = '';
   if (stView === 'central') h = `<table>${stHead}${S.filter(t => t.div === 'Central').sort(byPct).map((t, i) => stRow(t, i + 1, i === 2 ? ' cut' : '')).join('')}</table>`;
   else if (stView === 'west') { const pool = S.filter(t => t.conf === 'Western'), divs = [...new Set(pool.map(t => t.div))], top = divs.flatMap(d => pool.filter(t => t.div === d).sort(byPct).slice(0, 3)), rest = pool.filter(t => !top.includes(t)).sort(byPct);
     h = divs.map(d => `<h3 style="margin-top:8px">${d} top 3</h3><table>${stHead}${top.filter(t => t.div === d).map((t, i) => stRow(t, i + 1)).join('')}</table>`).join('') + `<h3 style="margin-top:12px">Wild card</h3><table>${stHead}${rest.map((t, i) => stRow(t, 'WC' + (i + 1), i === 1 ? ' cut' : '')).join('')}</table>`; }
   else if (stView === 'league') h = `<table>${stHead}${S.slice().sort(byPct).map((t, i) => stRow(t, i + 1)).join('')}</table>`;
-  else if (stView === 'p321') h = `<table><tr><th>#</th><th>Team</th><th>GP</th><th>RW</th><th>OT/SO W</th><th>OTL</th><th>3-2-1-0 PTS</th><th>P%</th><th>NHL PTS</th></tr>${S.filter(t => t.conf === 'Western').sort(by321).map((t, i) => `<tr class="${t.abbr === 'UTA' ? 'me' : ''}${i === 7 ? ' cut' : ''}"><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.gp}</td><td>${t.rw}</td><td>${t.w - t.rw}</td><td>${t.otl}</td><td><b>${t.p321}</b></td><td>${t.p321Pct.toFixed(3).replace(/^0/, '')}</td><td>${t.pts}</td></tr>`).join('')}</table>`;
-  else h = ['Western', 'Eastern'].map(cf => { const pool = S.filter(t => t.conf === cf).sort(by321); return `<h3 style="margin-top:8px">${cf}</h3><table><tr><th>Seed</th><th>Team</th><th>3-2-1-0 P%</th><th>RW</th><th>Status</th></tr>${pool.slice(0, 11).map((t, i) => `<tr class="${t.abbr === 'UTA' ? 'me' : ''}${i === 5 || i === 9 ? ' cut' : ''}"><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.p321Pct.toFixed(3).replace(/^0/, '')}</td><td>${t.rw}</td><td>${i < 6 ? '<span class="pill p-green">locked seed</span>' : i < 10 ? '<span class="pill p-amber">play-in</span>' : '<span class="pill p-red">out</span>'}</td></tr>`).join('')}</table>`; }).join('');
+  else if (stView === 'p321') h = `<table><tr><th>#</th><th>Team</th><th>GP</th><th>RW</th><th>OT/SO W</th><th>OTL</th><th>3-2-1-0 PTS</th><th>P%</th><th>NHL PTS</th></tr>${S.filter(t => t.conf === 'Western').sort(by321).map((t, i) => `<tr class="${t.abbr === TM ? 'me' : ''}${i === 7 ? ' cut' : ''}"><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.gp}</td><td>${t.rw}</td><td>${t.w - t.rw}</td><td>${t.otl}</td><td><b>${t.p321}</b></td><td>${t.p321Pct.toFixed(3).replace(/^0/, '')}</td><td>${t.pts}</td></tr>`).join('')}</table>`;
+  else h = ['Western', 'Eastern'].map(cf => { const pool = S.filter(t => t.conf === cf).sort(by321); return `<h3 style="margin-top:8px">${cf}</h3><table><tr><th>Seed</th><th>Team</th><th>3-2-1-0 P%</th><th>RW</th><th>Status</th></tr>${pool.slice(0, 11).map((t, i) => `<tr class="${t.abbr === TM ? 'me' : ''}${i === 5 || i === 9 ? ' cut' : ''}"><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.p321Pct.toFixed(3).replace(/^0/, '')}</td><td>${t.rw}</td><td>${i < 6 ? '<span class="pill p-green">locked seed</span>' : i < 10 ? '<span class="pill p-amber">play-in</span>' : '<span class="pill p-red">out</span>'}</td></tr>`).join('')}</table>`; }).join('');
   $('st-body').innerHTML = h;
   $('st-tabs').innerHTML = views.map(([k, l]) => `<button class="tab ${k === stView ? 'on' : ''}" data-v="${k}">${l}</button>`).join('');
   document.querySelectorAll('#st-tabs .tab').forEach(b => b.onclick = () => { stView = b.dataset.v; renderStandings(); });
@@ -621,7 +687,7 @@ function renderRoster(x) {
     <td${goalsTitle(r.tal)}><b>${sp(pt(r.tal))}</b> ${rbar(pt(r.tal), pt(r.tsd), -6, 6, tierCol(r.tier))}</td>
     <td>${bandPill(bandOf(r.tpct, r.grp, r.tal, r.tsd))} ${pctPill(r.tpct)}${r.trank ? `<span class="sub">${ord(r.trank)} of ${r.tn} NHL ${({F: 'forwards', D: 'defensemen', G: 'goalies'}[r.grp] || 'players')}</span>` : ''}</td>
     <td class="wrap">${styleChips(r.sty, r.styWhy)}</td><td class="small wrap">${r.sRole || ''}</td><td${goalsTitle(r.role)}>${sp(pt(r.role))}${r.grp === 'G' && PLID[r.id] && PLID[r.id].guse ? `<span class="sub">at ${Math.round(((PLID[r.id].guse.share25 != null && r.gp < 10) ? PLID[r.id].guse.share25 : PLID[r.id].guse.share) * 100)}% of starts</span>` : ''}</td>${hasCap ? `<td>${money(r.aav)}${r.elc ? ' <span class="pill p-grey" title="Entry-level contract: cheap by rule">ELC</span>' : ''}</td>` : ''}</tr>`).join('')}</table>
-    <p class="small" style="margin-top:6px">Team rank is by talent across all positions (F1 = best forward). "Clearly above/below average" appears only when this season's Impact is outside the 95% range of chance and he has 250+ minutes. Talent includes an age adjustment. Players who haven't played yet are rated from earlier seasons; brand-new players start from a below-average baseline that rises with NHL experience.${x === 'UTA' ? '' : ' Only players who have appeared for this team this season are listed.'}</p>`;
+    <p class="small" style="margin-top:6px">Team rank is by talent across all positions (F1 = best forward). "Clearly above/below average" appears only when this season's Impact is outside the 95% range of chance and he has 250+ minutes. Talent includes an age adjustment. Players who haven't played yet are rated from earlier seasons; brand-new players start from a below-average baseline that rises with NHL experience.${x === 'UTA' ? '' : ' Players who have appeared for this team this season are listed; Player Finder also shows rostered players who have not played yet.'}</p>`;
   // talent forest
   const fw = $('forest-wrap'); if (fw) fw.style.height = Math.max(300, L.length * 22) + 'px';
   mkChart('c-forest', { type: 'bar', data: { labels: shortNames(L).map((n, i) => n + ' (' + L[i].grp + ')'), datasets: [
@@ -676,8 +742,46 @@ function drawValue(L) {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.name}: $${c.raw.x}M, ${sp(c.raw.y)} pts` } } }, scales: { x: { title: { display: true, text: 'Cap hit ($M)' }, min: 0, max: xm }, y: { title: { display: true, text: role ? 'In his role (pts / 84 GP, his minutes)' : 'Raw talent (pts / 84 GP, standard minutes)' } } } },
     plugins: [quadPlugin(mxV, myV, ['Bargains', 'Paid stars', 'Cheap depth', 'Expensive, low output']), { id: 'lab', afterDraw(ch) { const {ctx, scales: {x, y}} = ch; ctx.save(); ctx.strokeStyle = css('--mute'); ctx.setLineDash([8, 4]); ctx.beginPath(); const fy = v => (f.icpt + f.slope * v) * PPI; ctx.moveTo(x.getPixelForValue(0), y.getPixelForValue(fy(0))); ctx.lineTo(x.getPixelForValue(xm), y.getPixelForValue(fy(xm))); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = css('--ink'); ctx.font = '10px sans-serif'; ch.getDatasetMeta(0).data.forEach((p, i) => ctx.fillText(V[i].name.split(' ').slice(-1)[0], p.x + 8, p.y + 3)); ctx.restore(); } }] });
 }
+
+// ================= PLAYOFFS =================
+const POM = PW && PW.playoffModel;
+const pc1 = v => v == null ? '&mdash;' : (v >= 0.995 ? '>99%' : v > 0 && v < 0.005 ? '<1%' : Math.round(v * 100) + '%');
+const pcB = (v, max, col) => `<div style="display:flex;align-items:center;gap:6px"><div style="flex:0 0 60px;height:8px;background:var(--line);border-radius:4px;overflow:hidden"><div style="height:8px;width:${Math.min(100, v / max * 100)}%;background:${col || 'var(--ice)'}"></div></div><b>${pc1(v)}</b></div>`;
+function renderPlayoffs(x) {
+  if (!PW || !PW.rows.some(r => r.po)) { $('po-table').innerHTML = '<div class="lock">Needs the league simulation (MoneyPuck game-by-game files and the league schedule).</div>'; return; }
+  const f = $('po-filter').value, k = $('po-sort').value;
+  const val = r => k === 'strength' ? r.po.strength : (r.po[k] ?? -1);
+  const rows = PW.rows.filter(r => r.po && (!f || confOf[r.team] === f)).sort((a, b) => val(b) - val(a) || b.po.cup - a.po.cup);
+  const mxCup = Math.max(...PW.rows.map(r => r.po ? r.po.cup : 0), 0.01);
+  $('po-table').innerHTML = `<table><tr><th>#</th><th>Team</th><th title="Top-12 forwards and top-6 defensemen by ice time with talent in the top 10% at the position">Elite skaters</th><th>Make playoffs</th><th>Win round 1</th><th>Playoff strength <span class="small">(80% range)</span></th><th>Reach conf. final</th><th>Reach Final</th><th>Win Cup</th><th>Cup if they make it</th></tr>
+    ${rows.map((r, i) => { const p = r.po; return `<tr${r.team === x ? ' class="me"' : ''}><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${r.team}');return false;"><b>${r.team}</b></a> <span class="small">${(S.find(s => s.abbr === r.team) || {}).name || ''}</span></td>
+      <td>${p.elite}</td><td>${pc1(p.make)}</td><td>${pc1(p.r1)}</td><td><b>${pc1(p.strength)}</b> <span class="small">(${Math.round(p.strengthLo * 100)}-${Math.round(p.strengthHi * 100)})</span></td><td>${pc1(p.r2)}</td><td>${pc1(p.final)}</td><td>${pcB(p.cup, mxCup)}</td><td>${pc1(p.cupIfIn)}</td></tr>`; }).join('')}</table>
+    <p class="small" style="margin-top:6px"><b>How sure:</b> making the playoffs comes from the season simulation (backtested on 8 seasons); round-one odds have clear skill in the backtest; conference final, Final and Cup odds carry only modest skill, so they are pulled toward even (the series edge is cut to ${POM ? Math.round(POM.alpha * 100) : 70}%, the setting that scored best on past seasons). Elite skaters are counted from players who have dressed this season.</p>`;
+  // selected team's path
+  const r = PW.rows.find(q => q.team === x), nm = (S.find(s => s.abbr === x) || {}).name || x;
+  if (r && r.po) { const p = r.po, steps = [['Make playoffs', p.make], ['Win round 1', p.r1], ['Reach conference final', p.r2], ['Reach Final', p.final], ['Win Cup', p.cup]];
+    const sl = ['Division 1st', 'Division 2nd', 'Division 3rd', 'Wild card 1', 'Wild card 2'];
+    $('po-path').innerHTML = `<h3>${nm}: path to the Cup</h3>${steps.map(([l, v]) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--line)"><span>${l}</span><div style="display:flex;align-items:center;gap:8px"><div style="width:180px;height:10px;background:var(--line);border-radius:5px;overflow:hidden"><div style="height:10px;width:${Math.max(0.5, v * 100)}%;background:${TEAM_COL[x] || 'var(--ice)'}"></div></div><b style="min-width:42px;text-align:right">${pc1(v)}</b></div></div>`).join('')}
+      <p class="small" style="margin-top:8px">Playoff strength <b>${pc1(p.strength)}</b> (80% range ${Math.round(p.strengthLo * 100)}-${Math.round(p.strengthHi * 100)}%) against an average playoff team; ${p.elite} elite skater${p.elite === 1 ? '' : 's'}. If they get in, they win the Cup ${pc1(p.cupIfIn)} of the time.</p>
+      <h3 style="margin-top:12px">Where they finish</h3><table>${sl.map((l, i) => `<tr><td>${l}</td><td>${pc1(p.seeds[i])}</td></tr>`).join('')}<tr><td>Miss the playoffs</td><td>${pc1(1 - p.make)}</td></tr></table>
+      ${p.r1opp && p.r1opp.length ? `<h3 style="margin-top:12px">Most likely first-round opponents</h3><div class="small">${p.r1opp.map(([o, q]) => `<a class="tm" href="#team" onclick="pickTeam('${o}');return false;"><b>${o}</b></a> ${pc1(q)}`).join(' &bull; ')} <span class="small">(share of simulations where they make it)</span></div>` : ''}`; }
+  else $('po-path').innerHTML = '<div class="lock">No playoff simulation for this team.</div>';
+  // conference picture: who wins it
+  const cf = confOf[x] || 'Western', C = PW.rows.filter(q => q.po && confOf[q.team] === cf).sort((a, b) => b.po.final - a.po.final).slice(0, 8), mx = Math.max(...C.map(q => q.po.final), 0.01);
+  $('po-conf').innerHTML = `<h3>${cf} Conference: who reaches the Final</h3>${C.map(q => `<div style="display:flex;align-items:center;gap:8px;padding:3px 0"><span style="width:44px"><b>${q.team}</b></span><div style="flex:1;height:12px;background:var(--line);border-radius:6px;overflow:hidden"><div style="height:12px;width:${q.po.final / mx * 100}%;background:${TEAM_COL[q.team] || 'var(--ice)'}"></div></div><b style="width:42px;text-align:right">${pc1(q.po.final)}</b></div>`).join('')}
+    <p class="small" style="margin-top:8px">Summed over the conference this is about 100%. Early in the season most of each team's number comes from roster talent and last season.</p>`;
+  // what predicts playoff success
+  if (POM) { const sb = POM.series_backtest.favorite_won;
+    $('po-pred').innerHTML = `<h3>Picking past series winners <span class="small">${POM.n_series} series, 2013-14 to 2024-25</span></h3><table><tr><th>Measure</th><th>Favorite won</th></tr>${Object.entries(sb).map(([l, v]) => `<tr${l.startsWith('Power ranking + elite') ? ' class="me"' : ''}><td>${l}</td><td>${(v * 100).toFixed(1)}%</td></tr>`).join('')}</table>
+      <p class="small" style="margin-top:6px">Each season scored with weights fitted on the other seasons. 50% = coin flip. Bottom-of-lineup talent and pre-season goalie ratings showed no measurable effect on series results: benches shorten in the playoffs, and goaltending over seven games is mostly about who gets hot.</p>`;
+    const ss = POM.stage_skill;
+    $('po-notes').innerHTML = `<h3>How much to trust each column</h3><table><tr><th>Stage</th><th>Backtest skill</th></tr><tr><td>Make playoffs</td><td>Strong (season simulation, 8 seasons)</td></tr><tr><td>Win round 1</td><td>Good (${ss.round1[0]}-${ss.round1[1]}% better than equal odds)</td></tr><tr><td>Reach conference final</td><td>Modest (${ss.confFinal[0]}-${ss.confFinal[1]}%)</td></tr><tr><td>Reach Final</td><td>Modest (${ss.final[0]}-${ss.final[1]}%)</td></tr><tr><td>Win Cup</td><td>Low (${ss.cup[0]}-${ss.cup[1]}%)</td></tr></table>
+      <p class="small" style="margin-top:6px">Skill = improvement in log-loss over giving every team equal odds, from about 4 and 14 games into 8 past seasons. ${POM.favorites} ${POM.cup_winners.note}</p>`; }
+}
+inits.playoffs = () => { $('po-filter').onchange = $('po-sort').onchange = () => renderPlayoffs(TM); };
+renderers.playoffs = renderPlayoffs;
 // ================= MATCHUP =================
-const MU = {a: 'UTA', b: null, v: 'b'};
+const MU = {a: 'UTA', b: null, v: 'b', for: null};
 function muPois(lam, k) { let p = Math.exp(-lam); for (let i = 1; i <= k; i++) p *= lam / i; return p; }
 // P(A wins) with independent Poisson goals over the time left; ties go to overtime at pOT (A's overtime/shootout win chance)
 function muWinFromState(la, lb, frac, lead, pOT) {
@@ -688,8 +792,7 @@ function muWinFromState(la, lb, frac, lead, pOT) {
 function initMatchup() {
   const teams = S.slice().sort((x, y) => x.name.localeCompare(y.name));
   const opt = sel => teams.map(s => `<option value="${s.abbr}" ${s.abbr === sel ? 'selected' : ''}>${s.name}</option>`).join('');
-  const n0 = (D.next10 || [])[0];
-  if (!MU.b) { MU.b = n0 ? n0.opp : (PW.rows[0].team === 'UTA' ? PW.rows[1].team : PW.rows[0].team); MU.v = n0 && (n0.ha === 'H' || n0.ha === 'vs') ? 'a' : 'b'; }
+  muFollow(TM);
   $('mu-a').innerHTML = opt(MU.a); $('mu-b').innerHTML = opt(MU.b); $('mu-v').value = MU.v;
   // upcoming games picker: the next three dates with unplayed games
   const G = ((PW && PW.sched) || []).filter(g => g[3] !== 6 && g[3] !== 7);
@@ -703,6 +806,14 @@ function initMatchup() {
   renderMatchup(true);
 }
 inits.matchup = initMatchup;
+// the matchup starts as the selected team vs. its next opponent (re-set whenever the selected team changes)
+function muFollow(x) {
+  if (MU.for === x) return; MU.for = x; MU.a = x;
+  const g = teamGames(x).next[0];
+  if (g) { const home = g[1] === x; MU.b = home ? g[2] : g[1]; MU.v = home ? 'a' : 'b'; }
+  else { const o = PW.rows.find(r => r.team !== x); MU.b = o ? o.team : x; MU.v = 'n'; }
+}
+renderers.matchup = x => { if (MU.for === x) return; muFollow(x); $('mu-a').value = MU.a; $('mu-b').value = MU.b; $('mu-v').value = MU.v; renderMatchup(true); };
 function renderMatchup(resetG) {
   const a = MU.a, b = MU.b, ra = PW.rows.find(r => r.team === a), rb = PW.rows.find(r => r.team === b);
   if (!ra || !rb || a === b) { $('mu-head').innerHTML = '<div class="lock">Pick two different teams.</div>'; return; }
@@ -918,8 +1029,8 @@ function muRenderInsight(E, a, b) {
   if (!E) { $('mu-edges').innerHTML = '<div class="lock">Not enough team data yet.</div>'; $('mu-why').innerHTML = ''; return; }
   const fav = E.pA >= 0.5 ? a : b, mx = Math.max(0.04, ...E.water.map(w => Math.abs(w.dp)));
   $('mu-why').innerHTML = `<h3>Why the odds lean ${fav} <span class="small">how ${a}'s ${Math.round(E.pA * 100)}% is built, starting from 50-50</span></h3>
-    <table>${E.water.map(w => { const pc = Math.round(w.dp * 1000) / 10, wd = Math.round(Math.abs(w.dp) / mx * 45);
-      return `<tr><td style="width:42%">${w.l}</td><td><div style="display:flex;align-items:center"><div style="width:50%;display:flex;justify-content:flex-end">${w.dp < 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[b] || '#888'};border-radius:3px"></span>` : ''}</div><div style="width:2px;height:16px;background:var(--line)"></div><div style="width:50%">${w.dp > 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[a] || '#888'};border-radius:3px"></span>` : ''}</div></div></td><td style="width:70px;text-align:right"><b>${w.dp >= 0 ? '+' : ''}${pc.toFixed(1)}</b> <span class="small">${w.dp >= 0 ? a : b}</span></td></tr>`; }).join('')}</table>
+    <table><tr><td></td><td><div style="display:flex" class="small"><div style="width:50%;text-align:right;padding-right:6px">&#9664; toward ${a}</div><div style="width:50%;padding-left:6px">toward ${b} &#9654;</div></div></td><td></td></tr>${E.water.map(w => { const pc = Math.round(w.dp * 1000) / 10, wd = Math.round(Math.abs(w.dp) / mx * 45);
+      return `<tr><td style="width:42%">${w.l}</td><td><div style="display:flex;align-items:center"><div style="width:50%;display:flex;justify-content:flex-end">${w.dp > 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[a] || '#888'};border-radius:3px"></span>` : ''}</div><div style="width:2px;height:16px;background:var(--line)"></div><div style="width:50%">${w.dp < 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[b] || '#888'};border-radius:3px"></span>` : ''}</div></div></td><td style="width:70px;text-align:right"><b>${w.dp >= 0 ? '+' : ''}${pc.toFixed(1)}</b> <span class="small">${w.dp >= 0 ? a : b}</span></td></tr>`; }).join('')}</table>
     <p class="small" style="margin-top:6px">Win-% points toward each team. The power rating weighs current roster talent, last season and this season's chances and goals (backtested weights), plus home ice and the goalies picked above. Early in the season most of it is roster and last season.</p>`;
   const card = (t, o) => { const P = E.paths[t]; return `<div style="margin-bottom:10px"><b style="font-size:15px">How ${t} wins</b>${P.length ? P.map(x => `<div style="margin:6px 0 0 0;padding-left:10px;border-left:3px solid ${TEAM_COL[t] || 'var(--ice)'}"><b>${x.head}</b> <span class="pill ${x.tag ? 'p-grey' : x.rel >= 0.55 ? 'p-green' : x.rel >= 0.4 ? 'p-blue' : 'p-grey'}" title="How well this carries from one stretch of games to the next">${x.tag || relTag(x.rel)}</span><div class="small" style="color:var(--ink)">${x.body}</div><div class="small"><b>Watch:</b> ${x.watch}</div></div>`).join('') : '<div class="small">No clear structural edge; needs its goaltending or finishing to carry the night.</div>'}</div>`; };
   $('mu-edges').innerHTML = `<h3>How each team wins <span class="small">the matchup, stat by stat, in goals per game</span></h3>${card(a, b)}${card(b, a)}
@@ -956,14 +1067,12 @@ function muShare(M) {
   const R = {[a]: E.ra, [b]: E.rb}, last = n => n ? n.split(' ').slice(-1)[0] : '', pct = p => Math.round(p * 100) + '%';
   const fav = pOf(aw) >= pOf(hm) ? aw : hm, pf = Math.max(pOf(aw), pOf(hm));
   const verdict = pf >= 0.6 ? `${nm(fav)} favored` : pf >= 0.53 ? `Slight edge: ${nm(fav)}` : 'Close to a coin flip';
-  const watch = t => (R[t].top || []).slice(0, 2).map(last);
   const PL = (t, n) => (D.playersLeague || []).find(p => p.t === t && p.n === n);
   const star = t => { const n = (R[t].top || [])[0]; const p = n && PL(t, n); return p ? {n: last(n), arch: (p.arch || '').replace(/^(Top-line|Middle-six|Bottom-six|Top-pair|Second-pair|Third-pair) /, ''), pct: p.tpct} : null; };
   const G = {[a]: E.C.gA, [b]: E.C.gB}, xg = M.xg || {};
   const divRk = t => { const s = st(t); if (!s.div) return ''; const L = S.filter(q => q.div === s.div).sort((x, y) => (y.pts - x.pts) || ((y.ptsPct || 0) - (x.ptsPct || 0))); return `${ord(L.findIndex(q => q.abbr === t) + 1)} in ${s.div}`; };
   const lastG = t => { const g = ((PW && PW.sched) || []).filter(x => (x[3] === 6 || x[3] === 7) && (x[1] === t || x[2] === t)).sort().pop(); if (!g) return '—';
     const h = g[1] === t, us = h ? g[4] : g[5], th = h ? g[5] : g[4]; return `${us > th ? 'W' : g[6] > 3 ? 'OTL' : 'L'} ${us}-${th} ${h ? 'vs' : 'at'} ${h ? g[2] : g[1]}${g[6] > 3 ? (g[6] >= 5 ? ' (SO)' : ' (OT)') : ''}`; };
-  const scr = (t, n) => (E.scorers[t] || []).slice(0, n).map(s => `${last(s.n)} ${Math.round(s.p * 100)}%`).join(', ');
   const lastDone = ((PW && PW.sched) || []).filter(x => x[3] === 6 || x[3] === 7).map(x => x[0]).sort().pop();
   const dataThru = lastDone ? new Date(lastDone + 'T12:00').toLocaleDateString([], {month: 'short', day: 'numeric'}) : '';
   const P1 = t => E.paths[t][0], sep = M.neutral ? 'vs' : '@';
@@ -973,23 +1082,6 @@ function muShare(M) {
     ['Goalies', G[a] && G[a].name ? `${last(G[a].name)} (${PO(G[a].tpct)} pct)` : 'usual mix', G[b] && G[b].name ? `${last(G[b].name)} (${PO(G[b].tpct)} pct)` : 'usual mix'],
   ];
   if ((E.rest.tired || []).length) keyRows.push(['Schedule', (E.rest.tired || []).includes(a) ? 'played last night' : 'rested', (E.rest.tired || []).includes(b) ? 'played last night' : 'rested']);
-  // ---------- post text (X: <= 280) and group-text version
-  const cap = s => s.replace(/^./, ch => ch.toUpperCase()), hd = p => cap(p.head.replace(/^Upset route: /, ''));
-  const lines = [`${aw} ${sep} ${hm} preview${M.when ? ', ' + M.when : ''}`, `Win odds: ${aw} ${pct(pOf(aw))}, ${hm} ${pct(pOf(hm))} (OT ${pct(M.pOT)})`];
-  [aw, hm].forEach(t => { const p = P1(t); if (p) lines.push(`${t}: ${hd(p)}`); });
-  lines.push(`To score: ${scr(aw, 2)} | ${scr(hm, 2)}`);
-  if ((E.rest.tired || []).length) lines.push(`Back-to-back: ${E.rest.tired.join(', ')}`);
-  if (G[hm] && G[aw] && G[hm].name && G[aw].name) lines.push(`In net: ${last(G[aw].name)} vs ${last(G[hm].name)}`);
-  if (xg[hm] != null) lines.push(`Model score: ${aw} ${xg[aw].toFixed(1)}, ${hm} ${xg[hm].toFixed(1)}`);
-  let tw = lines.join('\n');
-  for (const drop of [/^In net/, /^Model score/, /^Back-to-back/]) { if (tw.length <= 280) break; const i = lines.findIndex(l => drop.test(l)); if (i >= 0) { lines.splice(i, 1); tw = lines.join('\n'); } }
-  if (tw.length > 280) tw = tw.slice(0, 279) + '…';
-  const wy = E.water.slice().sort((x, y) => Math.abs(y.dp) - Math.abs(x.dp)).filter(w => (fav === a ? w.dp > 0 : w.dp < 0)).slice(0, 2).map(w => w.l.toLowerCase().replace(/ \(.*\)/, ''));
-  const pth = t => E.paths[t].length ? E.paths[t].map(x => `${hd(x)}. ${x.body.split('. ')[0].replace(/\.$/, '')}.`).join(' ') : 'No clear structural edge, so it needs its goalie or finishing.';
-  const long = `${nm(aw)} ${M.neutral ? 'vs.' : 'at'} ${nm(hm)}${M.when ? ', ' + M.when : ''}. ${verdict}. Win odds ${aw} ${pct(pOf(aw))}, ${hm} ${pct(pOf(hm))}, with a ${pct(M.pOT)} chance of overtime.${wy.length ? ` The lean comes mostly from ${wy.join(' and ')}.` : ''}\n\n`
-    + `How ${aw} wins. ${pth(aw)}\n\nHow ${hm} wins. ${pth(hm)}\n\n`
-    + `Most likely to score: ${scr(aw, 3)} for ${aw}; ${scr(hm, 3)} for ${hm}. ${(E.rest.tired || []).length ? `${E.rest.tired.join(' and ')} played last night (second of a back-to-back), which the odds include. ` : ''}Players to watch: ${watch(aw).join(' and ')} for ${aw}, ${watch(hm).join(' and ')} for ${hm}${G[hm] && G[aw] && G[hm].name && G[aw].name ? `. In net: ${last(G[aw].name)} vs ${last(G[hm].name)}` : ''}.`
-    + (xg[hm] != null ? ` Model score ${aw} ${xg[aw].toFixed(1)}, ${hm} ${xg[hm].toFixed(1)}.` : '') + ` Stat to watch: share of expected goals; teams with 55%+ of a game's expected goals won ${Math.round((winAtShare(0.55) || .65) * 100)}% last season.`;
   // ---------- image
   const tall = SH.fmt === 'tall', W = tall ? 1080 : 1600, H = tall ? 1350 : 900, K = 2, P = 52;
   const cv = document.createElement('canvas'); cv.width = W * K; cv.height = H * K; const c = cv.getContext('2d'); c.scale(K, K);
@@ -1022,10 +1114,12 @@ function muShare(M) {
   const wyT = by + bh + 162; label(`WHY THE ODDS LEAN ${fav}`, P, wyT);
   const WL = E.water.slice(0, 6), mx = Math.max(0.04, ...WL.map(w => Math.abs(w.dp))), ax = P + (LW - 2 * P) * 0.62, half = (LW - 2 * P) * 0.24;
   WL.forEach((w, i) => { const y = wyT + 32 + i * 27; T(w.l, P, y, F('500', 16), INK);
-    const L_ = Math.abs(w.dp) / mx * half, toA = w.dp > 0; c.fillStyle = _lite(TEAM_COL[toA ? a : b] || BLUE);
-    _rr(c, toA ? ax : ax - L_, y - 12, Math.max(2, L_), 13, 3); c.fill();
+    // each bar points toward the team it helps, on that team's side of the graphic (away team left, home right)
+    const L_ = Math.abs(w.dp) / mx * half, toA = w.dp > 0, helps = toA ? a : b, left = helps === aw; c.fillStyle = _lite(TEAM_COL[helps] || BLUE);
+    _rr(c, left ? ax - L_ : ax, y - 12, Math.max(2, L_), 13, 3); c.fill();
     T(`${toA ? '+' : '−'}${(Math.abs(w.dp) * 100).toFixed(1)} ${toA ? a : b}`, LW - P, y, F('700', 15), MUTE, 'right'); });
   c.fillStyle = LINE; c.fillRect(ax - 1, wyT + 14, 2, WL.length * 27 + 2);
+  T(`◀ ${aw}`, ax - 6, wyT, F('700', 13), MUTE, 'right'); T(`${hm} ▶`, ax + 6, wyT, F('700', 13), MUTE, 'left');
   // how each team wins (right side in wide, below in tall)
   const colY = tall ? wyT + 46 + WL.length * 27 : 96, cx0 = tall ? P : LW + 10, cwid = tall ? (W - 2 * P - 36) / 2 : (W - LW - 10 - P - 30) / 2;
   const col = (t, x) => { let y = colY; const X = x + 18, w = cwid - 24;
@@ -1050,32 +1144,24 @@ function muShare(M) {
   T('Utah Mammoth Season Dashboard  ·  model: power ratings, home ice, likely goalies  ·  objective, not betting advice', P, H - 34, F('500', 14), MUTE);
   T(`Data: MoneyPuck.com, NHL${dataThru ? ' · through ' + dataThru : ''}. Paths use only stats that carry over from game to game.`, P, H - 14, F('500', 14), MUTE);
   const url = cv.toDataURL('image/png'), fn = `${aw}-at-${hm}-preview-${SH.fmt}.png`;
-  el.innerHTML = `<h3>Share this preview <span class="small">image + post text, built from the analysis on this tab</span></h3>
-    <div class="ctl" style="margin-bottom:8px"><label><input type="radio" name="sh-fmt" value="tall" ${tall ? 'checked' : ''}> Full (1080x1350, X / Instagram / texts)</label>
-      <label style="margin-left:12px"><input type="radio" name="sh-fmt" value="wide" ${!tall ? 'checked' : ''}> Wide (1600x900)</label></div>
-    <div class="grid2" style="align-items:start"><div><img id="sh-img" src="${url}" alt="Matchup preview image" style="width:100%;border-radius:10px;border:1px solid var(--line)">
-      <div class="ctl" style="margin-top:8px"><a class="btn" id="sh-dl" href="${url}" download="${fn}">Download image</a> <span class="small">or right-click / long-press the image to save it</span></div></div>
-    <div><div class="small" style="margin-bottom:4px"><b>Post text</b> (${tw.length}/280)</div><textarea id="sh-tw" rows="8" style="width:100%;font:13px/1.4 inherit">${tw}</textarea>
-      <div class="small" style="margin:10px 0 4px"><b>Longer version</b> for a group text</div><textarea id="sh-long" rows="12" style="width:100%;font:13px/1.4 inherit">${long}</textarea>
-      <div class="ctl" style="margin-top:6px"><button class="btn" id="sh-ctw">Copy post text</button> <button class="btn" id="sh-clong">Copy longer version</button> <span class="small" id="sh-msg"></span></div></div></div>
+  el.innerHTML = `<h3>Share this preview <span class="small">image built from the analysis on this tab</span></h3>
+    <div style="max-width:560px"><img id="sh-img" src="${url}" alt="Matchup preview image" title="${fn}" style="width:100%;border-radius:10px;border:1px solid var(--line)">
+      <div class="small" style="margin-top:6px">Right-click or long-press the image to save it.</div></div>
     <p class="small" style="margin-top:6px">Everything matches this tab, including any goalie you pick ("usual mix" leaves goalies unnamed). Team colors only, no logos.</p>`;
-  document.getElementsByName('sh-fmt').forEach(r => r.onchange = () => { SH.fmt = r.value; muShare(M); });
-  const cp = id => { const ta = $(id); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} if (navigator.clipboard) navigator.clipboard.writeText(ta.value).then(() => $('sh-msg').textContent = 'Copied.', () => $('sh-msg').textContent = ok ? 'Copied.' : 'Select the text and copy it.'); else $('sh-msg').textContent = ok ? 'Copied.' : 'Select the text and copy it.'; };
-  $('sh-ctw').onclick = () => cp('sh-tw'); $('sh-clong').onclick = () => cp('sh-long');
 }
-// ================= GAME RECAP (share graphic for a finished Utah game) =================
-const RC = {fmt: 'tall', gid: null};
+// ================= GAME RECAP (share graphic for a finished game of the selected team) =================
+const RC = {fmt: 'tall', gid: null, team: 'UTA'};   // one format: 1080x1350 (fits X, Instagram and texts)
 function rcCompute(R) {
-  const U = 'UTA', opp = R.home === U ? R.away : R.home, home = R.home === U;
+  const U = RC.team || 'UTA', isU = U === 'UTA', opp = R.home === U ? R.away : R.home, home = R.home === U;
   const nm = x => (S.find(s => s.abbr === x) || {}).name || x, last = n => n ? n.split(' ').slice(-1)[0] : '';
   const nick = x => { const f = nm(x), two = ['Maple Leafs', 'Blue Jackets', 'Red Wings', 'Golden Knights'].find(k => f.endsWith(k)); return x === 'UTA' ? 'Utah' : two || f.split(' ').slice(-1)[0]; };
   const city = x => { const f = nm(x), k = nick(x); return x === 'UTA' ? 'Salt Lake City' : f.endsWith(k) ? f.slice(0, -k.length).trim() : f; };
   const st = R.stats, us = R.us != null ? R.us : st.goals[0], them = R.them != null ? R.them : st.goals[1], won = us > them;
   // record after this game, from the game log
-  const GL = (D.gamelog || []).slice().sort((x, y) => x.n - y.n), gi = GL.findIndex(g => g.date === R.date && g.opp === opp);
-  let w = 0, l = 0, o = 0; GL.slice(0, gi + 1).forEach(g => { if (g.res === 'W') w++; else if (g.res === 'L') l++; else o++; });
-  const n = gi + 1, snapA = (D.snaps || []).find(s => s.gp === n), snapB = (D.snaps || []).find(s => s.gp === n - 1);
-  const pBefore = snapB ? snapB.pPlayoff : (n === 1 ? (D.team || {}).prePlayoff : null), pAfter = snapA ? snapA.pPlayoff : null;
+  const GL = (isU ? (D.gamelog || []) : teamGames(U).log).slice().sort((x, y) => x.n - y.n), gi = GL.findIndex(g => g.date === R.date && g.opp === opp);
+  let w = 0, l = 0, o = 0; GL.slice(0, gi + 1).forEach(g => { if (g.res.endsWith('W')) w++; else if (g.res === 'L') l++; else o++; });
+  const n = gi + 1, snapA = isU ? (D.snaps || []).find(s => s.gp === n) : null, snapB = isU ? (D.snaps || []).find(s => s.gp === n - 1) : null;
+  const pBefore = snapB ? snapB.pPlayoff : (isU && n === 1 ? (D.team || {}).prePlayoff : null), pAfter = snapA ? snapA.pPlayoff : null;
   const rkB = snapB ? snapB.rank : null, rkA = snapA ? snapA.rank : null;
   // win probability through the game: league-average scoring for both sides (no team strength, so no hindsight), OT 50/50
   const TRv = Object.values(D.teamRates || {}), lam = TRv.length ? TRv.reduce((s, x) => s + (x.gf || 3), 0) / TRv.length : 3.1;
@@ -1096,43 +1182,28 @@ function rcCompute(R) {
     const byStart = L.slice().sort((x, y) => (R.shots.find(s => s[1] === (t === U ? 0 : 1)) ? 0 : 0) || y.toi - x.toi);
     return {name: L.map(g => g.name.split(' ').slice(-1)[0]).join('/'), sa: L.reduce((s, g) => s + g.sa, 0), ga: L.reduce((s, g) => s + g.ga, 0), xga: L.reduce((s, g) => s + g.xga, 0), toi: 60, multi: true}; };
   const gU = comb(U), gO = comb(opp);
-  const PG = (D.perGame || []).find(p => p.id === R.id);
+  const PG = (isU ? (D.perGame || []) : (((D.teamExtra || {})[U] || {}).perGame || [])).find(p => p.id === R.id && !p.pending);
   const x5 = st.xg5, xs = st.xg, pp = st.ppxg;
   // the verdict: result vs. chances
   const d = R.deserve, head = won ? (d >= 0.6 ? 'Earned it' : d >= 0.42 ? 'Took a coin-flip game' : 'Stole one') : (d >= 0.6 ? 'Deserved better' : d >= 0.42 ? 'Lost a coin-flip game' : 'Outplayed');
   const parts = [];
-  if ((x5[0] - x5[1]) * (pp[0] - pp[1]) < 0 && Math.abs(pp[0] - pp[1]) >= 0.5) parts.push(`${x5[0] > x5[1] ? 'Utah' : nick(opp)} won at 5-on-5 (${Math.max(...x5).toFixed(1)} to ${Math.min(...x5).toFixed(1)} expected goals), ${pp[0] > pp[1] ? 'Utah' : nick(opp)} on the power play (${Math.max(...pp).toFixed(1)} to ${Math.min(...pp).toFixed(1)})`);
-  else parts.push(`${xs[0] >= xs[1] ? 'Utah' : nick(opp)} had the better chances (${Math.max(...xs).toFixed(1)} to ${Math.min(...xs).toFixed(1)} expected goals)`);
+  if ((x5[0] - x5[1]) * (pp[0] - pp[1]) < 0 && Math.abs(pp[0] - pp[1]) >= 0.5) parts.push(`${x5[0] > x5[1] ? nick(U) : nick(opp)} won at 5-on-5 (${Math.max(...x5).toFixed(1)} to ${Math.min(...x5).toFixed(1)} expected goals), ${pp[0] > pp[1] ? nick(U) : nick(opp)} on the power play (${Math.max(...pp).toFixed(1)} to ${Math.min(...pp).toFixed(1)})`);
+  else parts.push(`${xs[0] >= xs[1] ? nick(U) : nick(opp)} had the better chances (${Math.max(...xs).toFixed(1)} to ${Math.min(...xs).toFixed(1)} expected goals)`);
   if (gU && gO) { const su = gU.xga - gU.ga, so = gO.xga - gO.ga; if (Math.abs(su - so) >= 1) parts.push(`the goaltending edge went to ${su > so ? last(gU.name) : last(gO.name)} (${Math.abs(su - so).toFixed(1)} goals better than ${su > so ? last(gO.name) : last(gU.name)} against expected)`); }
   return {U, opp, home, nm, nick, city, last, us, them, won, rec: `${w}-${l}-${o}`, pBefore, pAfter, rkB, rkA, goals, big, gwg, lucky, clock, gU, gO, PG, head, why: parts.join('; ') + '.',
-          lp: R.lp && R.lp !== 'REG' ? R.lp : (R.shots.some(s => s[0] > 3600) ? 'OT' : ''), next: (D.next10 || [])[0] && gi === GL.length - 1 ? D.next10[0] : null, n};
+          lp: R.lp && R.lp !== 'REG' ? R.lp : (R.shots.some(s => s[0] > 3600) ? 'OT' : ''), next: gi === GL.length - 1 ? (isU ? (D.next10 || [])[0] || null : (() => { const g = teamGames(U).next[0]; if (!g) return null; const q = gameOdds(U, g); return {ha: q.home ? 'vs' : '@', opp: q.opp, date: g[0], pWin: q.p}; })()) : null, n};
 }
 function rcRender() {
   const el = $('rc-card'); if (!el) return;
-  const L = (D.recaps || []).filter(r => r.date).slice().sort((x, y) => y.gid - x.gid);
-  if (!L.length) { el.innerHTML = '<div class="lock">No game data yet.</div>'; return; }
+  const U = RC.team || 'UTA', L = ((U === 'UTA' ? D.recaps : (D.recapsAll || {})[U]) || []).filter(r => r.date).slice().sort((x, y) => y.gid - x.gid);
+  if (!L.length) { el.innerHTML = `<h3>Game recap</h3><div class="lock">No game data for ${U} yet.</div>`; return; }
   if (RC.gid == null || !L.some(r => r.gid === RC.gid)) RC.gid = L[0].gid;
   const R = L.find(r => r.gid === RC.gid), C = rcCompute(R), st = R.stats, a = R.away, h = R.home;
-  const pct = p => Math.round(p * 100) + '%', ix = t => t === 'UTA' ? 0 : 1;      // stats arrays are [Utah, opponent]
-  const scoreOf = t => t === 'UTA' ? C.us : C.them;
-  // ---------- text
+  const pct = p => p == null ? '—' : Math.round(p * 100) + '%', ix = t => t === U ? 0 : 1;      // stats arrays are [selected team, opponent]
+  const scoreOf = t => t === U ? C.us : C.them, NK = C.nick(U);
+  // ---------- helpers
   const sgn = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1);
   const gsax = g => g ? g.xga - g.ga : null;
-  const stars = C.PG ? C.PG.best.map(b => `${C.last(b.name)}`).join(', ') : '';
-  const lines = [`Final${C.lp ? ' (' + C.lp + ')' : ''}: ${a} ${scoreOf(a)}, ${h} ${scoreOf(h)}`, `${C.head}. Chances: ${a} ${st.xg[ix(a)].toFixed(1)} xG, ${h} ${st.xg[ix(h)].toFixed(1)} (5v5 ${st.xg5[ix(a)].toFixed(1)}-${st.xg5[ix(h)].toFixed(1)})`,
-    `Deserve-to-win: UTA ${pct(R.deserve)}`];
-  if (stars) lines.push(`Utah's best: ${stars}`);
-  if (C.gwg) lines.push(`Game-winner: ${C.gwg.who}${C.gwg.uta ? '' : ' (' + C.opp + ')'} (UTA ${pct(C.gwg.before)} to ${pct(C.gwg.after)})`);
-  if (C.pAfter != null && C.pBefore != null) lines.push(`Playoff odds: ${pct(C.pBefore)} to ${pct(C.pAfter)}${C.next ? `. Next: ${C.next.ha === '@' ? '@' : 'vs'} ${C.next.opp} (${pct(C.next.pWin)})` : ''}`);
-  let tw = lines.join('\n'); while (tw.length > 280 && lines.length > 3) { lines.splice(lines.length - 2, 1); tw = lines.join('\n'); }
-  const long = `Final${C.lp ? ' (' + C.lp + ')' : ''}: ${C.nm(a)} ${scoreOf(a)}, ${C.nm(h)} ${scoreOf(h)}. ${C.head}: ${C.why.replace(/^./, ch => ch.toUpperCase())} Replaying every shot by its expected-goal value, Utah wins this game ${pct(R.deserve)} of the time.`
-    + (C.gU && C.gO ? ` In net: ${C.last(C.gU.name)} ${C.gU.sa - C.gU.ga}/${C.gU.sa} (${sgn(gsax(C.gU))} vs. expected), ${C.last(C.gO.name)} ${C.gO.sa - C.gO.ga}/${C.gO.sa} (${sgn(gsax(C.gO))}).` : '')
-    + (C.PG ? ` Utah's best by Player Impact: ${C.PG.best.map(b => `${C.last(b.name)} (${b.line})`).join(', ')}.` : '')
-    + (C.gwg ? ` Game-winner: ${C.gwg.who}${C.gwg.uta ? '' : ' (' + C.nick(C.opp) + ')'} at ${C.clock(C.gwg.t)}, moving Utah's win chance from ${pct(C.gwg.before)} to ${pct(C.gwg.after)}.` : '')
-    + (C.big ? ` Biggest swing: ${C.big.who} at ${C.clock(C.big.t)} (${pct(C.big.before)} to ${pct(C.big.after)}).` : '')
-    + (C.lucky && C.lucky.xg < 0.06 ? ` Unlikeliest goal: ${C.lucky.who}, a ${Math.max(1, Math.round(C.lucky.xg * 100))}% chance.` : '')
-    + (C.pAfter != null && C.pBefore != null ? ` Utah is ${C.rec}; playoff odds ${pct(C.pBefore)} to ${pct(C.pAfter)}.` : ` Utah is ${C.rec}.`)
-    + (C.next ? ` Next: ${C.next.ha === '@' ? 'at' : 'vs.'} ${C.nm(C.next.opp)} (${pct(C.next.pWin)} win chance).` : '');
   // ---------- image
   const tall = RC.fmt === 'tall', W = tall ? 1080 : 1600, H = tall ? 1350 : 900, K = 2, P = 52;
   const cv = document.createElement('canvas'); cv.width = W * K; cv.height = H * K; const c = cv.getContext('2d'); c.scale(K, K);
@@ -1149,13 +1220,13 @@ function rcRender() {
   // score row
   const ty = 160, wA = scoreOf(a) > scoreOf(h), wH = !wA;
   const teamTxt = (t, x, al, winner) => { T(t, x, ty, F('900', 84), winner ? INK : DIM, al); T(C.nm(t), x, ty + 32, F('600', 21), winner ? INK : MUTE, al);
-    if (t === 'UTA') T(`Now ${C.rec}`, x, ty + 58, F('500', 17), MUTE, al); c.fillStyle = col(t); c.fillRect(al === 'left' ? x : x - 56, ty + 70, 56, 5); };
+    if (t === U) T(`Now ${C.rec}`, x, ty + 58, F('500', 17), MUTE, al); c.fillStyle = col(t); c.fillRect(al === 'left' ? x : x - 56, ty + 70, 56, 5); };
   teamTxt(a, P, 'left', wA); teamTxt(h, LW - P, 'right', wH);
   T(String(scoreOf(a)), LW / 2 - 70, ty, F('900', 96), wA ? INK : DIM, 'center'); T('–', LW / 2, ty - 6, F('300', 64), MUTE, 'center'); T(String(scoreOf(h)), LW / 2 + 70, ty, F('900', 96), wH ? INK : DIM, 'center');
   // verdict
   const vy = ty + 122; T(`${C.head}`, LW / 2, vy, F('800', 32), INK, 'center');
   c.font = F('500', 17); c.fillStyle = '#C9D2DC'; c.textAlign = 'center'; let yy = _wrapC(c, C.why, LW / 2, vy + 30, LW - 2 * P, 22, 2);
-  // deserve-to-win bar (Utah share)
+  // deserve-to-win bar (selected team's share)
   const dy = yy + 22; label('DESERVE-TO-WIN  (CHANCES ONLY)', P, dy);
   const bw = LW - 2 * P, bh = 40, by = dy + 12, du = R.deserve, xa = C.home ? P + bw * (1 - du) : P + bw * du;   // left side = away team
   const pa = C.home ? 1 - du : du;
@@ -1174,36 +1245,36 @@ function rcRender() {
   c.beginPath(); c.moveTo(gx(0), gy(0)); c.lineTo(gx(tMax), gy(0)); c.stroke();
   ['1st', '2nd', '3rd', 'OT'].forEach((p, i) => { if (i * 1200 < tMax) T(p, gx(Math.min(tMax, i * 1200 + 600)), gy(0) + 18, F('600', 13), MUTE, 'center'); });
   for (let v = 1; v < yMax; v++) { T(String(v), cx0 + 30, gy(v) + 4, F('500', 12), MUTE, 'right'); c.strokeStyle = 'rgba(255,255,255,.05)'; c.beginPath(); c.moveTo(gx(0), gy(v)); c.lineTo(gx(tMax), gy(v)); c.stroke(); }
-  const team = u => u ? 'UTA' : C.opp;
+  const team = u => u ? U : C.opp;
   [[cO, 0], [cU, 1]].forEach(([pts, u]) => { c.strokeStyle = colL(team(u)); c.lineWidth = 3; c.beginPath(); pts.forEach(([t, v], i) => i ? c.lineTo(gx(t), gy(v)) : c.moveTo(gx(t), gy(v))); c.stroke();
     T(`${team(u)} ${pts[pts.length - 1][1].toFixed(1)}`, gx(tMax) - 4, gy(pts[pts.length - 1][1]) - 8, F('800', 15), colL(team(u)), 'right'); });
   // goal markers on each team's line
   const valAt = (pts, t) => { let v = 0; for (const [tt, vv] of pts) { if (tt <= t) v = vv; else break; } return v; };
   C.goals.forEach((g, i) => { const pts = g.uta ? cU : cO, x = gx(g.t), y = gy(valAt(pts, g.t));
-    c.fillStyle = g.uta ? colL('UTA') : colL(C.opp); c.beginPath(); c.arc(x, y, 6, 0, 7); c.fill(); c.strokeStyle = BG1; c.lineWidth = 2; c.stroke();
+    c.fillStyle = g.uta ? colL(U) : colL(C.opp); c.beginPath(); c.arc(x, y, 6, 0, 7); c.fill(); c.strokeStyle = BG1; c.lineWidth = 2; c.stroke();
     T(g.who + (g.st === 'PP' ? ' (PP)' : g.st === 'SH' ? ' (SH)' : g.st === 'EN' ? ' (EN)' : ''), x + (i % 2 ? 8 : -8), y + (g.uta ? -12 : 20), F('600', 12), INK, i % 2 ? 'left' : 'right'); });
   // by the numbers (left: away, right: home)
   const ny = tall ? cy0 + ch + 74 : by + bh + 66, nx = P, nw = LW - 2 * P;
   label('BY THE NUMBERS', nx + nw / 2, ny, 'center');
-  const gs = t => { const g = t === 'UTA' ? C.gU : C.gO; return g ? `${C.last(g.name)} ${sgn(gsax(g))}` : '—'; };
+  const gs = t => { const g = t === U ? C.gU : C.gO; return g ? `${C.last(g.name)} ${sgn(gsax(g))}` : '—'; };
   const rows = [['Shots on goal', st.sog], ['Expected goals', st.xg.map(v => v.toFixed(1))], ['5-on-5 expected goals', st.xg5.map(v => v.toFixed(1))],
-    ['Dangerous shots (10%+ chance)', st.danger], ['Power-play goals (xG)', st.ppg.map((v, i) => `${v} (${st.ppxg[i].toFixed(1)})`)], ['Goalie: saves vs. expected', ['UTA', C.opp].map(gs)]];
+    ['Dangerous shots (10%+ chance)', st.danger], ['Power-play goals (xG)', st.ppg.map((v, i) => `${v} (${st.ppxg[i].toFixed(1)})`)], ['Goalie: saves vs. expected', [U, C.opp].map(gs)]];
   rows.forEach(([lab, v], i) => { const y = ny + 30 + i * 28, va = v[ix(a)], vh = v[ix(h)];
     const num_ = s => parseFloat(String(s).replace('−', '-').replace(/^[^-\d]*/, '')); const ba = num_(va), bh_ = num_(vh), better = lab.startsWith('Goalie') ? null : (ba > bh_ ? 'a' : bh_ > ba ? 'h' : null);
     T(String(va), nx, y, F(better === 'a' ? '800' : '500', 18), better === 'a' ? INK : MUTE); T(lab, nx + nw / 2, y, F('500', 15), MUTE, 'center'); T(String(vh), nx + nw, y, F(better === 'h' ? '800' : '500', 18), better === 'h' ? INK : MUTE, 'right'); });
   // players + moments + context (below in tall; right column in wide)
   let py = tall ? ny + 30 + rows.length * 28 + 26 : cy0 + ch + 74; const px = tall ? P : LW + 20, pw = tall ? W - 2 * P : W - LW - 20 - P;
-  if (C.PG) { label("UTAH'S BEST  (PLAYER IMPACT, GOALS)", px, py); label('TOUGH NIGHT', px + pw * 0.62, py);
+  if (C.PG) { label(`${NK.toUpperCase()}'S BEST  (PLAYER IMPACT, GOALS)`, px, py); label('TOUGH NIGHT', px + pw * 0.62, py);
     C.PG.best.slice(0, 3).forEach((b, i) => { T(`${C.last(b.name)}  ${(b.score >= 0 ? '+' : '−') + Math.abs(b.score).toFixed(2)}`, px, py + 28 + i * 24, F('700', 18), INK); T(b.line, px + pw * 0.27, py + 28 + i * 24, F('500', 14), MUTE); });
     C.PG.worst.slice(0, 2).forEach((b, i) => { T(`${C.last(b.name)}  ${(b.score >= 0 ? '+' : '−') + Math.abs(b.score).toFixed(2)}`, px + pw * 0.62, py + 28 + i * 24, F('700', 18), '#C9D2DC'); });
     py += 28 + 3 * 24 + 12; }
   label('KEY MOMENTS', px, py); py += 26; c.font = F('500', 16); c.fillStyle = INK;
-  const gdesc = g => `${g.who} (${g.uta ? 'UTA' : C.opp}${g.st === 'PP' ? ', power play' : g.st === 'SH' ? ', shorthanded' : ''}), ${C.clock(g.t)}. Utah's win chance ${pct(g.before)} to ${pct(g.after)}.`;
+  const gdesc = g => `${g.who} (${g.uta ? U : C.opp}${g.st === 'PP' ? ', power play' : g.st === 'SH' ? ', shorthanded' : ''}), ${C.clock(g.t)}. ${NK}'s win chance ${pct(g.before)} to ${pct(g.after)}.`;
   if (C.gwg) py = _wrap(c, `Game-winner: ${gdesc(C.gwg)}`, px, py, pw, 21, 2);
   if (C.big) py = _wrap(c, `Biggest swing: ${gdesc(C.big)}`, px, py, pw, 21, 2);
-  if (C.lucky && C.lucky.xg < 0.08) { py = _wrap(c, `Unlikeliest goal: ${C.lucky.who} (${C.lucky.uta ? 'UTA' : C.opp}), a ${Math.max(1, Math.round(C.lucky.xg * 100))}% chance.`, px, py, pw, 21, 1); }
+  if (C.lucky && C.lucky.xg < 0.08) { py = _wrap(c, `Unlikeliest goal: ${C.lucky.who} (${C.lucky.uta ? U : C.opp}), a ${Math.max(1, Math.round(C.lucky.xg * 100))}% chance.`, px, py, pw, 21, 1); }
   py += 10; label('WHAT IT MEANS', px, py); py += 26; c.font = F('600', 16); c.fillStyle = INK;
-  const ctx = [`Utah ${C.rec}`]; if (C.pBefore != null && C.pAfter != null) ctx.push(`playoff odds ${pct(C.pBefore)} → ${pct(C.pAfter)}`);
+  const ctx = [`${NK} ${C.rec}`]; if (C.pBefore != null && C.pAfter != null) ctx.push(`playoff odds ${pct(C.pBefore)} → ${pct(C.pAfter)}`);
   if (C.rkA) ctx.push(`power rank ${ord(C.rkA)}${C.rkB && C.rkB !== C.rkA ? ` (${C.rkB > C.rkA ? 'up' : 'down'} from ${ord(C.rkB)})` : ''}`);
   if (C.next) ctx.push(`next: ${C.next.ha === '@' ? 'at' : 'vs'} ${C.next.opp}, ${new Date(C.next.date + 'T12:00').toLocaleDateString([], {weekday: 'short'})} (${pct(C.next.pWin)})`);
   _wrap(c, ctx.join('  ·  '), px, py, pw, 21, 2);
@@ -1211,21 +1282,13 @@ function rcRender() {
   T('Utah Mammoth Season Dashboard  ·  xG = expected goals: how often a shot like that goes in  ·  objective, not betting advice', P, H - 32, F('500', 14), MUTE);
   T('Data: MoneyPuck.com (shots, goalies), NHL (results). Win chance during the game uses league-average scoring, so it ignores team strength.', P, H - 13, F('500', 14), MUTE);
   const url = cv.toDataURL('image/png'), fn = `recap-${R.date}-${a}-at-${h}-${RC.fmt}.png`;
-  const opts = L.map(r => { const o = r.home === 'UTA' ? r.away : r.home, w_ = (r.us ?? 0) > (r.them ?? 0); return `<option value="${r.gid}" ${r.gid === RC.gid ? 'selected' : ''}>${new Date(r.date + 'T12:00').toLocaleDateString([], {month: 'short', day: 'numeric'})} ${r.home === 'UTA' ? 'vs' : '@'} ${o}: ${w_ ? 'W' : 'L'} ${r.us}-${r.them}</option>`; }).join('');
-  el.innerHTML = `<h3>Game recap <span class="small">share graphic for any finished Utah game</span></h3>
-    <div class="ctl" style="margin-bottom:8px"><select id="rc-game">${opts}</select>
-      <label style="margin-left:12px"><input type="radio" name="rc-fmt" value="tall" ${tall ? 'checked' : ''}> Full (1080x1350)</label>
-      <label style="margin-left:8px"><input type="radio" name="rc-fmt" value="wide" ${!tall ? 'checked' : ''}> Wide (1600x900)</label></div>
-    <div class="grid2" style="align-items:start"><div><img src="${url}" alt="Game recap image" style="width:100%;border-radius:10px;border:1px solid var(--line)">
-      <div class="ctl" style="margin-top:8px"><a class="btn" href="${url}" download="${fn}">Download image</a> <span class="small">or right-click / long-press the image to save it</span></div></div>
-    <div><div class="small" style="margin-bottom:4px"><b>Post text</b> (${tw.length}/280)</div><textarea id="rc-tw" rows="8" style="width:100%;font:13px/1.4 inherit">${tw}</textarea>
-      <div class="small" style="margin:10px 0 4px"><b>Longer version</b> for a group text</div><textarea id="rc-long" rows="11" style="width:100%;font:13px/1.4 inherit">${long}</textarea>
-      <div class="ctl" style="margin-top:6px"><button class="btn" id="rc-ctw">Copy post text</button> <button class="btn" id="rc-clong">Copy longer version</button> <span class="small" id="rc-msg"></span></div>
-      <p class="small" style="margin-top:8px"><b>Deserve-to-win</b> replays every shot as a goal with its own expected-goal probability; it answers "who had the better chances," not who played harder. Players: Utah's per-game Player Impact (MoneyPuck game data). Win chance through the game uses league-average scoring for both teams.</p></div></div>`;
+  const opts = L.map(r => { const o = r.home === U ? r.away : r.home, w_ = (r.us ?? 0) > (r.them ?? 0); return `<option value="${r.gid}" ${r.gid === RC.gid ? 'selected' : ''}>${new Date(r.date + 'T12:00').toLocaleDateString([], {month: 'short', day: 'numeric'})} ${r.home === U ? 'vs' : '@'} ${o}: ${w_ ? 'W' : 'L'} ${r.us}-${r.them}</option>`; }).join('');
+  el.innerHTML = `<h3>Game recap <span class="small">share graphic for ${U === 'UTA' ? 'any finished Utah game' : `${U}'s latest games`}</span></h3>
+    <div class="ctl" style="margin-bottom:8px"><select id="rc-game">${opts}</select></div>
+    <div style="max-width:560px"><img src="${url}" alt="Game recap image" title="${fn}" style="width:100%;border-radius:10px;border:1px solid var(--line)">
+      <div class="small" style="margin-top:6px">Right-click or long-press the image to save it.</div></div>
+    <p class="small" style="margin-top:8px"><b>Deserve-to-win</b> replays every shot as a goal with its own expected-goal probability; it answers "who had the better chances," not who played harder. Players: per-game Player Impact (MoneyPuck game data). Win chance through the game uses league-average scoring for both teams.</p>`;
   $('rc-game').onchange = () => { RC.gid = +$('rc-game').value; rcRender(); };
-  document.getElementsByName('rc-fmt').forEach(r => r.onchange = () => { RC.fmt = r.value; rcRender(); });
-  const cp = id => { const ta = $(id); ta.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} if (navigator.clipboard) navigator.clipboard.writeText(ta.value).then(() => $('rc-msg').textContent = 'Copied.', () => $('rc-msg').textContent = ok ? 'Copied.' : 'Select the text and copy it.'); else $('rc-msg').textContent = ok ? 'Copied.' : 'Select the text and copy it.'; };
-  $('rc-ctw').onclick = () => cp('rc-tw'); $('rc-clong').onclick = () => cp('rc-long');
 }
 function _wrapC(ctx, text, cx, y, maxW, lh, maxLines) {   // centered wrap
   const words = String(text).split(' '); let line = '', n = 0;
@@ -1234,7 +1297,6 @@ function _wrapC(ctx, text, cx, y, maxW, lh, maxLines) {   // centered wrap
   if (line) { ctx.fillText(line, cx, y); y += lh; } return y;
 }
 
-try { rcRender(); } catch (e) { const el_ = $('rc-card'); if (el_) el_.innerHTML = '<div class="lock">Recap image unavailable in this browser.</div>'; console.warn(e); }
 function muDetail(a, b, ra, rb) {
   const PLt = t => (D.playersLeague || []).filter(p => p.t === t && !p.ng);
   const A = PLt(a), B = PLt(b);
@@ -1362,7 +1424,7 @@ let pgAll = false;
 function teamExtras(x) {
   const isU = x === 'UTA', E = (D.teamExtra || {})[x] || {};
   if (teamExtras.last !== x) { pgAll = false; teamExtras.last = x; }
-  const PGx = isU ? PG : (E.perGame || []);
+  const PGx = isU ? (D.perGame || []) : (E.perGame || []);
   $('pg-lede').innerHTML = `Best and worst three by Impact in each game (from MoneyPuck game data${isU ? '' : '; latest 10 games'}). Green ★★★ = best, red ★★★ = worst.`;
   const drawPG = () => { const list = pgAll ? PGx : PGx.slice(0, 5);
     $('per-game').innerHTML = PGx.length ? list.map(g => `<div style="padding:10px 0;border-bottom:1px solid var(--line)"><b>${g.date.slice(5)} vs ${g.opp}</b> <span class="small">(${g.score}) &bull; ${g.method}</span>${g.pending ? '' : `<div class="grid2" style="gap:10px;margin-top:6px"><div><div class="small" style="font-weight:800;color:var(--green)">BEST</div>${g.best.map((q, i) => starRow(q, i, true)).join('')}</div><div><div class="small" style="font-weight:800;color:var(--red)">WORST</div>${g.worst.map((q, i) => starRow(q, i, false)).join('')}</div></div>`}</div>`).join('') + (PGx.length > 5 ? `<button class="tab" id="pg-more" style="margin-top:10px">${pgAll ? 'Show latest 5' : 'Show all ' + PGx.length}</button>` : '') : '<div class="small">No games with MoneyPuck game data yet.</div>';
@@ -1411,9 +1473,9 @@ function initExplorer() {
     const vcell = (v, lo, hi, role) => { if (v == null) return '&mdash;'; const lo90 = role ? v - (v - lo) * 1.645 / 1.96 : lo, hi90 = role ? v + (hi - v) * 1.645 / 1.96 : hi;
       return `<b style="color:${lo90 > 0 ? 'var(--green)' : hi90 < 0 ? 'var(--red)' : 'var(--ink)'}">${sp(pt(v))}</b><span class="sub">90%: ${sp(pt(lo90))} to ${sp(pt(hi90))}</span>`; };
     $('ex-table').innerHTML = `<div class="small" style="margin-bottom:6px">${total} players match${total > n ? `, showing the top ${n} by ${rkName}` : ''}. ${peerDesc}${bd || q || ty ? ' (caliber, player type and search filters hide rows but keep these ranks)' : ''}. Clicking a column header re-sorts but ranks stay with the player.${t ? ` <a href="#roster" onclick="setTeam('${t}','roster');return false;">Open the ${t} roster page &rarr;</a>` : ''}</div>
-    <table><tr><th>#</th><th>Player</th><th>Team</th><th>Age</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Impact this season (pts)</th><th>In his role (pts / 84 GP, his minutes)</th><th>Cap hit</th><th title="In his role (talent x his actual minutes) minus what his cap hit buys on the open market">Value vs. contract: in his role</th><th title="Raw talent at a standard workload minus what his cap hit buys on the open market">Value vs. contract: raw talent</th><th>Style</th></tr>${rows.map((p, i) => `<tr${p.t === 'UTA' ? ' class="me"' : ''}>
+    <table><tr><th>#</th><th>Player</th><th>Team</th><th>Age</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Impact this season (pts)</th><th>In his role (pts / 84 GP, his minutes)</th><th>Cap hit</th><th title="In his role (talent x his actual minutes) minus what his cap hit buys on the open market">Value vs. contract: in his role</th><th title="Raw talent at a standard workload minus what his cap hit buys on the open market">Value vs. contract: raw talent</th><th>Style</th></tr>${rows.map((p, i) => `<tr${p.t === TM ? ' class="me"' : ''}>
       <td>${p._rk}</td><td><a class="tm" href="#finder" onclick="showProfile('${p.id}','ex-prof');return false;"><b>${p.n}</b></a><span class="sub">${p.pos}${p.arch ? ' &bull; ' + p.arch : (p.sRole ? ' &bull; ' + p.sRole : '')}</span></td><td><a class="tm" href="#roster" title="Open ${p.t} roster" onclick="setTeam('${p.t}','roster');return false;">${p.t}</a></td><td>${p.age != null ? Math.floor(p.age) : '&mdash;'}<span class="sub">${p.gp} GP</span></td>
-      <td><b>${sp(pt(p.tal))}</b> ${rbar(pt(p.tal), pt(p.tsd), -6, 6, p.t === 'UTA' ? '#6CACE3' : '#7A8590')}</td>
+      <td><b>${sp(pt(p.tal))}</b> ${rbar(pt(p.tal), pt(p.tsd), -6, 6, p.t === TM ? '#6CACE3' : '#7A8590')}</td>
       <td>${bandPill(p.band)} ${pctPill(p.tpct)}<span class="sub">${p.trank ? ord(p.trank) + ' of ' + p.tn + ' NHL ' + ({F: 'forwards', D: 'defensemen', G: 'goalies'}[p.g] || 'players') + (p.r10 ? ' (likely ' + p.r10 + '-' + p.r90 + ')' : '') : ''}</span></td>
       <td>${p.ng ? '<span class="small">no games yet</span>' : sp(pt(p.imp), 2) + ' ' + pctPill(p.ipct)}</td><td>${sp(pt(p.role))}</td>
       <td>${p.cap ? money(p.cap) + (p.elc ? ' <span class="pill p-grey" title="Entry-level contract: cheap by rule">ELC</span>' : '') : '&mdash;'}</td>
@@ -1422,10 +1484,12 @@ function initExplorer() {
   };
   ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-n', 'ex-amin', 'ex-amax', 'ex-rank', 'ex-type'].forEach(id => $(id).onchange = run);
   $('ex-q').oninput = run;
+  window.exRun = run;
   $('ex-reset').onclick = () => { ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-q', 'ex-type'].forEach(id => $(id).value = ''); $('ex-rank').value = 'tal'; $('ex-amin').value = 17; $('ex-amax').value = 45; run(); };
   run();
 }
 inits.finder = initExplorer;
+renderers.finder = () => { if (window.exRun) window.exRun(); };
 
 // ================= METHOD =================
 function initMethod() {
@@ -1481,6 +1545,7 @@ $('foot').innerHTML = `Utah Mammoth Season Dashboard &bull; built ${D.built} &bu
 
 // start on the tab in the URL, if any (old #players / #explorer links still work)
 window.addEventListener && window.addEventListener('hashchange', () => showTab((location.hash || '').replace('#', '')));
+teamOptions('h-sel'); renderHero(TM);
 showTab((location.hash || '').replace('#', '') || 'overview');
 </script>
 </body>

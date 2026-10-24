@@ -1,0 +1,49 @@
+{
+ "_note": "Playoff series model and Cup simulation. Fitted on 165 playoff series 2013-14..2024-25 (excl. 2019-20 bubble): P(team A wins series) = logistic(alpha * (b_power * power-rating difference + b_elite * elite-skater difference)). Power rating = end-of-season power formula (goals/game); elite = top-12 F and top-6 D by ice time with talent >= 90th percentile at the position. alpha = share of the fitted edge kept, chosen by backtesting the full simulation from early-season checkpoints in 8 seasons (calibration/experiments/cup_odds_backtest_*).",
+ "b_power": 1.5575,
+ "b_elite": 0.1498,
+ "alpha": 0.7,
+ "elite_pct": 90,
+ "n_series": 165,
+ "series_backtest": {
+  "favorite_won": {
+   "Power ranking + elite players": 0.63,
+   "Power ranking": 0.618,
+   "Elite players (top-10% skaters)": 0.618,
+   "Regular-season xG differential": 0.6,
+   "Top-6 player talent": 0.588,
+   "Regular-season goal differential": 0.545,
+   "Total roster talent": 0.545,
+   "Goalie talent": 0.497,
+   "Bottom-6 player talent": 0.479
+  },
+  "note": "Share of 165 series won by the favorite by each measure, each season scored with weights fitted on the others."
+ },
+ "stage_skill": {
+  "note": "Backtest of the full simulation from about 4 and 14 games played, 8 seasons: improvement in log-loss over giving every team equal odds (alpha 0.7).",
+  "make": "high",
+  "round1": [
+   16.2,
+   26.2
+  ],
+  "confFinal": [
+   14.4,
+   18.0
+  ],
+  "final": [
+   11.2,
+   15.4
+  ],
+  "cup": [
+   10.8,
+   11.1
+  ]
+ },
+ "cup_winners": {
+  "n": 11,
+  "min_elite": 2,
+  "zero_or_one_superstar": 7,
+  "note": "Every Cup winner 2013-14..2024-25 (excl. 2019-20) had at least 2 elite (top-10%) skaters; 7 of 11 had 0 or 1 superstar (top 2%)."
+ },
+ "favorites": "Each season's model favorite (avg ~13% Cup at alpha 0.7) won 1 of 8 Cups from the October checkpoint, 0 of 8 from November."
+}

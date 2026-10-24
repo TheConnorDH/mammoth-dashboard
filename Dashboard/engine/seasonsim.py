@@ -1,7 +1,11 @@
 """Season simulation for every team from power ratings + home ice (validated win/OT model; config/winprob_params.json).
 Each simulated season draws every team's true strength once (from its rating and uncertainty), then plays
 every remaining game: P(home win) = logistic(a + b*diff), P(overtime) = logistic(c + d*|diff|),
-P(home win | OT) = logistic(e + f*diff); OT/shootout loser gets 1 point."""
+P(home win | OT) = logistic(e + f*diff); OT/shootout loser gets 1 point.
+With `series` (params/playoff_params.json + elite counts), each simulated season also plays out the playoffs:
+NHL bracket (top 3 per division + 2 wild cards; the better division winner meets the second wild card), every
+series P(A wins) = logistic(alpha * (b_power * strength gap + b_elite * elite-skater gap)). The series strength is the
+same draw as the season's, scaled to the end-of-season uncertainty the series model was fitted and backtested on."""
 import numpy as np
 
 
@@ -16,7 +20,7 @@ def game_probs(diff, wp):
     return p_reg_home, pot, potw
 
 
-def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=10000, seed=11):
+def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=10000, seed=11, series=None):
     teams = sorted(ratings)
     ix = {t: i for i, t in enumerate(teams)}
     rng = np.random.default_rng(seed)
@@ -67,5 +71,54 @@ def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=1000
         for t in teams:
             out[t]["playoff"] = float(made[:, ix[t]].mean()); out[t]["division"] = float(divwin[:, ix[t]].mean())
         out["_cut"] = cut
+        if series:
+            out["_playoffs"] = _playoffs(teams, ix, conf, div, score, true, ratings, sds, series, rng)
         out["_hist"] = {t: np.bincount(pts[:, ix[t]].astype(int), minlength=200)[:200].tolist() for t in teams}
+    return out
+
+
+def _playoffs(teams, ix, conf, div, score, true, ratings, sds, S, rng):
+    """Round-by-round odds from the simulated standings. S: b_power, b_elite, alpha, elite {team: n}, tv_end."""
+    n_sims, n = score.shape
+    rat = np.array([ratings[t] for t in teams]); sd = np.array([sds[t] for t in teams])
+    k = np.sqrt(np.clip(sd ** 2 - S["tv_end"], 0, None)) / np.where(sd > 0, sd, 1)
+    strength = rat[None, :] + (true - rat[None, :]) * k[None, :]
+    E = np.array([S["elite"].get(t, 0) for t in teams], float)
+    bp, be = S["alpha"] * S["b_power"], S["alpha"] * S["b_elite"]
+    cnt = np.zeros((n, 5)); seeds = np.zeros((n, 5)); opp = np.zeros((n, n))
+    u = rng.random((n_sims, 15))
+    confs = sorted(set(conf.values()))
+    members = {cf: [ix[t] for t in teams if conf.get(t) == cf] for cf in confs}
+    divs = {cf: sorted({div[t] for t in teams if conf.get(t) == cf}) for cf in confs}
+    dmem = {dv: [ix[t] for t in teams if div.get(t) == dv] for dv in set(div.values())}
+    for s_ in range(n_sims):
+        sc = score[s_]; st = strength[s_]; k_ = 0
+        def play(i, j):
+            nonlocal k_
+            p = 1 / (1 + np.exp(-(bp * (st[i] - st[j]) + be * (E[i] - E[j])))); w = i if u[s_, k_] < p else j; k_ += 1; return w
+        champs = []
+        for cf in confs:
+            tops = {dv: sorted(dmem[dv], key=lambda i: -sc[i])[:3] for dv in divs[cf]}
+            used = {i for v in tops.values() for i in v}
+            wc = sorted([i for i in members[cf] if i not in used], key=lambda i: -sc[i])[:2]
+            d1, d2 = sorted(divs[cf], key=lambda dv: -sc[tops[dv][0]])
+            for dv in (d1, d2):
+                for r_, i in enumerate(tops[dv]): seeds[i, r_] += 1
+            seeds[wc[0], 3] += 1; seeds[wc[1], 4] += 1
+            ms = [(tops[d1][0], wc[1]), (tops[d1][1], tops[d1][2]), (tops[d2][0], wc[0]), (tops[d2][1], tops[d2][2])]
+            for a, b in ms:
+                cnt[a, 0] += 1; cnt[b, 0] += 1; opp[a, b] += 1; opp[b, a] += 1
+            w1 = [play(a, b) for a, b in ms]
+            for i in w1: cnt[i, 1] += 1
+            w2 = [play(w1[0], w1[1]), play(w1[2], w1[3])]
+            for i in w2: cnt[i, 2] += 1
+            c = play(w2[0], w2[1]); cnt[c, 3] += 1; champs.append(c)
+        cnt[play(champs[0], champs[1]), 4] += 1
+    out = {}
+    for t in teams:
+        i = ix[t]; made = cnt[i, 0]
+        top_opp = sorted([(opp[i, j] / max(made, 1), teams[j]) for j in range(n) if opp[i, j] > 0], reverse=True)[:3]
+        out[t] = {"make": round(made / n_sims, 4), "r1": round(cnt[i, 1] / n_sims, 4), "r2": round(cnt[i, 2] / n_sims, 4), "final": round(cnt[i, 3] / n_sims, 4),
+                  "cup": round(cnt[i, 4] / n_sims, 4), "cupIfIn": round(cnt[i, 4] / made, 4) if made else None,
+                  "seeds": [round(x / n_sims, 4) for x in seeds[i]], "r1opp": [[o, round(p, 3)] for p, o in top_opp]}
     return out

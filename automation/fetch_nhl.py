@@ -1,5 +1,5 @@
 """NHL public API (api-web.nhle.com): standings, Utah schedule, full league schedule/results, Utah box scores,
-Utah roster, and birth dates for players MoneyPuck's lookup doesn't have yet. Writes the exact files build.py reads."""
+Utah roster, every team's roster, and birth dates for players MoneyPuck's lookup doesn't have yet. Writes the exact files build.py reads."""
 import csv, glob, json, os, datetime as dt
 from common import P, TEAM, NHL_SEASON, get, get_json, write_text, write_json, log
 
@@ -78,6 +78,31 @@ def roster():
         players += [p for i, p in old.items() if i not in ids and p.get("status")]
     write_json(P("config", "roster.json"), {"source": f"NHL API roster, {dt.date.today().isoformat()}", "players": players})
     return players
+
+
+def rosters_all(teams):
+    """Every team's current NHL roster -> config/rosters_all.json {team: [{playerId, name, pos, number}]}.
+    The build uses it to put traded players on their new team the next morning and to list rostered players who
+    haven't played yet (injured, suspended, scratched). A team whose fetch fails keeps yesterday's list."""
+    path = P("config", "rosters_all.json")
+    old = json.load(open(path, encoding="utf-8")).get("teams", {}) if os.path.exists(path) else {}
+    out, failed = {}, []
+    for t in sorted(teams):
+        try:
+            j = get_json(f"{API}/roster/{t}/current")
+            ps = [{"playerId": str(p["id"]), "name": f'{p["firstName"]["default"]} {p["lastName"]["default"]}', "pos": p.get("positionCode"),
+                   "number": p.get("sweaterNumber")} for grp in ("forwards", "defensemen", "goalies") for p in j.get(grp, [])]
+            if len(ps) < 18:
+                raise RuntimeError(f"only {len(ps)} players")
+            out[t] = ps
+        except Exception as e:      # one team's hiccup shouldn't stop the morning update
+            failed.append(t)
+            if t in old:
+                out[t] = old[t]
+            log(f"roster {t}: {e}; kept previous list" if t in old else f"roster {t}: {e}")
+    write_json(P("config", "rosters_all.json"), {"fetched": dt.date.today().isoformat(), "failed": failed, "teams": out})
+    log(f"all-team rosters: {len(out)} teams, {sum(len(v) for v in out.values())} players" + (f"; failed {failed}" if failed else ""))
+    return out
 
 
 def _names_by_id(players):
@@ -210,4 +235,4 @@ def bios(min_needed_from=("skaters", "goalies")):
 
 
 if __name__ == "__main__":
-    standings(); utah_schedule(); s = league_schedule(); pl = roster(); boxscores(s, pl)
+    j = standings(); utah_schedule(); s = league_schedule(); pl = roster(); rosters_all([t["teamAbbrev"]["default"] for t in j["standings"]]); boxscores(s, pl)

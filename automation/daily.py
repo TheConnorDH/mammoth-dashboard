@@ -58,8 +58,9 @@ def main():
     summary(f"### Mammoth dashboard daily run ({'final attempt' if final else 'early attempt'})")
     if not offline:
         fetch_moneypuck.static()
-        fetch_nhl.standings(); fetch_nhl.utah_schedule(); sched = fetch_nhl.league_schedule()
+        stj = fetch_nhl.standings(); fetch_nhl.utah_schedule(); sched = fetch_nhl.league_schedule()
         players = fetch_nhl.roster()
+        fetch_nhl.rosters_all([t["teamAbbrev"]["default"] for t in stj["standings"]])
         fetch_moneypuck.current()
         added, waiting = fetch_nhl.boxscores(sched, players)
         fetch_nhl.bios()
@@ -95,6 +96,9 @@ def main():
     write_text(P("history", "last_run.json"), json.dumps({"published_utc": _dt.datetime.utcnow().isoformat(timespec="seconds"), "record": d["team"]["rec"],
                                                           "checks_passed": sum(c["ok"] for c in d["checks"]), "checks": len(d["checks"]), "brief": a["used"]}))
     pl = d.get("playersLeague") or []
+    rn = (d.get("dataStatus") or {}).get("rosters")
+    if rn:
+        summary(f"- All-team rosters: {rn['teams']} teams; {rn['moved']} players moved to a new team, {rn['added']} rostered players added who haven't played yet")
     summary(f"- Data size: {len(pl)} NHL players rated ({sum(1 for p in pl if p.get('g') == 'G')} goalies), "
             f"{len(d.get('standings') or [])} teams in standings, {len((d.get('power') or {}).get('rows') or [])} in power rankings")
     if len(pl) < 500:

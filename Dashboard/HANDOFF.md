@@ -271,3 +271,11 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 - Gate: blocking checks = box-score goals vs final score, league schedule vs standings, the two static backtests. Others are shown on the page but don't block. Early run (11:45 UTC) waits if Utah's newest game isn't in MoneyPuck's game and shot files or its box score isn't final; final run (14:00 UTC) publishes whatever is available. A failed final run leaves the previous page up; GitHub emails the owner.
 - build.py fix: "Box-score goals sum to final score" now subtracts the shootout-winning goal (no skater is credited with it).
 - Secret: ANTHROPIC_API_KEY (repository secret). Without it the template brief is used.
+
+## Oct 24: v1.1.0 (playoffs, any-team view, all-team rosters)
+- Versioning: `VERSION` at repo root (shown in the page header, linked to `CHANGELOG.md`). Bump MINOR for features/model changes, PATCH for fixes; write the changelog entry with every release.
+- Playoffs: `engine/seasonsim.py` `_playoffs()` plays the bracket inside the existing 10,000-season simulation (same strength draw, scaled to end-of-season uncertainty). Series model and backtests: `params/playoff_params.json`; experiments in `calibration/experiments/` (`stars_vs_depth_*`, `playoff_predictors_*`, `cup_odds_*`). Output per team: `power.rows[].po`. New check "Playoff simulation adds up".
+- Any team: header select (`h-sel`) sets the global selected team `TM`; `renderHero`, `renderOverview`, playoffs, team, roster and matchup re-render for it; league tables highlight it. Other teams' overview data: `execAll` (rule-based), `recapsAll` (latest 5 games, MoneyPuck shots + league schedule).
+- All-team rosters: `automation/fetch_nhl.py rosters_all()` -> `config/rosters_all.json` (a failed team keeps yesterday's list). The build moves traded players to their new team and adds rostered players with no games this season (`ng`), rated from past seasons; team-strength views and power rankings still exclude `ng` players.
+- Share cards: post-text / group-text boxes removed; "why the odds lean" bars fixed to point toward each team's side.
+- Workflow: also runs on push to main (code paths only).

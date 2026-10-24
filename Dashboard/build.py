@@ -26,6 +26,7 @@ import recap as recap_mod
 BASE = os.path.dirname(os.path.abspath(__file__))
 HOCKEY = os.path.dirname(BASE)
 SRC = os.path.join(HOCKEY, "Source Data")
+VERSION = open(os.path.join(HOCKEY, "VERSION")).read().strip() if os.path.exists(os.path.join(HOCKEY, "VERSION")) else "dev"
 P = lambda *a: os.path.join(BASE, *a)
 TEAM = "UTA"
 SEASON_GAMES = 84
@@ -564,6 +565,7 @@ def main():
     gaa24, gaa23 = _season_imp("2024"), _season_imp("2023")
     prevs_of = lambda pid: [gaa25.get(pid), gaa24.get(pid), gaa23.get(pid)]
     rank, mp_lines = [], []
+    rosters_note = None
     if full_mp:
         sk26 = readcsv(P("inputs", "moneypuck", "skaters.csv")); gl26 = readcsv(P("inputs", "moneypuck", "goalies.csv"))
         # league-wide: every player valued identically, so Utah's numbers are directly comparable
@@ -590,6 +592,36 @@ def main():
             pvv = next((x_ for x_ in prevs_of(pid_) if x_ and x_["grp"] == g_ and x_.get("toi", 0) > 0), None)
             q_["tpg"] = league.toi_per_game(q_, pvv) if pvv else 0.0
             lg26.append(q_)
+        # every team's current NHL roster (config/rosters_all.json, fetched each morning): traded players move to their
+        # new team the next day, and rostered players who haven't played this season (injured, suspended, scratched)
+        # are valued from their earlier seasons, same method as above. Power rankings still use who actually dressed.
+        ra_path = P("config", "rosters_all.json")
+        RA_ = json.load(open(ra_path, encoding="utf-8")) if os.path.exists(ra_path) else {}
+        RA = RA_.get("teams", {}); ra_failed = set(RA_.get("failed", []))
+        # today's lists win over a team's kept-from-yesterday list (a player traded since then is on both)
+        cur_team = {p_["playerId"]: t_ for t_, ps_ in RA.items() if t_ in ra_failed for p_ in ps_ if p_.get("playerId")}
+        cur_team.update({p_["playerId"]: t_ for t_, ps_ in RA.items() if t_ not in ra_failed for p_ in ps_ if p_.get("playerId")})
+        n_moved = n_added = 0
+        for q_ in lg26:
+            t_ = cur_team.get(q_["id"])
+            if t_ and t_ != q_["team"]:
+                q_["mpTeam"] = q_["team"]; q_["team"] = t_; n_moved += 1
+        have_ = {q_["id"] for q_ in lg26}
+        for t_, ps_ in RA.items():
+            for rp_ in ps_:
+                pid_ = rp_.get("playerId")
+                if not pid_ or pid_ in have_ or not rp_.get("pos") or cur_team.get(pid_) != t_:
+                    continue
+                g_ = "G" if rp_["pos"] == "G" else ("D" if rp_["pos"] == "D" else "F")
+                q_ = {"id": pid_, "name": rp_["name"], "team": t_, "pos": rp_["pos"], "grp": g_, "gp": 0, "toi": 0.0, "gaa": 0.0, "se": 0.0, "lo": 0.0, "hi": 0.0,
+                      "per60": 0.0, "comp": {}, "parts": {}, "noGames": True}
+                league.player_value(q_, prevs_of(pid_), ip, rp, team_gp.get(t_, mp_gp), SEASON_GAMES, age=AGE.get(pid_), standard=TPAR["standard"])
+                pvv = next((x_ for x_ in prevs_of(pid_) if x_ and x_["grp"] == g_ and x_.get("toi", 0) > 0), None)
+                if not pvv:      # no NHL minutes in the last three seasons: nothing to rate him on yet
+                    continue
+                q_["tpg"] = league.toi_per_game(q_, pvv)
+                lg26.append(q_); have_.add(pid_); n_added += 1
+        rosters_note = {"teams": len(RA), "moved": n_moved, "added": n_added}
         roster_meta = {rp_["playerId"]: rp_ for rp_ in ROSTER if rp_.get("playerId")}
         for q_ in lg26:
             if q_["id"] in roster_meta:
@@ -755,7 +787,7 @@ def main():
                                    "tal": q_["tstd"], "tsd": round(q_["tstd_sd"], 2), "tpct": lt_.get("pct"), "trank": lt_.get("rank"), "tn": lt_.get("n"),
                                    "r10": lt_.get("r10"), "r90": lt_.get("r90"), "role": round(q_.get("talent84") or 0, 1),
                                    "sty": [x_["tag"] for x_ in sty_.get("tags", [])], "styWhy": [x_["why"] for x_ in sty_.get("tags", [])], "sRole": sty_.get("role"),
-                                   "ng": bool(q_.get("noGames")),
+                                   "ng": bool(q_.get("noGames")), **({"from": q_["mpTeam"]} if q_.get("mpTeam") else {}),
                                    **({"cap": q_["aav"], "elc": bool(q_.get("elc")), "vs": q_.get("vsContract"), "vsLo": q_.get("vsLo"), "vsHi": q_.get("vsHi"),
                                        "exp": q_.get("expectedForPay"), "vsRaw": q_.get("vsRaw"), "vsRawLo": q_.get("vsRawLo"), "vsRawHi": q_.get("vsRawHi"), "expRaw": q_.get("expRaw")} if q_.get("aav") else {}),
                                    "vd": gaa.verdict(q_) if q_.get("toi", 0) >= MIN_VERDICT_TOI and q_.get("lo") is not None else None,
@@ -1013,7 +1045,17 @@ def main():
             rat = {r_["team"]: r_["pred"] - mean_pred for r_ in prows}
             sds = {r_["team"]: r_["true_sd"] * float(_np.interp(r_["gp"], cgp, mults)) for r_ in prows}
             conf_ = {s_["abbr"]: s_["conf"] for s_ in standings}; div_ = {s_["abbr"]: s_["div"] for s_ in standings}
-            lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7)
+            # playoff series model (params/playoff_params.json): elite = top-12 F / top-6 D by ice time with talent at
+            # or above the 90th percentile at the position (players who have played this season)
+            ppo = json.load(open(P("params", "playoff_params.json"))) if os.path.exists(P("params", "playoff_params.json")) else None
+            elite_ = {}
+            if ppo and players_league:
+                for t_ in rat:
+                    sk_ = [q_ for q_ in players_league if q_["t"] == t_ and q_["g"] in "FD" and not q_.get("ng")]
+                    top_ = sorted([q_ for q_ in sk_ if q_["g"] == "F"], key=lambda q_: -(q_["tpg"] or 0))[:12] + sorted([q_ for q_ in sk_ if q_["g"] == "D"], key=lambda q_: -(q_["tpg"] or 0))[:6]
+                    elite_[t_] = sum(1 for q_ in top_ if (q_.get("tpct") or 0) >= ppo["elite_pct"])
+            series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
+            lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7, series=series_)
             bw_ = wpp["win"][1]
             for r_ in prows:
                 q_ = lsim.get(r_["team"])
@@ -1022,6 +1064,19 @@ def main():
                                "pPlayoff": round(q_["playoff"], 3), "pDiv": round(q_["division"], 3)})
                 r_["neutralWin"] = round(1 / (1 + math.exp(-bw_ * rat[r_["team"]])), 3)     # vs. an average team, neutral ice
                 r_["r"] = round(rat[r_["team"]], 4)
+            if lsim.get("_playoffs"):
+                po_ = lsim["_playoffs"]; a_ = ppo["alpha"]
+                wsum_ = sum(po_[t_]["make"] for t_ in po_) or 1
+                avgR_ = sum(rat[t_] * po_[t_]["make"] for t_ in po_) / wsum_; avgE_ = sum(elite_.get(t_, 0) * po_[t_]["make"] for t_ in po_) / wsum_
+                ser_ = lambda r0_, e0_: 1 / (1 + math.exp(-a_ * (ppo["b_power"] * (r0_ - avgR_) + ppo["b_elite"] * (e0_ - avgE_))))
+                for r_ in prows:
+                    t_ = r_["team"]
+                    if t_ in po_:
+                        z_ = 1.2816 * math.sqrt(max(sds[t_] ** 2 - pwp["true_var"][-1], 0))     # same uncertainty the series model uses
+                        r_["po"] = {**po_[t_], "elite": elite_.get(t_, 0), "strength": round(ser_(rat[t_], elite_.get(t_, 0)), 3),
+                                    "strengthLo": round(ser_(rat[t_] - z_, elite_.get(t_, 0)), 3), "strengthHi": round(ser_(rat[t_] + z_, elite_.get(t_, 0)), 3)}
+                power_out["playoffModel"] = {k_: ppo[k_] for k_ in ppo if k_ != "_note"}
+                power_out["playoffModel"]["note"] = ppo["_note"]
             power_out["simAll"] = {t_: [{"x": x_, "n": h_[x_] + (h_[x_ + 1] if x_ + 1 < len(h_) else 0)} for x_ in range(0, len(h_), 2) if h_[x_] + (h_[x_ + 1] if x_ + 1 < len(h_) else 0) > 0]
                                    for t_, h_ in lsim["_hist"].items()}
             power_out["sched"] = [[g_["date"], g_["home"], g_["away"], g_["state"], g_["hs"], g_["as"], g_["period"]] for g_ in sched]
@@ -1317,6 +1372,13 @@ def main():
                    "detail": f"start-of-season test on {dd_['n']} team-seasons: roster talent r = {dd_['r']}, last season's goal differential r = {dd_['r_baseline']}, both together r = {dd_['r_both']}"})
     recs = params["reconciliation"]
     checks.append({"check": "Game model calibrated to league points rate", "ok": True, "detail": f"OT inflation factor {tie_f}, average team = {lg_pts_pct:.3f} points %"})
+    if power_out and any(r_.get("po") for r_ in power_out["rows"]):
+        po_rows_ = [r_ for r_ in power_out["rows"] if r_.get("po")]
+        s_make_ = sum(r_["po"]["make"] for r_ in po_rows_); s_cup_ = sum(r_["po"]["cup"] for r_ in po_rows_)
+        agree_ = max(abs(r_["po"]["make"] - (r_.get("pPlayoff") or 0)) for r_ in po_rows_)
+        mono_ = all(r_["po"]["make"] + 1e-9 >= r_["po"]["r1"] >= r_["po"]["r2"] - 1e-9 >= r_["po"]["final"] - 2e-9 >= r_["po"]["cup"] - 3e-9 for r_ in po_rows_)
+        checks.append({"check": "Playoff simulation adds up", "ok": abs(s_make_ - 16) < 0.01 and abs(s_cup_ - 1) < 0.01 and agree_ < 0.002 and mono_,
+                       "detail": f"{s_make_:.2f} playoff teams and {s_cup_:.3f} Cups per simulated season (16 and 1); playoff odds match the standings simulation within {agree_ * 100:.2f} points; each round's odds no higher than the round before."})
 
     # ---- executive summary (rule-based; claims carry their confidence)
     conf = "low" if gp < 10 else ("medium" if gp < 25 else "high")
@@ -1392,6 +1454,100 @@ def main():
                              "Goals saved above expected: " + ", ".join(f"{g_['name'].split(' ')[-1]} {g_['gsax']:+.1f} ({g_['gs']} start{'s' if g_['gs'] != 1 else ''})" for g_ in sorted(gq, key=lambda g_: (-g_["gs"], -g_["gsax"])))),
                     "body": (f"{q['name'].split(' ')[-1]} has the most starts: {sig}. " if len(gq) > 1 and sum(1 for g_ in gq if g_["gs"] == q["gs"]) == 1 else f"{sig.capitalize()}. ") + "Goalie results are mostly noise over short stretches."})
     exec_summary = {"confidence": conf, "gp": gp, "items": ins}
+    # ---- the same kind of summary for every other team (Overview follows the selected team), from league-wide data
+    exec_all = {}
+    if power_out and players_league:
+        PPI_ = PPAR["impact_goal_slope"] * PPAR["points_per_goal"]
+        rost_ = {r_["team"]: r_ for r_ in (league_out or {}).get("rosters", [])}
+        for r_ in power_out["rows"]:
+            t_ = r_["team"]
+            if t_ == TEAM:
+                continue
+            gp_ = r_.get("gp") or 0; it_ = []
+            if r_.get("projPts") is not None:
+                pp_ = r_.get("pPlayoff") or 0
+                it_.append({"tag": "Outlook", "tone": "good" if pp_ >= 0.65 else ("bad" if pp_ < 0.4 else "neutral"),
+                            "head": f"Projected {round(r_['projPts'])} points (80% range {r_['projLo80']}-{r_['projHi80']})",
+                            "body": f"{round(pp_ * 100)}% chance of making the playoffs, from 10,000 simulations of every remaining NHL game (power ratings + home ice, division and wild-card format)."})
+            if r_.get("po"):
+                po_ = r_["po"]
+                it_.append({"tag": "Playoff strength", "tone": "good" if po_["strength"] >= 0.55 else ("bad" if po_["strength"] < 0.45 else "neutral"),
+                            "head": f"{round(po_['strength'] * 100)}% to beat an average playoff team in a series",
+                            "body": f"80% range {round(po_['strengthLo'] * 100)}-{round(po_['strengthHi'] * 100)}%. {po_['elite']} elite skater{'s' if po_['elite'] != 1 else ''} (top 10% at the position); Cup {round(po_['cup'] * 100, 1)}% overall, {round((po_['cupIfIn'] or 0) * 100, 1)}% if they make it."})
+            it_.append({"tag": "Power ranking", "tone": "good" if r_["rhi"] <= 10 else ("bad" if r_["rlo"] >= 23 else "neutral"),
+                        "head": f"{ord_(r_['rank'])} of {len(power_out['rows'])} (likely {r_['r10']}-{r_['r90']})" + (f", {r_['neutralWin'] * 100:.1f}% vs. an average team" if r_.get("neutralWin") is not None else ""),
+                        "body": f"Rating {r_['rating']:+.1f} standings points per 84 games vs. an average team: lineup {r_['parts']['lineup']:+.1f}, results {r_['parts']['results']:+.1f}, shot quality {r_['parts']['shots']:+.1f}, last season {r_['parts']['lastseason']:+.1f}."})
+            sw_ = [x_ for x_ in sw_all.get(t_, []) if x_.get("rank")]
+            cs_ = [x_ for x_ in sw_ if x_["sig"] == "confirmed strength"]; cw_ = [x_ for x_ in sw_ if x_["sig"] == "confirmed weakness"]
+            if cs_:
+                x_ = min(cs_, key=lambda x_: x_["rank"])
+                it_.append({"tag": "Confirmed strength", "tone": "good", "head": f"{x_['label']}: {ord_(x_['rank'])} in the NHL", "body": f"{fmtv(x_['cur'], x_['fmt'])}. Clearly better than league average (95%), after accounting for sample size and carry-over (r = {x_['rel_yoy']})."})
+            elif sw_:
+                x_ = min(sw_, key=lambda x_: x_["rank"])
+                it_.append({"tag": "Leading strength (not yet confirmed)", "tone": "neutral", "head": f"{x_['label']}: {ord_(x_['rank'])} in the NHL", "body": f"{fmtv(x_['cur'], x_['fmt'])}. Not yet statistically distinguishable from average at 95%."})
+            if cw_:
+                x_ = max(cw_, key=lambda x_: x_["rank"])
+                it_.append({"tag": "Confirmed weakness", "tone": "bad", "head": f"{x_['label']}: {ord_(x_['rank'])} in the NHL", "body": f"{fmtv(x_['cur'], x_['fmt'])}. Clearly worse than league average (95%), after accounting for sample size and carry-over (r = {x_['rel_yoy']})."})
+            elif sw_:
+                x_ = max(sw_, key=lambda x_: x_["rank"])
+                it_.append({"tag": "Leading weakness (not yet confirmed)", "tone": "neutral", "head": f"{x_['label']}: {ord_(x_['rank'])} in the NHL", "body": f"{fmtv(x_['cur'], x_['fmt'])}. Not yet statistically distinguishable from average at 95%."})
+            PL_ = [q_ for q_ in players_league if q_["t"] == t_ and not q_.get("ng")]
+            sk_ = [q_ for q_ in PL_ if q_["g"] != "G" and q_["gp"] >= max(1, gp_ // 2)]
+            if sk_:
+                b_ = max(sk_, key=lambda q_: q_["imp"])
+                lo_, hi_ = (b_["imp"] - 1.645 * b_["ise"]) * PPI_, (b_["imp"] + 1.645 * b_["ise"]) * PPI_
+                it_.append({"tag": "Top performer", "tone": "good", "head": f"{b_['n']}: {b_['imp'] * PPI_:+.1f} standings points vs. average",
+                            "body": f"90% range {lo_:+.1f} to {hi_:+.1f} points: " + ("clearly above average." if lo_ > 0 else "not yet distinguishable from average.")})
+            tl_ = [q_ for q_ in PL_ if q_["g"] != "G" and q_.get("tal") is not None]
+            if tl_:
+                b_ = max(tl_, key=lambda q_: q_["tal"])
+                it_.append({"tag": "Best player (talent)", "tone": "good", "head": f"{b_['n']}: {ord_(b_['tpct'])} percentile at his position" if b_.get("tpct") is not None else b_["n"],
+                            "body": f"Talent independent of ice time, from this season and the last three: {b_['tal'] * PPI_:+.1f} standings points per standard season (90% range {(b_['tal'] - 1.645 * b_['tsd']) * PPI_:+.1f} to {(b_['tal'] + 1.645 * b_['tsd']) * PPI_:+.1f})."})
+            vc_ = [q_ for q_ in PL_ if q_.get("vs") is not None]
+            if vc_:
+                k_ = 1.645 / 1.96
+                def vsig_(q_):
+                    lo_ = q_["vs"] - (q_["vs"] - q_["vsLo"]) * k_; hi_ = q_["vs"] + (q_["vsHi"] - q_["vs"]) * k_
+                    return " Clearly more than the contract pays for." if lo_ > 0 else (" Clearly less than the contract pays for." if hi_ < 0 else " Not a clear gap yet.")
+                bv_ = max(vc_, key=lambda q_: q_["vs"]); wv_ = min(vc_, key=lambda q_: q_["vs"])
+                it_.append({"tag": "Best value", "tone": "good", "head": f"{bv_['n']} (${bv_['cap']}M)", "body": f"{bv_['vs'] * PPI_:+.1f} standings points per 84 games in his role vs. what his cap hit buys at the league market rate." + vsig_(bv_)})
+                it_.append({"tag": "Worst value", "tone": "bad", "head": f"{wv_['n']} (${wv_['cap']}M)", "body": f"{wv_['vs'] * PPI_:+.1f} standings points per 84 games in his role vs. what his cap hit buys at the league market rate." + vsig_(wv_)})
+            ro_ = rost_.get(t_)
+            if ro_ and league_out:
+                gaps_ = {g_: ro_[g_] - league_out["avgTop8"][g_] for g_ in ("F", "D", "G")}; w_ = min(gaps_, key=gaps_.get)
+                it_.append({"tag": "Roster vs. league", "tone": "neutral", "head": f"{ord_(ro_['rank_total'])} in summed player talent",
+                            "body": f"Forwards {ord_(ro_['rank_F'])}, defense {ord_(ro_['rank_D'])}, goalies {ord_(ro_['rank_G'])}. Biggest gap to the eight strongest rosters: {({'F': 'forwards', 'D': 'defense', 'G': 'goaltending'})[w_]} ({to_pts(gaps_[w_]):+.1f} standings points per 84 games)."})
+            gq_ = sorted([q_ for q_ in PL_ if q_["g"] == "G" and q_["gp"] > 0], key=lambda q_: -q_["gp"])
+            if gq_:
+                q_ = gq_[0]
+                it_.append({"tag": "Goaltending", "tone": "neutral", "head": f"{q_['n']}: {q_['imp']:+.1f} goals vs. an average goalie ({q_['gp']} GP)",
+                            "body": f"Talent {ord_(q_['tpct'])} percentile among goalies. Goalie results are mostly noise over short stretches." if q_.get("tpct") is not None else "Goalie results are mostly noise over short stretches."})
+            exec_all[t_] = {"confidence": "low" if gp_ < 10 else ("medium" if gp_ < 25 else "high"), "gp": gp_, "items": it_}
+        up_ = next((r_ for r_ in power_out["rows"] if r_["team"] == TEAM and r_.get("po")), None)
+        if up_:
+            po_ = up_["po"]
+            ins.insert(1, {"tag": "Playoff strength", "tone": "good" if po_["strength"] >= 0.55 else ("bad" if po_["strength"] < 0.45 else "neutral"),
+                           "head": f"{round(po_['strength'] * 100)}% to beat an average playoff team in a series",
+                           "body": f"80% range {round(po_['strengthLo'] * 100)}-{round(po_['strengthHi'] * 100)}%. {po_['elite']} elite skater{'s' if po_['elite'] != 1 else ''} (top 10% at the position; every Cup winner since 2014 had at least 2). Cup {round(po_['cup'] * 100, 1)}% overall, {round((po_['cupIfIn'] or 0) * 100, 1)}% if they make it."})
+    # ---- game recaps for every other team's latest games (Overview follows the selected team): shots and goalies from
+    # MoneyPuck, score and date from the league schedule (Utah's also use its box scores)
+    recaps_all = {}
+    shots_p_ = P("inputs", "moneypuck", "shots_2026.csv")
+    if os.path.exists(shots_p_) and os.path.exists(P("inputs", "nhl", "league_schedule.json")):
+        lgs_ = {g_["id"]: g_ for g_ in json.load(open(P("inputs", "nhl", "league_schedule.json")))["games"]}
+        for t_ in sorted({s_["abbr"] for s_ in standings}):
+            if t_ == TEAM:
+                continue
+            L_ = []
+            for rc_ in recap_mod.build(shots_p_, P("inputs", "moneypuck_games", "goalies_games.csv"), "/nonexistent", t_):
+                g_ = lgs_.get(rc_["id"])
+                if not g_ or g_["state"] not in (6, 7):
+                    continue
+                home_ = g_["home"] == t_
+                rc_.update({"date": g_["date"], "us": g_["hs"] if home_ else g_["as"], "them": g_["as"] if home_ else g_["hs"],
+                            "lp": "SO" if g_["period"] >= 5 else ("OT" if g_["period"] == 4 else "REG")})
+                L_.append(rc_)
+            recaps_all[t_] = sorted(L_, key=lambda r_: r_["gid"])[-5:]
 
     # ---- snapshot history (trend lines)
     hist_path = P("history", "snapshots.json")
@@ -1409,7 +1565,7 @@ def main():
     last = played[-1] if played else None
     data = {
         "built": now.strftime("%b %d, %Y %I:%M %p"), "season": "2026-27",
-        "dataStatus": {"mpFull": full_mp, "standingsDate": standings[0]["date"] if standings else None, "boxscores": nbox, "mpGp": mp_gp},
+        "dataStatus": {"rosters": rosters_note, "mpFull": full_mp, "standingsDate": standings[0]["date"] if standings else None, "boxscores": nbox, "mpGp": mp_gp},
         "unlock": UNLOCK,
         "team": {"gp": gp, "pts": pts, "rec": f'{me["w"]}-{me["l"]}-{me["otl"]}' if me else "", "rw": me["rw"] if me else None,
                  "streak": me["streak"] if me else "", "gf": me["gf"] if me else None, "ga": me["ga"] if me else None,
@@ -1421,7 +1577,7 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "exec": exec_summary, "execAll": exec_all, "recapsAll": recaps_all, "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
         "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recap_mod.build(P("inputs", "moneypuck", "shots_2026.csv"), P("inputs", "moneypuck_games", "goalies_games.csv"), P("inputs", "nhl", "boxscores"), TEAM),
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,
