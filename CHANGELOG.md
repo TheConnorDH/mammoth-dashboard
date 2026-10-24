@@ -2,6 +2,11 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.2.1 (2026-10-24)
+
+**Fixed**
+- Goalie percentiles now use the same scale as the goalie labels: percentile among the 32 likely starters (shown as "Nth of starters"). Before, the number was the percentile among all goalies, backups included, so a goalie could read 47th yet be labeled *Borderline starter*.
+
 ## 1.2.0 (2026-10-24)
 
 **Changed (model)**
