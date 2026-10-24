@@ -9,6 +9,9 @@ on:
     - cron: "17 11 * * *"   # 5:17 am MDT
     - cron: "47 12 * * *"   # 6:47 am MDT  (final attempt)
   workflow_dispatch:         # "Run workflow" button for a manual update
+  push:                      # a code change on main rebuilds the site right away (the bot's own daily commits don't trigger this)
+    branches: [main]
+    paths: ["Dashboard/**", "automation/**", "VERSION", ".github/workflows/daily.yml"]
 
 permissions:
   contents: write
@@ -75,7 +78,9 @@ jobs:
           git config user.name "mammoth-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add Dashboard/config Dashboard/inputs/nhl Dashboard/inputs/bio_supplement.csv Dashboard/history/snapshots.json Dashboard/history/last_run.json
-          git diff --cached --quiet || git commit -m "Daily update $(date -u +%F)"
+          # only scheduled runs write "Daily update <date>" (the skip check looks for it); pushes and manual runs say "Rebuild"
+          if [ "${{ github.event_name }}" = "schedule" ]; then MSG="Daily update $(date -u +%F)"; else MSG="Rebuild $(date -u +%F)"; fi
+          git diff --cached --quiet || git commit -m "$MSG"
           git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" || true
           git push
 
