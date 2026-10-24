@@ -6,7 +6,7 @@
  "uta_score": 3,
  "opp_score": 5,
  "uta_sog": 36,
- "opp_sog": 23,
+ "opp_sog": 25,
  "last_period": "REG",
  "skaters": [
   {
@@ -373,8 +373,8 @@
  "goalies": [
   {
    "name": "Karel Vejmelka",
-   "sa": 22,
-   "sv": 18,
+   "sa": 24,
+   "sv": 20,
    "ga": 4,
    "toi": "58:14",
    "start": true,
