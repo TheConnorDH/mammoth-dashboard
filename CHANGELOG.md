@@ -2,6 +2,20 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.2.0 (2026-10-24)
+
+**Changed (model)**
+- **Playoff series model counts only a team's first two elite skaters.** In 165 past series, each of the first two top-10% skaters moved a team's odds a lot and a third or more added nothing measurable. Counting only two gave more accurate series probabilities than counting every elite player (leave-one-season-out log-loss 0.6468 vs. 0.6595; coin flip 0.6931). The full Cup simulation backtest scored the same as before within simulation noise, so the 70% series-edge setting is unchanged. Effect: teams with 0-1 elite skaters (Utah has 0) drop in playoff strength; teams with many elite skaters no longer get extra credit beyond two.
+- **Goalie labels now mark a floor instead of a ladder.** Goalies are compared with the league's 32 likely starters (not all goalies, which mixed in backups): *Below starter floor* (bottom 20%), *Borderline starter* (20th-40th), *Starter quality* (above 40th). Tested on 12 seasons, one held out at a time: teams with a bottom-20% starter lost about 14 goals a season beyond what their skaters predicted (10 of 12 seasons); above the 40th percentile, more goalie talent added nothing measurable. Replaces "Likely above avg / Avg range / Likely below avg", which put almost every goalie in the middle.
+
+**New**
+- **Elite skaters indicator** on the Team tab header and the Playoffs tab: "X of 2", the playoff floor.
+- Playoffs tab: the "what predicts playoff success" table adds a probability-accuracy column (the measure used to choose the model).
+- Other teams' Overview goaltending card says where the starter sits relative to the floor.
+
+**Tested and not adopted**
+- A goalie floor inside the power rankings: no better than the current model (results and last season already carry it).
+
 ## 1.1.0 (2026-10-24)
 
 **New**

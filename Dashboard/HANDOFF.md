@@ -279,3 +279,8 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 - All-team rosters: `automation/fetch_nhl.py rosters_all()` -> `config/rosters_all.json` (a failed team keeps yesterday's list). The build moves traded players to their new team and adds rostered players with no games this season (`ng`), rated from past seasons; team-strength views and power rankings still exclude `ng` players.
 - Share cards: post-text / group-text boxes removed; "why the odds lean" bars fixed to point toward each team's side.
 - Workflow: also runs on push to main (code paths only).
+
+## Oct 24 (later): v1.2.0
+- Series model: elite skaters counted up to 2 (`elite_cap` in params/playoff_params.json; b_power 1.609, b_elite 0.561, alpha 0.7). LOSO log-loss 0.6468 vs 0.6595 linear; full Cup backtest equal within noise (`cup_odds_backtest_floor*` in calibration/experiments).
+- Goalie labels: starter percentile vs. the 32 likely starters (`goalieStarters` in data; most starts this season, then talent): <20 Below starter floor, 20-40 Borderline starter, 40+ Starter quality. Validated on 12 held-out seasons (`goalie_bands_validation.txt`).
+- Goalie floor inside the power rankings tested and not adopted (`pr_goalie_floor_*`).

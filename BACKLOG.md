@@ -3,6 +3,7 @@
 Requests and planned changes, in rough priority order. Each item is validated on history before it ships, and gets a version bump and changelog entry.
 
 ## Shipped
+- 1.2.0 (2026-10-24): elite-skater floor in the playoff series model, goalie floor labels, elite indicator.
 - 1.1.0 (2026-10-24): versioning + changelog, all-team rosters, playoff tab, team selector across the site, odds-lean bar fix, push-to-rebuild. See CHANGELOG.md.
 
 ## Next
@@ -33,13 +34,15 @@ Calibration (`cup_odds_backtest_calibration.py`): keeping 70% of the fitted seri
 Before shipping:
 - Confirm alpha with more seasons / more sims (8 champions is a tiny sample); re-check calibration at every round.
 - Decide on A vs B (B is slightly better on series but rests on a moderate effect).
-- Use the same elite definition historically and live (prior-only talent, regulars only).
+- Use the same elite definition historically and live (prior-only talent, regulars only). Same for the goalie floor (live uses current talent vs. this season's likely starters).
 - Done in 1.1.0: each simulated team's standings and playoff strength come from the same draw.
 - Home ice, and reseeding rules if the NHL changes format.
+- Done in 1.2.0: elite term counts the first two only (validated leave-one-season-out).
 - Test recent goalie form going into the playoffs (e.g. last month's GSAx) as a series factor. Pre-season goalie talent added nothing (49.7% alone; made combined models worse).
 - Page design: playoff tab with Cup odds, playoff strength, round-by-round odds, and Utah's path / likely opponents.
 
 ## Model ideas tested and not adopted
+- Goalie floor in the power rankings (2026-10-24, `pr_goalie_floor_*`): a bottom-20% goalie costs ~6 points/82 in a full-season check, but in the power-ranking backtest neither a floor (20th-50th pct) nor a separate goalie term beat the current model; results and last season already carry it. Not adopted.
 - Last-season roster continuity / replayed last season / team-residual split for power rankings (no gain; `pr_continuity_*`, 2026-10-24).
 - Score/venue-adjusted xG (small team-level gain, none at player level).
 

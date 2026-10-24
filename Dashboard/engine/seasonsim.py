@@ -83,7 +83,7 @@ def _playoffs(teams, ix, conf, div, score, true, ratings, sds, S, rng):
     rat = np.array([ratings[t] for t in teams]); sd = np.array([sds[t] for t in teams])
     k = np.sqrt(np.clip(sd ** 2 - S["tv_end"], 0, None)) / np.where(sd > 0, sd, 1)
     strength = rat[None, :] + (true - rat[None, :]) * k[None, :]
-    E = np.array([S["elite"].get(t, 0) for t in teams], float)
+    E = np.minimum(np.array([S["elite"].get(t, 0) for t in teams], float), S.get("elite_cap", 99))     # only the first two elite skaters count
     bp, be = S["alpha"] * S["b_power"], S["alpha"] * S["b_elite"]
     cnt = np.zeros((n, 5)); seeds = np.zeros((n, 5)); opp = np.zeros((n, n))
     u = rng.random((n_sims, 15))

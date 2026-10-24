@@ -961,6 +961,17 @@ def main():
         for gid_, v_ in pg_snap.items():
             if pg_src.get(gid_) == "game":
                 print("DIAG", gid_, sorted(((round(pg_gaa[gid_][n]["gaa"], 2), round(v_[n]["gaa"], 2), n) for n in v_ if n in pg_gaa[gid_]), reverse=True))
+    # ---- goalie floor: each team's likely starter (largest share of starts this season, then talent); their talent spread
+    # sets the goalie labels (bottom 20% of starters = below the floor; validated on 12 seasons, calibration/experiments)
+    goalie_starters = []
+    if players_league:
+        for t_ in sorted({s_["abbr"] for s_ in standings}):
+            gs_ = [q_ for q_ in players_league if q_["t"] == t_ and q_["g"] == "G" and not q_.get("ng") and q_.get("tal") is not None]
+            if gs_:
+                goalie_starters.append(max(gs_, key=lambda q_: (((q_.get("guse") or {}).get("share")) or 0, q_["gp"], q_["tal"]))["tal"])
+    gst_sorted_ = sorted(goalie_starters)
+    starter_pct = lambda tal_: round(100 * sum(1 for v_ in gst_sorted_ if v_ < tal_) / len(gst_sorted_)) if gst_sorted_ and tal_ is not None else None
+    goalie_band = lambda tal_: None if starter_pct(tal_) is None else ("below the starter floor" if starter_pct(tal_) < 20 else ("a borderline starter" if starter_pct(tal_) < 40 else "starter quality"))
     # ---- power rankings (needs MoneyPuck game-by-game files)
     power_out = None
     if "skaters" in games_files and "goalies" in games_files:
@@ -1054,7 +1065,7 @@ def main():
                     sk_ = [q_ for q_ in players_league if q_["t"] == t_ and q_["g"] in "FD" and not q_.get("ng")]
                     top_ = sorted([q_ for q_ in sk_ if q_["g"] == "F"], key=lambda q_: -(q_["tpg"] or 0))[:12] + sorted([q_ for q_ in sk_ if q_["g"] == "D"], key=lambda q_: -(q_["tpg"] or 0))[:6]
                     elite_[t_] = sum(1 for q_ in top_ if (q_.get("tpct") or 0) >= ppo["elite_pct"])
-            series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
+            series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite_cap": ppo.get("elite_cap", 99), "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
             lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7, series=series_)
             bw_ = wpp["win"][1]
             for r_ in prows:
@@ -1068,7 +1079,9 @@ def main():
                 po_ = lsim["_playoffs"]; a_ = ppo["alpha"]
                 wsum_ = sum(po_[t_]["make"] for t_ in po_) or 1
                 avgR_ = sum(rat[t_] * po_[t_]["make"] for t_ in po_) / wsum_; avgE_ = sum(elite_.get(t_, 0) * po_[t_]["make"] for t_ in po_) / wsum_
-                ser_ = lambda r0_, e0_: 1 / (1 + math.exp(-a_ * (ppo["b_power"] * (r0_ - avgR_) + ppo["b_elite"] * (e0_ - avgE_))))
+                cap_ = ppo.get("elite_cap", 99)
+                avgE_ = sum(min(elite_.get(t_, 0), cap_) * po_[t_]["make"] for t_ in po_) / wsum_
+                ser_ = lambda r0_, e0_: 1 / (1 + math.exp(-a_ * (ppo["b_power"] * (r0_ - avgR_) + ppo["b_elite"] * (min(e0_, cap_) - avgE_))))
                 for r_ in prows:
                     t_ = r_["team"]
                     if t_ in po_:
@@ -1521,7 +1534,7 @@ def main():
             if gq_:
                 q_ = gq_[0]
                 it_.append({"tag": "Goaltending", "tone": "neutral", "head": f"{q_['n']}: {q_['imp']:+.1f} goals vs. an average goalie ({q_['gp']} GP)",
-                            "body": f"Talent {ord_(q_['tpct'])} percentile among goalies. Goalie results are mostly noise over short stretches." if q_.get("tpct") is not None else "Goalie results are mostly noise over short stretches."})
+                            "body": (f"Rated {goalie_band(q_.get('tal'))} ({ord_(starter_pct(q_.get('tal')))} percentile among the 32 likely starters). Below the 20th percentile costs about 14 goals a season; above the 40th, more goalie talent adds little. " if starter_pct(q_.get('tal')) is not None else "") + "Goalie results are mostly noise over short stretches."})
             exec_all[t_] = {"confidence": "low" if gp_ < 10 else ("medium" if gp_ < 25 else "high"), "gp": gp_, "items": it_}
         up_ = next((r_ for r_ in power_out["rows"] if r_["team"] == TEAM and r_.get("po")), None)
         if up_:
@@ -1577,7 +1590,7 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "recapsAll": recaps_all, "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
         "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recap_mod.build(P("inputs", "moneypuck", "shots_2026.csv"), P("inputs", "moneypuck_games", "goalies_games.csv"), P("inputs", "nhl", "boxscores"), TEAM),
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,
