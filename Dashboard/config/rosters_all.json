@@ -2878,6 +2878,12 @@
     "number": 41
    },
    {
+    "playerId": "8473503",
+    "name": "James Reimer",
+    "pos": "G",
+    "number": null
+   },
+   {
     "playerId": "8478048",
     "name": "Igor Shesterkin",
     "pos": "G",
@@ -3084,12 +3090,6 @@
     "name": "Tyson Foerster",
     "pos": "R",
     "number": 71
-   },
-   {
-    "playerId": "8481848",
-    "name": "Jacob Gaucher",
-    "pos": "C",
-    "number": 78
    },
    {
     "playerId": "8483733",

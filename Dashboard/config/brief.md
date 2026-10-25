@@ -1,19 +1,16 @@
-## Utah beats Tampa Bay 5-4 in overtime; detailed chance data isn't in yet
+## Utah beats Tampa Bay 5-4 in overtime, with the shot-quality edge on its side
 
-Utah is 8-4-0 with 16 points after its 12th game, a 5-4 overtime home win over the Tampa Bay Lightning on Oct 24. The streak is W1, and Utah is first in the Central Division. Shots on goal were Utah 28, Tampa Bay 32. MoneyPuck's shot data for this game isn't out yet, so there are no expected goals, dangerous shots or replay odds for how the chances compared.
+Utah is now 8-4-0 with 16 points after 12 games, first in the Central Division, and is on a one-game winning streak. On Oct 24 at home, Utah beat the Tampa Bay Lightning 5-4 in overtime. Tampa Bay had more shots on goal, 32 to 28, but Utah had the better chances: expected goals were 4.0 to 3.5 overall and 2.8 to 2.0 at 5v5. Utah had 16 dangerous shots (10% or higher chance) to Tampa Bay's 13. Replaying every shot by its quality, Utah wins 57% of the time.
 
 What the numbers showed:
-- **Scoring.** Dylan Guenther (one power-play goal), Kailer Yamamoto and Anders Lee each scored once, and Dmitri Simashev scored twice. Vincent Trocheck had two assists. Clayton Keller, Barrett Hayton, Andrew Peeke, MacKenzie Weegar and Mikhail Sergachev each had one.
-- **Goaltending.** Karel Vejmelka started and made 29 saves on 32 shots. A comparison with expected goals isn't possible until the shot data arrives.
-- **Special teams.** The packet lists one power-play goal, from Guenther. No other special-teams detail is available.
-- **Ice time.** Sergachev (26:01) and Weegar (25:20) played the most, followed by Trocheck (21:02) and Peeke (20:38).
-- **Season process vs. results.** Utah has 16 points against 15.1 expected from shot quality. Season expected goals are 38.6 for and 28.5 against.
+- **Goaltending vs. expected.** Karel Vejmelka allowed 4 goals on 33 shots worth 3.5 expected goals, 0.5 goals worse than expected. Tampa Bay's Dennis Hildeby allowed 5 on 28 shots worth 4.0 expected goals, 1.0 goals worse than expected.
+- **Special teams.** Each team scored one power-play goal. Utah's came from Dylan Guenther.
+- **Player Impact, best.** Kailer Yamamoto (+1.43), Anders Lee (+0.84) and MacKenzie Weegar (+0.76).
+- **Player Impact, lowest.** Guenther (-0.71), Nick Schmaltz (-0.67) and Logan Cooley (-0.62).
+- **Season process vs. results.** Utah has 16 points against 16.3 expected from shot quality. Season expected goals are 42.5 for and 32.0 against.
 
-**Where Utah stands:** Utah ranks 8th in the power rankings (likely range 3rd-18th), down from 6th, in Tier 2. The rating is +9.6 standings points per 84 games vs. an average team. The projection is 106 points, with an 80% range of 90-120. Playoff odds are 87%, up from 84%.
+**Where Utah stands:** Power rank 6th (likely range 3rd-17th), unchanged from the previous 6th, in Tier 2. The rating is +10.2 standings points per 84 games vs. an average team. The projection is 106 points, with an 80% range of 91-120. Playoff odds are 88%, up from 84%.
 
 **What to watch next:**
-- Tuesday, Oct 27, home vs. the Minnesota Wild (power rank 10th): Utah win chance 57%. This is a division game.
-- Thursday, Oct 29, away vs. the Pittsburgh Penguins (14th): 50%.
-- Sunday, Nov 1, away vs. the Philadelphia Flyers (29th): 61%.
-
-*Data note: MoneyPuck data through Oct 22; NHL results through Oct 24.*
+- Tuesday, Oct 27: home vs. Minnesota Wild (power rank 8th), a Central Division game. Utah win chance 56%.
+- Thurs
