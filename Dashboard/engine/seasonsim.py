@@ -4,7 +4,7 @@ every remaining game: P(home win) = logistic(a + b*diff), P(overtime) = logistic
 P(home win | OT) = logistic(e + f*diff); OT/shootout loser gets 1 point.
 With `series` (params/playoff_params.json + elite counts), each simulated season also plays out the playoffs:
 NHL bracket (top 3 per division + 2 wild cards; the better division winner meets the second wild card), every
-series P(A wins) = logistic(alpha * (b_power * strength gap + b_elite * elite-skater gap)). The series strength is the
+series P(A wins) = average over the blended models of logistic(alpha * (b_power * strength gap + b_elite * capped elite gap)). The series strength is the
 same draw as the season's, scaled to the end-of-season uncertainty the series model was fitted and backtested on."""
 import numpy as np
 
@@ -83,8 +83,10 @@ def _playoffs(teams, ix, conf, div, score, true, ratings, sds, S, rng):
     rat = np.array([ratings[t] for t in teams]); sd = np.array([sds[t] for t in teams])
     k = np.sqrt(np.clip(sd ** 2 - S["tv_end"], 0, None)) / np.where(sd > 0, sd, 1)
     strength = rat[None, :] + (true - rat[None, :]) * k[None, :]
-    E = np.minimum(np.array([S["elite"].get(t, 0) for t in teams], float), S.get("elite_cap", 99))     # only the first two elite skaters count
-    bp, be = S["alpha"] * S["b_power"], S["alpha"] * S["b_elite"]
+    E0 = np.array([S["elite"].get(t, 0) for t in teams], float)
+    # series model: the average of the listed models (each logistic in power gap + capped elite gap), scaled by alpha
+    MODELS = S.get("blend") or [{"b_power": S["b_power"], "b_elite": S["b_elite"], "elite_cap": S.get("elite_cap", 99)}]
+    MS = [(S["alpha"] * m["b_power"], S["alpha"] * m["b_elite"], np.minimum(E0, m.get("elite_cap", 99))) for m in MODELS]
     cnt = np.zeros((n, 5)); seeds = np.zeros((n, 5)); opp = np.zeros((n, n))
     u = rng.random((n_sims, 15))
     confs = sorted(set(conf.values()))
@@ -95,7 +97,7 @@ def _playoffs(teams, ix, conf, div, score, true, ratings, sds, S, rng):
         sc = score[s_]; st = strength[s_]; k_ = 0
         def play(i, j):
             nonlocal k_
-            p = 1 / (1 + np.exp(-(bp * (st[i] - st[j]) + be * (E[i] - E[j])))); w = i if u[s_, k_] < p else j; k_ += 1; return w
+            p = sum(1 / (1 + np.exp(-(bp * (st[i] - st[j]) + be * (E[i] - E[j])))) for bp, be, E in MS) / len(MS); w = i if u[s_, k_] < p else j; k_ += 1; return w
         champs = []
         for cf in confs:
             tops = {dv: sorted(dmem[dv], key=lambda i: -sc[i])[:3] for dv in divs[cf]}

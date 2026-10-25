@@ -5,13 +5,15 @@
 An objective, data-only view of the Utah Mammoth's season, with every other NHL team one click away (pick a team at the top of the page). It updates automatically every morning. Current version and changes: [CHANGELOG.md](CHANGELOG.md).
 
 ## What's on it
-- **Overview:** the daily brief, which is a short write-up of the latest game. Every number in it is checked against the data before it is published.
-- **League:** standings, playoff odds and power rankings.
-- **Playoffs:** each team's odds round by round, playoff strength (chance of beating an average playoff team in a series), seeding and likely first-round opponents, and what has predicted past playoff series.
-- **Team and Roster:** any team's style, lines and roster, with Player Impact (per game, in goals) and Talent (percentile at his position).
-- **Matchup:** any two teams, with goalies and venue, compared head to head.
-- **Player Finder:** every NHL player rated the same way, filtered by team, division, position or age.
-- **How It Works:** the method, and the integrity checks run on every build.
+Pick any team at the top of the page; every tab follows it.
+- **Overview:** the daily brief (Utah), executive summary, game recap graphic, next 10 games, last game's best and worst players.
+- **Team:** how the team is built and plays, needs and possible moves, season outlook, strengths and weaknesses, shot maps.
+- **Roster:** every player's Impact and Talent, player profiles, value vs. contract, game by game, lines and goaltending.
+- **Matchup:** any two teams head to head, with a shareable preview graphic.
+- **League:** power rankings, conference and division comparisons, lineup strength, standings.
+- **Playoffs:** each team's odds round by round and playoff strength.
+- **Players:** every NHL player rated the same way, with filters.
+- **Guide:** what every number means and how it's built, plus the integrity checks run on every build.
 
 ## Data and credit
 - [MoneyPuck.com](https://moneypuck.com/data.htm): shot-model and player data, free for non-commercial use with credit. Files are downloaded fresh on each run and are not stored in this repository.

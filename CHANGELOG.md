@@ -2,6 +2,18 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.3.0 (2026-10-24)
+
+**Changed (model)**
+- **Playoff series odds now average two versions of the elite-skater term:** counting every elite skater (1.1) and counting only the first two (1.2). When the threshold and count were chosen fairly (each season held out from the choice), "first two only" was no better than counting every elite skater; the two disagree most for teams with zero elite skaters, where history is thinnest (14 series). The average sits between them (leave-one-season-out log-loss 0.6509; every elite 0.6595; first two 0.6468 before the fair check). Correction: the 1.2.0 note overstated "first two only" as clearly the most accurate. Effect for Utah (0 elite): playoff strength about 42% (1.2: 37%, 1.1: 47%).
+
+**Changed (site)**
+- **Cleaner data tabs; new Guide tab.** Methodology notes moved off the data tabs into a Guide (key terms, calibers and goalie labels, and how each tab's numbers are built). Each section has a "How this works" link to its Guide entry. The "What predicts playoff success" tables and the matchup stat glossary live in the Guide.
+- **Tabs reordered and renamed:** Overview, Team, Roster, Matchup, League, Playoffs, Players (was Player Finder), Guide (was How It Works).
+- The per-tab team pickers are gone; the team picker at the top of the page drives every tab.
+- Players tab shows a compact caliber legend.
+- Elite-skater wording fixed (it read "6 of 2" for teams above the floor).
+
 ## 1.2.1 (2026-10-24)
 
 **Fixed**

@@ -1065,7 +1065,7 @@ def main():
                     sk_ = [q_ for q_ in players_league if q_["t"] == t_ and q_["g"] in "FD" and not q_.get("ng")]
                     top_ = sorted([q_ for q_ in sk_ if q_["g"] == "F"], key=lambda q_: -(q_["tpg"] or 0))[:12] + sorted([q_ for q_ in sk_ if q_["g"] == "D"], key=lambda q_: -(q_["tpg"] or 0))[:6]
                     elite_[t_] = sum(1 for q_ in top_ if (q_.get("tpct") or 0) >= ppo["elite_pct"])
-            series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite_cap": ppo.get("elite_cap", 99), "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
+            series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite_cap": ppo.get("elite_cap", 99), "blend": ppo.get("blend"), "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
             lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7, series=series_)
             bw_ = wpp["win"][1]
             for r_ in prows:
@@ -1079,9 +1079,10 @@ def main():
                 po_ = lsim["_playoffs"]; a_ = ppo["alpha"]
                 wsum_ = sum(po_[t_]["make"] for t_ in po_) or 1
                 avgR_ = sum(rat[t_] * po_[t_]["make"] for t_ in po_) / wsum_; avgE_ = sum(elite_.get(t_, 0) * po_[t_]["make"] for t_ in po_) / wsum_
-                cap_ = ppo.get("elite_cap", 99)
-                avgE_ = sum(min(elite_.get(t_, 0), cap_) * po_[t_]["make"] for t_ in po_) / wsum_
-                ser_ = lambda r0_, e0_: 1 / (1 + math.exp(-a_ * (ppo["b_power"] * (r0_ - avgR_) + ppo["b_elite"] * (min(e0_, cap_) - avgE_))))
+                models_ = ppo.get("blend") or [{"b_power": ppo["b_power"], "b_elite": ppo["b_elite"], "elite_cap": ppo.get("elite_cap", 99)}]
+                # vs. an average playoff team: each model compares with the playoff-weighted average of its own (capped) elite count
+                avgEs_ = [sum(min(elite_.get(t_, 0), m_.get("elite_cap", 99)) * po_[t_]["make"] for t_ in po_) / wsum_ for m_ in models_]
+                ser_ = lambda r0_, e0_: sum(1 / (1 + math.exp(-a_ * (m_["b_power"] * (r0_ - avgR_) + m_["b_elite"] * (min(e0_, m_.get("elite_cap", 99)) - ae_)))) for m_, ae_ in zip(models_, avgEs_)) / len(models_)
                 for r_ in prows:
                     t_ = r_["team"]
                     if t_ in po_:

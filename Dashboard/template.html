@@ -90,6 +90,11 @@ details summary { cursor:pointer; }
 td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset:3px; cursor:pointer; }
 @media (max-width:720px) { .hero h1 { font-size:22px; } .theme-btn { position:static; margin-bottom:8px; } }
 .btn { display:inline-block; padding:7px 14px; border-radius:8px; border:1px solid var(--ice-d); background:var(--ice-d); color:#fff; font-weight:700; font-size:13px; cursor:pointer; text-decoration:none; } .btn:hover { filter:brightness(1.1); }
+.glink { font-size:12px; font-weight:700; color:var(--ice-d); text-decoration:none; margin-left:auto; white-space:nowrap; }
+.glink:hover { text-decoration:underline; }
+.legend { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:2px 0 10px; }
+.guide details { margin-top:10px; } .guide summary { cursor:pointer; font-weight:800; font-size:15px; color:var(--head); padding:4px 0; }
+.guide p, .guide li { font-size:13.5px; line-height:1.55; margin:6px 0; } .guide ul { padding-left:18px; } .guide dt { font-weight:800; margin-top:8px; } .guide dd { margin:2px 0 0 0; font-size:13.5px; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -101,39 +106,37 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
   <div class="hero-grid" id="h-grid"></div>
 </div>
 <div class="tabbar" id="tabbar">
-  <button data-t="overview" class="on">Overview</button><button data-t="league">League</button><button data-t="playoffs">Playoffs</button><button data-t="team">Team</button><button data-t="matchup">Matchup</button><button data-t="roster">Roster</button><button data-t="finder">Player Finder</button><button data-t="method">How It Works</button>
+  <button data-t="overview" class="on">Overview</button><button data-t="team">Team</button><button data-t="roster">Roster</button><button data-t="matchup">Matchup</button><button data-t="league">League</button><button data-t="playoffs">Playoffs</button><button data-t="finder">Players</button><button data-t="method">Guide</button>
 </div>
 <div class="wrap">
 
 <!-- ================= OVERVIEW ================= -->
 <div class="pane on" id="p-overview">
   <section><h2>Executive Summary <span class="tag" id="exec-tag"></span></h2>
-    <p class="lede">The key reads right now, each stated with how sure the data is.</p>
     <div class="grid3" id="exec-body"></div></section>
   <section id="brief-sec"><div class="card brief" id="brief-body"></div></section>
   <section><div class="card" id="rc-card"></div></section>
   <section><div class="grid2">
-    <div class="card"><h3>Next 10 games</h3><p class="small">Win odds from the power ratings plus home ice, overtime included. Expected points: win = 2, overtime/shootout loss = 1.</p><div id="next10"></div></div>
+    <div class="card"><h3>Next 10 games</h3><div id="next10"></div></div>
     <div class="card"><h3>Last game: best and worst</h3><div id="last-stars"></div><div id="cd-wrap"><h3 style="margin-top:14px">Countdowns</h3><div id="countdowns"></div></div></div>
   </div></section>
 </div>
 
 <!-- ================= LEAGUE ================= -->
 <div class="pane" id="p-league">
-  <section><h2>Power Rankings <span class="tag">BACKTESTED ON 8 SEASONS</span></h2>
-    <p class="lede">How good each team is right now. <b>Win % vs. average</b> = chance of beating a perfectly average team on neutral ice. The rating blends the talent of the lineup each team has been dressing, goal differential and shot quality so far, and last season's results, with weights that shift as the season goes. Click a team to open its Team page.</p>
+  <section><h2>Power Rankings <a class="glink" href="#method" onclick="goGuide('g-power');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede">How good each team is right now. Click a team to open it.</p>
     <div class="ctl">Show <select id="pw-filter"></select></div>
     <div class="card" id="pw-table"></div>
     <div class="grid2" style="margin-top:14px">
-      <div class="card"><h3>Matchup calculator <a class="small" href="#matchup" onclick="showTab('matchup');return false;">full Matchup tab &rarr;</a></h3><div class="ctl"><select id="mc-a"></select><select id="mc-ga" title="Goalie"></select> vs. <select id="mc-b"></select><select id="mc-gb" title="Goalie"></select><select id="mc-v"><option value="n">Neutral ice</option><option value="a">First team at home</option><option value="b">Second team at home</option></select></div><div id="mc-out"></div><p class="small" id="mc-note"></p></div>
+      <div class="card"><h3 style="display:flex">Matchup calculator <a class="glink" href="#matchup" onclick="showTab('matchup');return false;">Full matchup &rsaquo;</a></h3><div class="ctl"><select id="mc-a"></select><select id="mc-ga" title="Goalie"></select> vs. <select id="mc-b"></select><select id="mc-gb" title="Goalie"></select><select id="mc-v"><option value="n">Neutral ice</option><option value="a">First team at home</option><option value="b">Second team at home</option></select></div><div id="mc-out"></div><p class="small" id="mc-note"></p></div>
       <div class="card"><div class="chart tall"><canvas id="c-power"></canvas></div></div>
     </div></section>
   <section><h2>Conferences and Divisions</h2>
-    <p class="lede">Compare groups of teams by power rating, using all teams or each group's top few.</p>
     <div class="ctl">Teams per group <select id="cg-n"><option value="0">All</option><option value="3">Top 3</option><option value="4">Top 4</option><option value="5">Top 5</option><option value="8">Top 8</option></select></div>
     <div class="grid2"><div class="card" id="cg-table"></div><div class="card"><div class="chart"><canvas id="c-groups"></canvas></div></div></div></section>
-  <section><h2>Lineup Strength: Top vs. Depth</h2>
-    <p class="lede">Each team's best possible lineup by talent, built the way real lines are: every line needs a center (at least two in the top six forwards, four in the twelve), centers can play wing, and left and right wingers are interchangeable. <b>Top</b> = best six forwards + top four defensemen. <b>Depth</b> = the next six forwards + the third pair. Hover a value to see the players.</p>
+  <section><h2>Lineup Strength: Top vs. Depth <a class="glink" href="#method" onclick="goGuide('g-lineups');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede"><b>Top</b> = best six forwards + top four defensemen. <b>Depth</b> = the rest of the lineup. Hover a value to see the players.</p>
     <div class="ctl">Show <select id="ln-filter"></select></div>
     <div class="grid2"><div class="card" id="ln-table"></div><div class="card"><h3>Top vs. depth, every team</h3><div class="chart tall"><canvas id="c-lines"></canvas></div><div class="small" id="ln-quad" style="margin-top:8px"></div></div></div></section>
   <section><h2>Standings</h2><div class="tabs" id="st-tabs"></div><div class="card" id="st-body"></div></section>
@@ -141,36 +144,33 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 
 <!-- ================= PLAYOFFS ================= -->
 <div class="pane" id="p-playoffs">
-  <section><h2>Playoff Picture <span class="tag">10,000 SIMULATED SEASONS + PLAYOFFS</span></h2>
-    <p class="lede">Every remaining regular-season game is simulated with the power ratings, then the playoffs are played out under the NHL format (top three in each division plus two wild cards per conference). Each series goes to the stronger team by the backtested series model: <b>power rating plus elite skaters</b> (top-10% talent at the position). Only a team's first two elite skaters count: in past series each of the first two moved the odds a lot and more added nothing measurable, and counting only two gave the most accurate probabilities of every version tested. <b>Playoff strength</b> = chance of beating an average playoff team in a seven-game series, with its 80% range given how unsure we are about the team's true strength. Odds after round one are deliberately modest: the playoffs are close to a coin flip series by series, and even the favorite usually doesn't win the Cup.</p>
+  <section><h2>Playoff Picture <a class="glink" href="#method" onclick="goGuide('g-playoffs');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede">Every team's odds, round by round, from 10,000 simulated seasons and playoffs. <b>Playoff strength</b> = chance of beating an average playoff team in a series.</p>
     <div class="ctl">Show <select id="po-filter"><option value="">All teams</option><option value="Eastern">Eastern Conference</option><option value="Western">Western Conference</option></select>
       Sort by <select id="po-sort"><option value="cup">Win Cup</option><option value="strength">Playoff strength</option><option value="make">Make playoffs</option><option value="cupIfIn">Cup if they make it</option></select></div>
     <div class="card" id="po-table"></div></section>
   <section><div class="grid2"><div class="card" id="po-path"></div><div class="card" id="po-conf"></div></div></section>
-  <section><h2>What Predicts Playoff Success</h2><div class="grid2"><div class="card" id="po-pred"></div><div class="card" id="po-notes"></div></div></section>
 </div>
 
 <!-- ================= TEAM ================= -->
 <div class="pane" id="p-team">
-  <section><div class="teambar"><select id="tm-sel" class="teamsel" aria-label="Team"></select><span class="small">The selected team follows you across every tab (also set at the top of the page).</span><a href="#roster" class="tab" onclick="setTeam(TM,'roster');return false;">Open roster &rarr;</a></div>
-    <p class="lede">How the selected team is built, how it plays, where its season is headed, and what its numbers say so far.</p>
+  <section><div class="teambar" style="justify-content:flex-end"><a href="#roster" class="tab" onclick="setTeam(TM,'roster');return false;">Open roster &rarr;</a></div>
     <div class="hero-grid" id="tm-head" style="margin-top:0"></div>
     <div class="grid2" style="margin-top:14px"><div class="card" id="tm-style"></div><div class="card" id="tm-roster"></div></div>
-    <h2 style="margin-top:26px">Needs, Possible Moves &amp; Fits <span class="tag">SCREENING TOOL</span></h2>
-    <p class="lede">Where this roster is thin, who on it could be moved (extras, or clearly overpaid for their output), and which players elsewhere would cover those needs. A screen, not a trade forecast: the data has no contract term, trade clauses, real cap space, injuries, prospects or team intentions.</p>
+    <h2 style="margin-top:26px">Needs, Possible Moves &amp; Fits <a class="glink" href="#method" onclick="goGuide('g-needs');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede">Where this roster is thin, who could be moved, and who elsewhere would fill the gap. A screen, not a trade forecast.</p>
     <div class="grid2"><div class="card" id="nd-needs"></div><div class="card" id="nd-surplus"></div></div>
     <div class="card" style="margin-top:14px"><h3>Fits</h3><div class="ctl">Max cap hit <select id="nd-cap"><option value="99">Any</option><option value="2">$2M</option><option value="4">$4M</option><option value="6">$6M</option><option value="8">$8M</option></select>
       <label><input type="checkbox" id="nd-sell" checked> Only teams under 35% playoff odds</label>
       <label><input type="checkbox" id="nd-elc"> Include entry-level deals</label>
       Sort <select id="nd-sort"><option value="vs">Value vs. contract</option><option value="gain">Talent gain</option><option value="cap">Lowest cap hit</option></select></div><div id="nd-fits"></div></div>
-    <h2 style="margin-top:26px">Season Outlook</h2>
+    <h2 style="margin-top:26px">Season Outlook <a class="glink" href="#method" onclick="goGuide('g-outlook');return false;">How this works &rsaquo;</a></h2>
     <div class="grid2">
       <div class="card"><h3>Simulated final points</h3><p class="small" id="sim-note"></p><div class="chart"><canvas id="c-sim"></canvas></div></div>
       <div class="card"><h3>Points so far vs. projection pace</h3><div class="chart"><canvas id="c-points"></canvas></div></div>
     </div>
     <div class="grid2" style="margin-top:14px"><div class="card"><h3>Next 10 games</h3><div id="tm-next"></div></div><div class="card"><h3>Results</h3><div id="gamelog"></div></div></div>
-    <h2 style="margin-top:26px">Strengths &amp; Weaknesses <span class="small" id="sw-tag" style="font-weight:400"></span></h2>
-    <p class="small" style="margin-bottom:8px">Every team stat ranked against the league. A verdict appears only once the data clears 95% ("confirmed") or about 85% ("leaning").</p>
+    <h2 style="margin-top:26px">Strengths &amp; Weaknesses <span class="small" id="sw-tag" style="font-weight:400"></span><a class="glink" href="#method" onclick="goGuide('g-sw');return false;">How this works &rsaquo;</a></h2>
     <div class="grid2"><div class="card"><h3>Top-half metrics</h3><div id="sw-str"></div></div><div class="card"><h3>Bottom-half metrics</h3><div id="sw-weak"></div></div></div>
     <details class="card" style="margin-top:14px"><summary><b>All metrics</b></summary><div id="sw-all" style="margin-top:8px"></div></details>
     <h2 style="margin-top:26px">Shot Maps</h2><div class="small" id="shot-note" style="margin-bottom:8px"></div><div class="grid3" id="shot-maps"></div>
@@ -184,17 +184,16 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <select id="mu-v" title="Venue"><option value="b">@</option><option value="a">vs.</option><option value="n">neutral</option></select>
       <select id="mu-b" class="teamsel" style="min-width:150px" aria-label="Team B"></select><select id="mu-gb" title="Team B goalie"></select>
       <select id="mu-game" title="Pick an upcoming game" style="margin-left:auto"></select></div>
-    <p class="lede" id="mu-lede">Everything about one game: odds, how the teams compare, who matters, where each side can win, and tools to follow it live. "@" means the first team is away.</p>
+    <p class="lede" id="mu-lede"></p><div style="display:flex;margin-top:-6px"><a class="glink" href="#method" onclick="goGuide('g-matchup');return false;">How the matchup model works &rsaquo;</a></div>
     <div class="hero-grid" id="mu-head" style="margin-top:0"></div>
     <div class="card" style="margin-top:14px" id="mu-share"></div>
     <div class="grid2" style="margin-top:14px"><div class="card" id="mu-why"></div><div class="card" id="mu-players"></div></div>
     <div class="card" style="margin-top:14px" id="mu-edges"></div>
     <div class="card" style="margin-top:14px" id="mu-tape"></div>
-    <div class="card" style="margin-top:14px" id="mu-gloss"></div>
     <h2 style="margin-top:26px">Styles &amp; Special Teams</h2>
     <div class="grid2"><div class="card" id="mu-style"></div><div class="card" id="mu-st"></div></div>
     <h2 style="margin-top:26px">Lines</h2>
-    <p class="lede">Each team's lines from its most recent game (Utah: current lineup), line against line. Line value = sum of the players' talent (standings points per 84 games at a standard workload); hover a name for his player type. Coaches won't match lines exactly, especially on the road, so read it as "where the depth edges are."</p>
+    <p class="lede">Each team's lines from its latest game, line against line: where the depth edges are.</p>
     <div class="card" id="mu-lines"></div>
     <h2 style="margin-top:26px">Rosters</h2>
     <div class="grid2"><div class="card" id="mu-ra"></div><div class="card" id="mu-rb"></div></div>
@@ -209,11 +208,11 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 
 <!-- ================= ROSTER ================= -->
 <div class="pane" id="p-roster">
-  <section><div class="teambar"><select id="ro-sel" class="teamsel" aria-label="Team"></select><span class="small">The selected team follows you across every tab (also set at the top of the page).</span><a href="#team" class="tab" onclick="setTeam(TM,'team');return false;">Open team page &rarr;</a></div>
+  <section><div class="teambar" style="justify-content:flex-end"><a href="#team" class="tab" onclick="setTeam(TM,'team');return false;">Open team page &rarr;</a></div>
     <h2 id="ro-title">Roster</h2>
-    <p class="lede"><b>Impact</b> = what he has contributed this season in his actual minutes. <b>Talent</b> = how good he is regardless of ice time, at a standard workload. Both are in standings points vs. an average NHL player at his position (2 points = 1 win). Bars show the likely range (dark, 50%) and the 90% range (light). <b>Tier</b> groups players the data can't confidently tell apart (a new tier starts when the tier's best is better with 75% probability). Hover style tags for detail.</p>
+    <p class="lede" style="display:flex;gap:10px;flex-wrap:wrap"><span><b>Impact</b> = what he's contributed this season. <b>Talent</b> = how good he is at a standard workload. Standings points vs. an average player at his position.</span><a class="glink" href="#method" onclick="goGuide('g-roster');return false;">How this works &rsaquo;</a></p>
     <div class="card" id="roster-table"></div></section>
-  <section><h2>Player Profile</h2><p class="lede">How a player has played (not how good he is: that's talent). The <b>player type</b> on top sums it up in one label: his role by ice time plus the type his skills and usage point to; the sentence under it says why. Skills are his percentile among NHL forwards or defensemen on each part of Player Impact (faceoffs: centers only), pooled over up to four seasons and pulled toward average by how much each skill repeats year to year. Click any player's name to open his profile. Goalies get their own profile (shot-stopping by danger level, rebounds, workload).</p>
+  <section><h2>Player Profile <a class="glink" href="#method" onclick="goGuide('g-profile');return false;">How this works &rsaquo;</a></h2><p class="lede">How he plays: his type, skills and usage. Click any player's name to open his profile.</p>
     <div class="ctl">Player <select id="ro-prof-sel"></select></div><div class="card" id="ro-prof"></div></section>
   <section id="ro-charts"><div class="grid2">
     <div class="card"><h3>Talent with uncertainty</h3><div class="chart" id="forest-wrap"><canvas id="c-forest"></canvas></div></div>
@@ -222,8 +221,8 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
   <section id="ro-h2h"><details class="card"><summary><b>Head to head</b>: chance the row player is more talented than the column player (top 8 by talent)</summary><div id="h2h" style="margin-top:8px"></div></details></section>
   <div id="ro-note" class="lock" style="margin-top:26px;display:none"></div>
   <div id="ro-uta">
-  <section><h2>Value vs. Contract</h2>
-    <p class="lede">Two views. <b>In his role</b>: what he's expected to deliver in the minutes he actually plays (talent times ice time). This is what the team is getting for the money. <b>Raw talent</b>: how good he is at a standard workload. Both are compared with what that cap hit buys on the open market across the NHL. A gap between the two means role, not talent, is driving his value.</p>
+  <section><h2>Value vs. Contract <a class="glink" href="#method" onclick="goGuide('g-value');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede"><b>In his role</b> = value in the minutes he plays. <b>Raw talent</b> = value at a standard workload. Both vs. what his cap hit buys.</p>
     <div class="tabs" id="val-tabs"></div><div class="grid2"><div class="card" id="val-table"></div><div class="card"><div class="chart tall"><canvas id="c-value"></canvas></div><div class="small" id="val-quad" style="margin-top:8px"></div></div></div></section>
   </div>
   <section><h2>Game by Game</h2><p class="lede" id="pg-lede">Best and worst three by Impact in each game (from MoneyPuck game data). Green ★★★ = best, red ★★★ = worst.</p><div class="card" id="per-game"></div></section>
@@ -233,8 +232,9 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 
 <!-- ================= PLAYER FINDER ================= -->
 <div class="pane" id="p-finder">
-  <section><h2>Player Finder <span class="tag">EVERY NHL PLAYER, SAME MODEL</span></h2>
-    <p class="lede">Every NHL player who has appeared this season, plus every team's rostered players who haven't played yet (marked "no games", rated from past seasons), rated exactly the same way. <b>NHL caliber</b> = talent percentile at his position: Superstar (top 2%), Elite (top 10%), Top of lineup (top third), Middle (middle third), Depth (bottom third), Fringe (bottom 10%). Each step is a real one: a player at the top of a group beats one at the top of the next group down about 80% of the time. Goalies are different: what matters is clearing a floor, not climbing a ladder. Each goalie is compared with the league's 32 likely starters: <b>Below starter floor</b> (bottom 20% of starters; such teams lost about 14 goals a season beyond what their skaters predict, in 10 of 12 seasons tested), <b>Borderline starter</b> (20th-40th) or <b>Starter quality</b> (above the 40th percentile; beyond this, more goalie talent added nothing measurable in the regular season or the playoffs). Goalie ratings are noisy, so treat goalies near a line as uncertain. Filter by team, conference, division, position or age to rank players within that group. Click a team code to open that team's roster.</p>
+  <section><h2>Players <a class="glink" href="#method" onclick="goGuide('g-caliber');return false;">How calibers work &rsaquo;</a></h2>
+    <p class="lede">Every NHL player, rated the same way. Filter to rank within any group; click a team to open its roster.</p>
+    <div class="legend"><span class="small"><b>Skaters:</b></span><span class="pill p-star">Superstar</span><span class="small">top 2%</span><span class="pill p-green">Elite</span><span class="small">top 10%</span><span class="pill p-blue">Top of lineup</span><span class="pill p-grey">Middle</span><span class="pill p-amber">Depth</span><span class="pill p-red">Fringe</span><span class="small" style="margin-left:10px"><b>Goalies</b> (vs. the 32 starters):</span><span class="pill p-green">Starter quality</span><span class="pill p-amber">Borderline</span><span class="pill p-red">Below floor</span></div>
     <div class="ctl">
       <select id="ex-team"></select><select id="ex-conf"></select><select id="ex-div"></select>
       <select id="ex-pos"><option value="">All positions</option><option value="F">Forwards</option><option value="C">C</option><option value="L">LW</option><option value="R">RW</option><option value="D">Defense</option><option value="G">Goalies</option></select>
@@ -252,6 +252,64 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 
 <!-- ================= HOW IT WORKS ================= -->
 <div class="pane" id="p-method">
+  <section class="guide"><h2>Guide</h2>
+    <p class="lede">What every number on the site means and how it's built. Every model here is checked against past seasons before it's used.</p>
+    <div class="card">
+    <details open id="g-terms"><summary>Key terms</summary><dl>
+      <dt>Player Impact</dt><dd>How much a player has changed his team's goal differential this season, compared with the same team when he's off the ice, in his actual minutes. Shown in goals or in standings points (2 points = 1 win).</dd>
+      <dt>Talent</dt><dd>How good a player is, regardless of ice time: his Impact pooled over this season and up to three earlier ones, pulled toward average when the sample is small, adjusted for age, and stated at a standard workload so a 4th-liner and a 1st-liner are compared on equal minutes.</dd>
+      <dt>Standings points vs. average</dt><dd>The common unit for players and teams: how many standings points a player or team adds over an average one across a season (84 games).</dd>
+      <dt>Likely range</dt><dd>Where the true value probably sits given the sample: the dark bar is 50%, the light bar 90%. Early in a season ranges are wide.</dd>
+      <dt>Tier</dt><dd>Groups players or teams the data can't confidently tell apart. A new tier starts when the tier's best is better than the next player or team with 75% probability.</dd>
+      <dt>Expected goals (xG)</dt><dd>Shot quality: how often an NHL shot from that spot and type goes in.</dd>
+      <dt>Elite skaters / the playoff floor</dt><dd>Skaters in the top 10% of talent at their position, among a team's top 12 forwards and top 6 defensemen by ice time. In past playoffs the first two mattered most, and every Cup winner since 2014 had at least two.</dd>
+      <dt>Playoff strength</dt><dd>A team's chance of beating an average playoff team in a seven-game series.</dd>
+      <dt>Win % vs. average</dt><dd>Chance of beating a perfectly average team on neutral ice.</dd>
+      <dt>Confirmed / leaning</dt><dd>A team strength or weakness is "confirmed" once the data clears 95% confidence after accounting for sample size and how much the stat carries over, "leaning" at about 85%.</dd>
+      <dt>Deserve-to-win</dt><dd>Every shot in a game replayed 20,000 times at its expected-goal value: who had the better chances, not who played harder. Empty-net shots excluded.</dd>
+    </dl></details>
+    <details id="g-caliber"><summary>Player calibers and goalie labels</summary>
+      <p><b>Skaters</b> are grouped by talent percentile at their position: <b>Superstar</b> (top 2%), <b>Elite</b> (top 10%), <b>Top of lineup</b> (top third), <b>Middle</b> (middle third), <b>Depth</b> (bottom third), <b>Fringe</b> (bottom 10%). Each step is a real one: a player at the top of a group beats one at the top of the next group down about 80% of the time.</p>
+      <p><b>Goalies</b> are compared with the league's 32 likely starters, because what matters is clearing a floor, not climbing a ladder: <b>Below starter floor</b> (bottom 20% of starters), <b>Borderline starter</b> (20th-40th), <b>Starter quality</b> (above the 40th). Over 12 seasons, teams with a bottom-20% starter lost about 14 goals a season beyond what their skaters predicted; above the 40th percentile, more goalie talent added nothing measurable, in the regular season or the playoffs. Goalie ratings are noisy, so a goalie near a line is uncertain.</p>
+      <p>Players who haven't played this season are rated from earlier seasons and marked "no games". Brand-new players start from a below-average baseline that rises with NHL experience.</p></details>
+    <details id="g-power"><summary>Power rankings</summary>
+      <p>The rating is a team's expected goal differential for the rest of the season. It blends four things with weights that shift as the season goes (fitted and tested on 8 past seasons): the talent of the lineup each team has dressed in its last 5 games, at the minutes they played; goal differential so far; shot quality so far; and last season's results. Early in the season, lineup talent and last season carry most of the weight. The four "where it comes from" columns show each part in standings points per 84 games.</p>
+      <p><b>Likely rank</b> = where the team ranks in 80% of simulations. <b>Tiers</b> start where a tier's top team is better than a team with at least 75% probability; early-season tiers are broad. <b>Top impact players</b> = the three skaters with the most expected impact in their role. <b>G</b> = the likely starter and backup, each rated as if he starts.</p>
+      <p><b>Team style tags</b> describe how a team plays relative to the league, pooling this season with last season at half weight (mostly last season until about 15 games).</p>
+      <p><b>Game odds</b> use the power ratings plus home ice (about a quarter of a goal a game), rest (a team on the second night of a back-to-back loses some win probability) and each team's recent goalie mix. Who starts in goal moves odds less than you'd expect, usually under a point of win probability. Expected points: win = 2, overtime or shootout loss = 1.</p>
+      <p>Tested and not adopted: replaying last season with this season's roster, roster continuity, a goalie floor, and other lineup windows or minute weightings. None beat the current model.</p></details>
+    <details id="g-lineups"><summary>Lineup strength</summary>
+      <p>Each team's best possible lineup by talent, built the way real lines are: every line needs a center (at least two in the top six forwards, four in the twelve), centers can play wing, and wingers are interchangeable. <b>Top</b> = best six forwards + top four defensemen; <b>Depth</b> = the next six forwards + the third pair. Built from talent, not this week's deployment, so it shows what each roster could ice. Unlike the power rankings, every player counts equally. A 7th defenseman dressed as a forward fills the 12th forward slot.</p></details>
+    <details id="g-playoffs"><summary>Playoff odds</summary>
+      <p>Every remaining regular-season game is simulated 10,000 times with the power ratings, then the playoffs are played out under the NHL format (top three in each division plus two wild cards per conference; the better division winner meets the second wild card). Each series is decided by the series model below. Each team's simulated strength is the same draw in the regular season and the playoffs.</p>
+      <p><b>Series model.</b> Power rating plus elite skaters. Two versions predicted past series about equally well once the choice was tested fairly: counting every elite skater, or counting only the first two. They differ most for teams with zero elite skaters, where history is thinnest (14 series), so the site uses the average of the two. The series edge is then cut to 70% of its fitted size, the setting that best matched past results from early in the season.</p>
+      <p><b>How sure:</b> making the playoffs has clear skill (season simulation, 8 seasons); round one has good skill; later rounds and the Cup have only modest skill, and each season's early favorite has rarely won. Read Cup odds as low-confidence.</p>
+      <div class="grid2"><div class="card" id="po-pred"></div><div class="card" id="po-notes"></div></div></details>
+    <details id="g-needs"><summary>Needs, possible moves and fits (Team tab)</summary>
+      <p>Skills are summed over the players a team has been dressing, weighted by ice time; driving play and defense use the team's own 5v5 chance rates. A <b>need</b> = clearly below the league (about the bottom quarter). <b>Possible moves</b> = extras outside the best lineup by talent, or players clearly overpaid for their output. <b>Fits</b> = players elsewhere who cover a need: talent gain is his talent minus the player he'd replace; "covers" = need areas where he's at the 70th percentile or better. "Sellers" are judged on today's playoff odds, which mean little before about 20 games. A screen, not a trade forecast: the data has no contract term, trade clauses, real cap space, injuries, prospects or team intentions.</p></details>
+    <details id="g-sw"><summary>Strengths and weaknesses (Team tab)</summary>
+      <p>Every team stat ranked against the league this season. A verdict appears only when the data clears 95% ("confirmed") or about 85% ("leaning"), after accounting for sample size and how much each stat carries over from one stretch of games to the next.</p></details>
+    <details id="g-outlook"><summary>Season outlook (Team tab)</summary>
+      <p>10,000 simulations of every remaining game from the power ratings, home ice and rest. The chart shows the spread of final points; the line is this season's simulated playoff line in the team's conference. These projections beat "current pace" at every point of the season in 8 past seasons.</p></details>
+    <details id="g-matchup"><summary>Matchup</summary>
+      <p><b>Why the odds lean</b> breaks a game's odds into its parts, from 50-50: home ice, rest, roster talent, last season, chances and goals this season, and the goalies picked. Bars point toward the team each part helps.</p>
+      <p><b>How each team wins</b> uses only stats that carry over from game to game: 5v5 chances, slot shots, power play and penalty kill, penalties, and goalie talent. Faceoffs add nothing measurable once chances are counted, and hits are a style with no effect on winning in our tests. Each team's rates pool this season with last season at half weight. "Running hot or cold" (finishing and save results) barely predicts the next games.</p>
+      <p><b>Likely to score</b> = each player's shot quality per minute (this season and three before, shrunk toward typical) x expected ice time x how many chances the opponent allows, with finishing heavily regressed; checked against this season's games.</p>
+      <p><b>Expected box score</b> = each team's per-game rates adjusted for the opponent. During a game, a team well above its expected-goals line is playing to its edge even if it's losing.</p>
+      <p><b>Live win probability</b> lets goals arrive at each team's expected rate (calibrated so 0-0 at puck drop equals the pre-game odds), with overtime at the model's odds. It ignores score effects and empty nets, so late leads are slightly safer than shown. Not tested on in-game data.</p>
+      <p><b>Lines</b> come from each team's latest game (Utah: current lineup). Line value = the players' summed talent. Coaches don't match lines exactly, so read it as where the depth edges are.</p>
+      <div id="g-statgloss"></div></details>
+    <details id="g-roster"><summary>Roster</summary>
+      <p><b>Impact</b> = what a player has contributed this season in his actual minutes; <b>Talent</b> = how good he is at a standard workload. Bars show the likely range (dark 50%, light 90%). "Clearly above/below average" appears only when this season's Impact is outside the 95% range of chance and he has 250+ minutes. Team rank orders all positions by talent (F1 = best forward).</p>
+      <p><b>Game by game</b>: best and worst three by Impact in each game, from MoneyPuck game data.</p></details>
+    <details id="g-profile"><summary>Player profiles</summary>
+      <p>How a player has played, not how good he is (that's talent). The <b>player type</b> sums up his role by ice time plus the type his skills and usage point to. Skills are his percentile among NHL forwards or defensemen on each part of Player Impact (faceoffs: centers only), pooled over up to four seasons and pulled toward average by how much each skill repeats year to year. Takeaways vs. giveaways: players who carry the puck a lot give it away more, so stars can rank low there. Usage percentiles describe, they don't grade.</p>
+      <p><b>Goalie profiles</b> show shot-stopping by danger level, rebounds and workload, pooled over up to four seasons and pulled hard toward average, since goalie numbers are the noisiest in hockey. "Talent as a starter" is what he'd add over a full starter's workload.</p></details>
+    <details id="g-value"><summary>Value vs. contract</summary>
+      <p><b>In his role</b> = what he's expected to deliver in the minutes he actually plays (talent x ice time): what the team gets for the money. <b>Raw talent</b> = how good he is at a standard workload. Both are compared with what his cap hit buys on the open market, from a line fitted across every NHL skater's 2026-27 cap hit. <b>ELC</b> = entry-level contract, cheap by rule, so those players look like bargains. A value is colored only when its whole 90% range is on one side of zero. Goalies aren't valued (their talent is too uncertain for a fair price). Cap hits: Spotrac.</p></details>
+    <details id="g-recap"><summary>Game recap and preview graphics</summary>
+      <p>Recaps show the score, deserve-to-win, the expected-goals race, the numbers, each team's best and worst players by per-game Impact, and the key moments (win chance through the game uses league-average scoring for both teams, so it ignores team strength). Previews match the Matchup tab, including any goalies you pick. Team colors only, no logos.</p></details>
+    </div></section>
   <section><h2>How the numbers work</h2><div class="grid2"><div class="card small" id="impact-recipe"></div><div class="card small" id="impact-drivers"></div></div>
     <div class="card small" style="margin-top:14px" id="blend-card"></div>
     <div class="card small" style="margin-top:14px" id="conf-rules"></div></section>
@@ -289,7 +347,7 @@ function goalieOdds(team, opp, home) {
 }
 const goalsTitle = (v) => v == null ? '' : ` title="${(v > 0 ? '+' : '') + v.toFixed(2)} goals of goal differential"`;
 // goalies: percentile among the 32 likely starters (the same scale as the goalie labels), not among all goalies
-const gPill = tal => { const q = starterPct(tal); return q == null ? '&mdash;' : `<span class="pill ${q < 20 ? 'p-red' : q < 40 ? 'p-amber' : 'p-green'}" title="Percentile among the 32 likely starters">${q === 0 ? '0th' : ord(q)} of starters</span>`; };
+const gPill = tal => { const q = starterPct(tal); return q == null ? '&mdash;' : `<span class="pill ${q < 20 ? 'p-red' : q < 40 ? 'p-amber' : 'p-green'}" title="Percentile among the 32 likely starters">${q === 0 ? 'below every starter' : ord(q) + ' of starters'}</span>`; };
 const pctPill = p => p == null ? '&mdash;' : `<span class="pill ${p >= 80 ? 'p-green' : p <= 20 ? 'p-red' : 'p-blue'}">${p === 0 ? '0th' : ord(p)}</span>`;
 const tierCols = ['#1E8E4E', '#6CACE3', '#9AA6B5', '#C77C0E', '#C0392B', '#8E44AD', '#5C6670', '#3D4650'];
 const tierCol = n => tierCols[Math.min((n || 8) - 1, 7)];
@@ -344,7 +402,7 @@ function mkChart(id, cfg) { const el = $(id); if (!el || typeof Chart === 'undef
 
 // ---------------- tabs (each tab builds its charts the first time it is shown)
 const inits = {}, done = {};
-const TABS = ['overview', 'league', 'playoffs', 'team', 'matchup', 'roster', 'finder', 'method'], ALIAS = {players: 'roster', explorer: 'finder'};
+const TABS = ['overview', 'team', 'roster', 'matchup', 'league', 'playoffs', 'finder', 'method'], ALIAS = {players: 'finder', explorer: 'finder', guide: 'method', howitworks: 'method'};
 // one selected team, shared by the Team and Roster tabs; each re-renders only when it is visible and stale
 let TM = 'UTA';
 const shown = {}, keepVals = {};
@@ -451,7 +509,6 @@ function renderOverview(x) {
   rows.forEach(g => xp += g.e || 0);
   $('next10').innerHTML = rows.length ? `<table><tr><th>Date</th><th></th><th>Opp</th><th>Opp power rank</th><th>${x} win odds</th><th>Exp. pts</th></tr>${rows.map(g => { const p = g.p, c = p == null ? '' : p >= 0.55 ? 'p-green' : p <= 0.45 ? 'p-red' : 'p-blue';
     return `<tr><td>${new Date(g.date + 'T12:00').toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'})}</td><td>${g.ha}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${g.opp}');return false;">${g.opp}</a></b></td><td>${g.rank ?? '&mdash;'}</td><td>${p == null ? '&mdash;' : `<span class="pill ${c}">${Math.round(p * 100)}%</span>`}</td><td>${g.e ?? '&mdash;'}</td></tr>`; }).join('')}</table>
-    <p class="small" style="margin-top:6px">Odds use each team's recent goalie mix. Who starts moves them less than you might expect: a team's starter vs. its backup is worth about half a point of win probability in a typical game (at most about 2 points), because goalie talent is hard to pin down. Try specific goalies in the matchup calculator (League tab).</p>
     ${rows.some(g => g.e != null) ? `<p class="small" style="margin-top:6px">Expected: <b>${xp.toFixed(1)}</b> of ${2 * rows.length} possible points.</p>` : ''}` : '<div class="small">No games scheduled.</div>';
   // last game: best and worst
   const PG = isU ? (D.perGame || []) : (((D.teamExtra || {})[x] || {}).perGame || []);
@@ -479,14 +536,13 @@ function renderPower() {
   const mv = r => r.move ? (r.move > 0 ? ` <span style="color:var(--green)">&#9650;${r.move}</span>` : ` <span style="color:var(--red)">&#9660;${-r.move}</span>`) : '';
   const tp = r => r.tier ? ` <span class="pill" style="background:${tierCol(r.tier)};color:${tierInk(r.tier)}" title="League tier ${r.tier}">T${r.tier}</span>` : '';
   const rkCell = (r, i) => g ? `<td><b>${i + 1}</b>${tp(r)}<span class="sub">NHL ${r.rank}${mv(r)} (likely ${r.r10}-${r.r90})</span></td>` : `<td><b>${r.rank}</b>${tp(r)}${mv(r)}<span class="sub">likely ${r.r10}-${r.r90}</span></td>`;
-  $('pw-table').innerHTML = `<p class="small" style="margin-bottom:6px">${g ? `<b>#</b> = rank within the ${groupName(g)}; NHL rank and its likely range (80% of simulations) underneath.` : 'Under each rank: where the team likely ranks (80% of simulations).'} Arrows = NHL move since the last update. <b>T</b> = league tier: a new tier starts where the tier's top team is better than a team with at least 75% probability (the same rule as player tiers). The rule compares each team with its tier's top team, not its neighbor, so teams on either side of a boundary can be nearly even. Early in the season ratings are uncertain, so tiers are broad; they split as games are played. Projected points shows the 80% range (hover for 95%). The four columns before "Team style" show where each rating comes from, in standings points per 84 games. <b>Top impact players</b> = the three skaters dressed in the last 5 games with the most expected impact in their role (talent x the ice time they actually get; the "In his role" column on the Roster page): who to watch in a game. <b>G</b> = goalies: the likely starter (most starts in those games) and the backup, each rated as if he starts (talent at a starter's workload), since a goalie plays all of a game or none of it.</p>
-  <table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Win % vs. avg</th><th>Record</th><th>Proj. points</th><th>Playoff %</th><th>Division %</th><th>Lineup</th><th>Results</th><th>Shot quality</th><th>Last season</th><th>Team style</th><th title="Skaters: expected impact in his role: talent x the ice time he actually gets (goalies by share of starts), standings points per 84 games. Same as the 'In his role' column on the Roster and Player Finder pages. Players dressed in the last 5 games.">Top impact players</th></tr>${rows.map((r, i) => `<tr${r.team === TM ? ' class="me"' : ''}>
+  $('pw-table').innerHTML = `<table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Win % vs. avg</th><th>Record</th><th>Proj. points</th><th>Playoff %</th><th>Division %</th><th>Lineup</th><th>Results</th><th>Shot quality</th><th>Last season</th><th>Team style</th><th title="Skaters: expected impact in his role: talent x the ice time he actually gets (goalies by share of starts), standings points per 84 games. Same as the 'In his role' column on the Roster and Player Finder pages. Players dressed in the last 5 games.">Top impact players</th></tr>${rows.map((r, i) => `<tr${r.team === TM ? ' class="me"' : ''}>
   ${rkCell(r, i)}<td><a class="tm" href="#team" onclick="pickTeam('${r.team}');return false;">${r.team}</a></td><td><b>${(r.neutralWin * 100).toFixed(1)}%</b></td>
   <td>${r.rec}</td><td title="95% range ${r.projLo}-${r.projHi}">${r.projPts != null ? Math.round(r.projPts) + ' <span class="small">(' + r.projLo80 + '-' + r.projHi80 + ')</span>' : '&mdash;'}</td>
   <td>${r.pPlayoff != null ? Math.round(r.pPlayoff * 100) + '%' : '&mdash;'}</td><td>${r.pDiv != null ? Math.round(r.pDiv * 100) + '%' : '&mdash;'}</td>
   <td>${sp(r.parts.lineup)}</td><td>${sp(r.parts.results)}</td><td>${sp(r.parts.shots)}</td><td>${sp(r.parts.lastseason)}</td>
   <td class="wrap">${styleChips(r.style)}</td><td class="small wrap">${r.noLineup ? 'no games yet' : r.top.map((n, i) => `${n} <b>${r.topV ? sp(r.topV[i]) : ''}</b>`).join(', ')}${goalieLine(r)}</td></tr>`).join('')}</table>
-  <p class="small" style="margin-top:6px">Team style tags describe how a team plays, from its own numbers relative to the league (hover a tag for detail). They pool this season with last season at half weight, so until about 15 games they mostly reflect last season's team.</p>`;
+`;
 }
 function renderGroups() {
   if (!PW) return;
@@ -519,7 +575,7 @@ function initLeague() {
       const d = (a.r + gdr(a, $('mc-ga'))) - (b.r + gdr(b, $('mc-gb'))), pA = v === 'n' ? lg(wp.win[1] * d) : v === 'a' ? lg(wp.win[0] + wp.win[1] * d) : 1 - lg(wp.win[0] - wp.win[1] * d), pot = lg(wp.ot[0] + wp.ot[1] * Math.abs(d));
       $('mc-out').innerHTML = `<p style="font-size:17px"><b>${a.team} ${(pA * 100).toFixed(1)}%</b> &nbsp;vs.&nbsp; <b>${b.team} ${((1 - pA) * 100).toFixed(1)}%</b></p><p class="small">${Math.round(pot * 100)}% chance it goes to overtime</p>`; };
     ['mc-a', 'mc-b', 'mc-v', 'mc-ga', 'mc-gb'].forEach(id => $(id).onchange = run); run();
-    $('mc-note').innerHTML = `Home ice is worth about ${PW.hia ? PW.hia.home_reg_gd.toFixed(2) : '0.24'} goals a game (home teams won ${PW.hia ? (PW.hia.home_win * 100).toFixed(1) : '54.1'}% from 2014-15 to 2025-26). Team-specific home edges couldn't be told apart from chance, so one value applies everywhere. Goalie choice shifts a team's rating by the model's own goalie term (his talent vs. the team's recent goalie mix, at the weight the backtest gives the lineup); it's model-implied, not separately backtested, and usually small because goalie talent is hard to pin down.`;
+    $('mc-note').innerHTML = '';
     mkChart('c-power', { type: 'bar', data: { labels: rows.map(r => r.team), datasets: [{ data: rows.map(r => +(r.neutralWin * 100).toFixed(1)), backgroundColor: rows.map(r => r.tier ? tierCol(r.tier) + (r.team === TM ? '' : '99') : '#7A8590'), borderColor: rows.map(r => r.team === TM ? css('--head') : 'transparent'), borderWidth: rows.map(r => r.team === TM ? 2 : 0) }] },
       options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { autoSkip: false, font: { size: 9 } } }, y: { title: { display: true, text: 'Win % vs. an average team' }, suggestedMin: 40, suggestedMax: 60 } } } });
   }
@@ -551,7 +607,7 @@ function renderTeam() {
     ['Projected points', pr && pr.projPts != null ? Math.round(pr.projPts) : '&mdash;', pr && pr.projLo80 != null ? `80% range ${pr.projLo80}-${pr.projHi80}` : ''],
     ['Playoff odds', pr && pr.pPlayoff != null ? Math.round(pr.pPlayoff * 100) + '%' : '&mdash;', pr && pr.pDiv != null ? `Division title ${Math.round(pr.pDiv * 100)}%` : ''],
     ['Division', st.div || '&mdash;', st.conf ? st.conf + ' Conference' : ''],
-    ['Elite skaters', pr && pr.po ? `${pr.po.elite} <span style="font-size:14px;font-weight:600">of 2</span>` : '&mdash;', pr && pr.po ? (pr.po.elite >= 2 ? 'At the playoff floor (top-10% talent; the first two matter most)' : 'Below the playoff floor: every Cup winner since 2014 had 2+') : '']
+    ['Elite skaters', pr && pr.po ? pr.po.elite : '&mdash;', pr && pr.po ? (pr.po.elite >= 2 ? 'Meets the playoff floor of 2' : 'Below the playoff floor of 2 (every Cup winner since 2014 had 2+)') : '']
   ].map(h => `<div class="hstat"><div class="l">${h[0]}</div><div class="v">${h[1]}</div><div class="s">${h[2]}</div></div>`).join('');
   // style + profile
   const SR = pr && pr.styleRanks ? pr.styleRanks : null, n = pr ? pr.styleN : 32;
@@ -566,7 +622,7 @@ function renderTeam() {
     + (ln ? `<h3 style="margin-top:12px">Best lineup by talent</h3><div class="small"><b>Top (${sp(ln.top)}, ${ord(ln.rk_top)}):</b> ${ln.topNames.join(' &bull; ')}</div><div class="small" style="margin-top:4px"><b>Depth (${sp(ln.depth)}, ${ord(ln.rk_depth)}):</b> ${ln.depNames.join(' &bull; ')}</div>` : '');
   // simulation
   const sh = (PW && PW.simAll && PW.simAll[x]) || [];
-  $('sim-note').innerHTML = pr && pr.projPts != null ? `10,000 simulations of every remaining game. Middle 80%: <b>${pr.projLo80}-${pr.projHi80}</b> points (95%: ${pr.projLo}-${pr.projHi}). Blue = at or above ${T.playoffLineNow ? `this season's simulated West playoff line (~${T.playoffLine} points; 80% range ${T.playoffLineNow.lo80}-${T.playoffLineNow.hi80}). A typical West line over the last ${T.playoffLineN} full seasons was ~${T.playoffLineHist}` : `a typical playoff line (~${T.playoffLine})`}.` : '';
+  $('sim-note').innerHTML = pr && pr.projPts != null ? `Middle 80%: <b>${pr.projLo80}-${pr.projHi80}</b> points. Blue = at or above the projected playoff line (~${T.playoffLine}).` : '';
   mkChart('c-sim', { type: 'bar', data: { labels: sh.map(b => b.x), datasets: [{ data: sh.map(b => b.n), backgroundColor: sh.map(b => b.x + 1 >= T.playoffLine ? css('--ice') : 'rgba(128,128,128,.35)') }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { title: c => c[0].label + '-' + (+c[0].label + 1) + ' points', label: c => (c.raw / 100).toFixed(1) + '% of simulations' } } }, scales: { x: { title: { display: true, text: 'Final points' }, ticks: { maxTicksLimit: 14 } }, y: { display: false } } } });
   const N = D.seasonGames, xs = Array.from({length: N + 1}, (_, i) => i), proj = pr && pr.projPts != null ? pr.projPts : null;
@@ -594,12 +650,12 @@ function renderLines() {
     return `<td title="${g ? `NHL rank ${ord(rk)} of ${LN.length}. ` : ''}${(names || []).join(', ')}"><b>${sp(r[k])}</b> <span class="small">${ord(show)}</span></td>`; };
   $('ln-table').innerHTML = `<table><tr><th>${g ? '# in ' + shortGroup(g) : '#'}</th><th>Team</th><th>Top (6F + 4D)</th><th>Top F</th><th>Top D</th><th>Depth (6F + 2D)</th><th>Depth F</th><th>3rd pair</th><th>Starting G</th><th title="18 skaters + starting goalie, each counted equally">Total</th></tr>${rows.map((r, i) => `<tr${r.team === TM ? ' class="me"' : ''}>
     <td>${g ? `<b>${i + 1}</b><span class="sub">NHL ${r.rk_total}</span>` : r.rk_total}</td><td><a class="tm" href="#team" onclick="pickTeam('${r.team}');return false;">${r.team}</a>${r.incomplete ? `<span class="sub" title="Not enough players have appeared yet; ${r.incomplete} slot(s) filled at replacement level">incomplete*</span>` : ''}</td>${cell(r, 'top', r.topNames)}${cell(r, 'topF', r.topNames.slice(0, 6))}${cell(r, 'topD', r.topNames.slice(6))}${cell(r, 'depth', r.depNames)}${cell(r, 'depF', r.depNames.slice(0, 6))}${cell(r, 'depD', r.depNames.slice(6))}${cell(r, 'goalie', r.gName)}<td><b>${sp(r.total)}</b></td></tr>`).join('')}</table>
-    <p class="small" style="margin-top:6px">${g ? `Ranks in this view are within the ${groupName(g)} (hover a value for its NHL rank).` : `Ranks are out of ${LN.length} teams. Total = the 18 skaters plus the starting goalie, each counted equally (unlike Power Rankings, which weight players by ice time). Teams that dress 11 forwards and 7 defensemen (Colorado so far) have the 7th defenseman counted in the 12th forward slot. *Incomplete: the team hasn't dressed enough players yet, so empty slots are filled at replacement level (the league's 10th percentile).`} Built from talent, not this week's deployment, so it shows what each roster could ice. Players who haven't played yet are left out.</p>`;
+    ${LN.some(r => r.incomplete) ? '<p class="small" style="margin-top:6px">* Not enough players dressed yet; empty slots filled at replacement level.</p>' : ''}`;
   const mxL = median(LN.map(r => r.top)), myL = median(LN.map(r => r.depth));
   const quadOf = r => (r.top >= mxL ? (r.depth >= myL ? 'Complete' : 'Top-heavy') : (r.depth >= myL ? 'Deep, no stars' : 'Thin'));
   const qTeams = q => LN.filter(r => quadOf(r) === q).sort((a, b) => b.total - a.total).map(r => r.team === TM ? `<b>${TM}</b>` : r.team).join(', ');
   const uQ = LN.find(r => r.team === TM);
-  $('ln-quad').innerHTML = `Dotted lines = the median team (half the league on each side; unlike the mean, one extreme roster can't drag it). <b>Complete</b> (top right): above-median top group and depth; the profile of most contenders. <b>Top-heavy</b> (bottom right): strong top six and top four, thin below; results lean on stars staying healthy. <b>Deep, no stars</b> (top left): a strong supporting cast without a high-end core; the top group plays the most minutes, and team strength tracks it far more closely than depth, so this profile usually wins less than its total suggests. <b>Thin</b> (bottom left): below median on both; usually rebuilding or injury-hit.${uQ ? ` ${TM}: <b>${quadOf(uQ)}</b>.` : ''}<br><span style="display:block;margin-top:4px">Complete: ${qTeams('Complete')}<br>Top-heavy: ${qTeams('Top-heavy')}<br>Deep, no stars: ${qTeams('Deep, no stars')}<br>Thin: ${qTeams('Thin')}</span>`;
+  $('ln-quad').innerHTML = `Quadrants split at the median team. ${uQ ? `${TM}: <b>${quadOf(uQ)}</b>.` : ''}`;
   mkChart('c-lines', { type: 'scatter', data: { datasets: [{ data: LN.map(r => ({x: r.top, y: r.depth, t: r.team})), pointRadius: LN.map(r => r.team === TM ? 8 : 5),
     backgroundColor: LN.map(r => r.team === TM ? css('--ice') : (DARK() ? 'rgba(200,210,220,.6)' : 'rgba(90,100,110,.6)')) }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.t}: top ${sp(c.raw.x)}, depth ${sp(c.raw.y)}` } } },
@@ -694,7 +750,7 @@ function renderRoster(x) {
     <td${goalsTitle(r.tal)}><b>${sp(pt(r.tal))}</b> ${rbar(pt(r.tal), pt(r.tsd), -6, 6, tierCol(r.tier))}</td>
     <td>${bandPill(bandOf(r.tpct, r.grp, r.tal, r.tsd))} ${r.grp === 'G' ? gPill(r.tal) : pctPill(r.tpct)}${r.trank ? `<span class="sub">${ord(r.trank)} of ${r.tn} NHL ${({F: 'forwards', D: 'defensemen', G: 'goalies'}[r.grp] || 'players')}</span>` : ''}</td>
     <td class="wrap">${styleChips(r.sty, r.styWhy)}</td><td class="small wrap">${r.sRole || ''}</td><td${goalsTitle(r.role)}>${sp(pt(r.role))}${r.grp === 'G' && PLID[r.id] && PLID[r.id].guse ? `<span class="sub">at ${Math.round(((PLID[r.id].guse.share25 != null && r.gp < 10) ? PLID[r.id].guse.share25 : PLID[r.id].guse.share) * 100)}% of starts</span>` : ''}</td>${hasCap ? `<td>${money(r.aav)}${r.elc ? ' <span class="pill p-grey" title="Entry-level contract: cheap by rule">ELC</span>' : ''}</td>` : ''}</tr>`).join('')}</table>
-    <p class="small" style="margin-top:6px">Team rank is by talent across all positions (F1 = best forward). "Clearly above/below average" appears only when this season's Impact is outside the 95% range of chance and he has 250+ minutes. Talent includes an age adjustment. Players who haven't played yet are rated from earlier seasons; brand-new players start from a below-average baseline that rises with NHL experience.${x === 'UTA' ? '' : ' Players who have appeared for this team this season are listed; Player Finder also shows rostered players who have not played yet.'}</p>`;
+    `;
   // talent forest
   const fw = $('forest-wrap'); if (fw) fw.style.height = Math.max(300, L.length * 22) + 'px';
   mkChart('c-forest', { type: 'bar', data: { labels: shortNames(L).map((n, i) => n + ' (' + L[i].grp + ')'), datasets: [
@@ -733,18 +789,18 @@ function drawValue(L) {
   document.querySelectorAll('#val-tabs .tab').forEach(b => b.onclick = () => { vv = b.dataset.v; drawValue(L); });
   const V = L.filter(r => r.aav && r.grp !== 'G' && (role ? r.vs != null : r.vsRaw != null)).sort((a, b) => (role ? b.vs - a.vs : b.vsRaw - a.vsRaw));
   if (!V.length || !f) { $('val-table').innerHTML = '<div class="lock">No cap hits matched yet.</div>'; return; }
-  $('val-table').innerHTML = `<p class="small" style="margin-bottom:6px">${role ? 'Expected delivery in his actual minutes' : 'Talent at a standard workload'} vs. what that cap hit buys on the open market, league-wide (about ${sp(f.slope * PPI, 2)} standings points per extra $1M; fitted on ${f.n} NHL skaters' 2026-27 cap hits). <b>ELC</b> = entry-level contract: cheap by rule, so these players look like bargains (rookie deals deliver about ${sp(f.elc * PPI, 1)} points more than the same cap hit on the open market).</p>
+  $('val-table').innerHTML = `<p class="small" style="margin-bottom:6px"><b>ELC</b> = entry-level contract (cheap by rule).</p>
   <table><tr><th>Player</th><th>Cap hit</th><th>${role ? 'In his role' : 'Raw talent'}</th><th>Market value of the cap hit</th><th>Vs. contract</th><th>90% range</th></tr>${V.map(r => { const v = role ? r.vs : r.vsRaw, lo = role ? r.vsLo : r.vsRawLo, hi = role ? r.vsHi : r.vsRawHi, base = role ? r.role : r.tal, ex = role ? r.exp : r.expRaw;
     const lo90 = role ? v - (v - lo) * 1.645 / 1.96 : lo, hi90 = role ? v + (hi - v) * 1.645 / 1.96 : hi;
     return `<tr><td><b>${r.name}</b>${r.elc ? ' <span class="pill p-grey">ELC</span>' : ''}</td><td>${money(r.aav)}</td><td>${sp(pt(base))}</td><td>${sp(pt(ex))}</td><td><b style="color:${lo90 > 0 ? 'var(--green)' : hi90 < 0 ? 'var(--red)' : 'var(--ink)'}">${sp(pt(v))}</b></td><td class="small">${sp(pt(lo90))} to ${sp(pt(hi90))}</td></tr>`; }).join('')}</table>
-  <p class="small" style="margin-top:6px">Colored when the whole 90% range is on one side of zero. The market line is treated as fixed, so ranges slightly understate total uncertainty. Cap hits: Spotrac, 2026-27. Goalies aren't valued here (their talent is too uncertain for a fair price comparison).</p>`;
+  `;
   const xm = Math.ceil(Math.max(...V.map(r => r.aav)) + 1);
   // league medians (all NHL skaters with a cap hit), so every team's chart uses the same reference lines
   const LGc = (D.playersLeague || []).filter(p => p.cap && p.g !== 'G');
   const mxV = median(LGc.map(p => p.cap)), myV = median(LGc.map(p => pt(role ? p.role : p.tal)));
   const qV = r => { const hiPay = r.aav >= mxV, hiVal = pt(role ? r.role : r.tal) >= myV; return hiPay ? (hiVal ? 'Paid stars' : 'Expensive, low output') : (hiVal ? 'Bargains' : 'Cheap depth'); };
   const qList = q => V.filter(r => qV(r) === q).map(r => r.name.split(' ').slice(-1)[0]).join(', ') || '&mdash;';
-  $('val-quad').innerHTML = `Dotted lines = the median NHL skater (cap hit ${money(mxV)}; ${role ? 'in-his-role value' : 'raw talent'} ${sp(myV)} pts). The long dashed diagonal is the market price line: points above it beat their contract, points below fall short. Quadrants describe the roster; the diagonal decides value. <b>Paid stars</b> (top right): high pay, high output; fair or good if above the diagonal. <b>Bargains</b> (top left): above-median output on below-median pay, often entry-level deals or value signings. <b>Expensive, low output</b> (bottom right): the contracts that hurt most. <b>Cheap depth</b> (bottom left): low pay, low output; normal for fourth lines and extras, a problem only if they play big minutes.<span style="display:block;margin-top:4px">Paid stars: ${qList('Paid stars')}<br>Bargains: ${qList('Bargains')}<br>Expensive, low output: ${qList('Expensive, low output')}<br>Cheap depth: ${qList('Cheap depth')}</span>`;
+  $('val-quad').innerHTML = `Above the dashed line = more than the contract pays for.`;
   mkChart('c-value', { type: 'scatter', data: { datasets: [{ data: V.map(r => ({x: r.aav, y: +pt(role ? r.role : r.tal).toFixed(2), name: r.name})), backgroundColor: V.map(r => r.elc ? 'rgba(199,124,14,.85)' : r.grp === 'D' ? css('--head') : '#6CACE3'), pointRadius: 6 }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => `${c.raw.name}: $${c.raw.x}M, ${sp(c.raw.y)} pts` } } }, scales: { x: { title: { display: true, text: 'Cap hit ($M)' }, min: 0, max: xm }, y: { title: { display: true, text: role ? 'In his role (pts / 84 GP, his minutes)' : 'Raw talent (pts / 84 GP, standard minutes)' } } } },
     plugins: [quadPlugin(mxV, myV, ['Bargains', 'Paid stars', 'Cheap depth', 'Expensive, low output']), { id: 'lab', afterDraw(ch) { const {ctx, scales: {x, y}} = ch; ctx.save(); ctx.strokeStyle = css('--mute'); ctx.setLineDash([8, 4]); ctx.beginPath(); const fy = v => (f.icpt + f.slope * v) * PPI; ctx.moveTo(x.getPixelForValue(0), y.getPixelForValue(fy(0))); ctx.lineTo(x.getPixelForValue(xm), y.getPixelForValue(fy(xm))); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = css('--ink'); ctx.font = '10px sans-serif'; ch.getDatasetMeta(0).data.forEach((p, i) => ctx.fillText(V[i].name.split(' ').slice(-1)[0], p.x + 8, p.y + 3)); ctx.restore(); } }] });
@@ -763,21 +819,22 @@ function renderPlayoffs(x) {
   $('po-table').innerHTML = `<table><tr><th>#</th><th>Team</th><th title="Top-12 forwards and top-6 defensemen by ice time with talent in the top 10% at the position. The series model counts the first two.">Elite skaters <span class="small">(2 = floor)</span></th><th>Make playoffs</th><th>Win round 1</th><th>Playoff strength <span class="small">(80% range)</span></th><th>Reach conf. final</th><th>Reach Final</th><th>Win Cup</th><th>Cup if they make it</th></tr>
     ${rows.map((r, i) => { const p = r.po; return `<tr${r.team === x ? ' class="me"' : ''}><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${r.team}');return false;"><b>${r.team}</b></a> <span class="small">${(S.find(s => s.abbr === r.team) || {}).name || ''}</span></td>
       <td>${p.elite >= 2 ? `<b>${p.elite}</b>` : `<span style="color:var(--red)">${p.elite}</span>`}</td><td>${pc1(p.make)}</td><td>${pc1(p.r1)}</td><td><b>${pc1(p.strength)}</b> <span class="small">(${Math.round(p.strengthLo * 100)}-${Math.round(p.strengthHi * 100)})</span></td><td>${pc1(p.r2)}</td><td>${pc1(p.final)}</td><td>${pcB(p.cup, mxCup)}</td><td>${pc1(p.cupIfIn)}</td></tr>`; }).join('')}</table>
-    <p class="small" style="margin-top:6px"><b>How sure:</b> making the playoffs comes from the season simulation (backtested on 8 seasons); round-one odds have clear skill in the backtest; conference final, Final and Cup odds carry only modest skill, so they are pulled toward even (the series edge is cut to ${POM ? Math.round(POM.alpha * 100) : 70}%, the setting that scored best on past seasons). Elite skaters are counted from players who have dressed this season.</p>`;
+    <p class="small" style="margin-top:6px">Odds beyond round one are low-confidence: even favorites usually don't win the Cup.</p>`;
   // selected team's path
   const r = PW.rows.find(q => q.team === x), nm = (S.find(s => s.abbr === x) || {}).name || x;
   if (r && r.po) { const p = r.po, steps = [['Make playoffs', p.make], ['Win round 1', p.r1], ['Reach conference final', p.r2], ['Reach Final', p.final], ['Win Cup', p.cup]];
     const sl = ['Division 1st', 'Division 2nd', 'Division 3rd', 'Wild card 1', 'Wild card 2'];
     $('po-path').innerHTML = `<h3>${nm}: path to the Cup</h3>${steps.map(([l, v]) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--line)"><span>${l}</span><div style="display:flex;align-items:center;gap:8px"><div style="width:180px;height:10px;background:var(--line);border-radius:5px;overflow:hidden"><div style="height:10px;width:${Math.max(0.5, v * 100)}%;background:${TEAM_COL[x] || 'var(--ice)'}"></div></div><b style="min-width:42px;text-align:right">${pc1(v)}</b></div></div>`).join('')}
-      <p class="small" style="margin-top:8px">Playoff strength <b>${pc1(p.strength)}</b> (80% range ${Math.round(p.strengthLo * 100)}-${Math.round(p.strengthHi * 100)}%) against an average playoff team; <b>${p.elite} of 2</b> elite skaters needed for the playoff floor${p.elite >= 2 ? ' (met)' : ''}. If they get in, they win the Cup ${pc1(p.cupIfIn)} of the time.</p>
+      <p class="small" style="margin-top:8px">Playoff strength <b>${pc1(p.strength)}</b> (80% range ${Math.round(p.strengthLo * 100)}-${Math.round(p.strengthHi * 100)}%) against an average playoff team; <b>${p.elite}</b> elite skater${p.elite === 1 ? '' : 's'} (${p.elite >= 2 ? 'meets' : 'below'} the playoff floor of 2). If they get in, they win the Cup ${pc1(p.cupIfIn)} of the time.</p>
       <h3 style="margin-top:12px">Where they finish</h3><table>${sl.map((l, i) => `<tr><td>${l}</td><td>${pc1(p.seeds[i])}</td></tr>`).join('')}<tr><td>Miss the playoffs</td><td>${pc1(1 - p.make)}</td></tr></table>
       ${p.r1opp && p.r1opp.length ? `<h3 style="margin-top:12px">Most likely first-round opponents</h3><div class="small">${p.r1opp.map(([o, q]) => `<a class="tm" href="#team" onclick="pickTeam('${o}');return false;"><b>${o}</b></a> ${pc1(q)}`).join(' &bull; ')} <span class="small">(share of simulations where they make it)</span></div>` : ''}`; }
   else $('po-path').innerHTML = '<div class="lock">No playoff simulation for this team.</div>';
   // conference picture: who wins it
   const cf = confOf[x] || 'Western', C = PW.rows.filter(q => q.po && confOf[q.team] === cf).sort((a, b) => b.po.final - a.po.final).slice(0, 8), mx = Math.max(...C.map(q => q.po.final), 0.01);
   $('po-conf').innerHTML = `<h3>${cf} Conference: who reaches the Final</h3>${C.map(q => `<div style="display:flex;align-items:center;gap:8px;padding:3px 0"><span style="width:44px"><b>${q.team}</b></span><div style="flex:1;height:12px;background:var(--line);border-radius:6px;overflow:hidden"><div style="height:12px;width:${q.po.final / mx * 100}%;background:${TEAM_COL[q.team] || 'var(--ice)'}"></div></div><b style="width:42px;text-align:right">${pc1(q.po.final)}</b></div>`).join('')}
-    <p class="small" style="margin-top:8px">Summed over the conference this is about 100%. Early in the season most of each team's number comes from roster talent and last season.</p>`;
-  // what predicts playoff success
+`;
+}
+function renderPlayoffModelNotes() {
   if (POM) { const sb = POM.series_backtest.favorite_won;
     const ps = POM.series_backtest.prob_score || {};
     $('po-pred').innerHTML = `<h3>Picking past series winners <span class="small">${POM.n_series} series, 2013-14 to 2024-25</span></h3><table><tr><th>Measure</th><th>Favorite won</th><th title="How much more accurate the probabilities were than a coin flip (log-loss); the main test">Probability accuracy</th></tr>${Object.entries(sb).map(([l, v]) => `<tr${l.includes('(adopted)') ? ' class="me"' : ''}><td>${l}</td><td>${(v * 100).toFixed(1)}%</td><td>${ps[l] != null ? (ps[l] >= 0 ? '+' : '') + ps[l].toFixed(1) + '%' : '&mdash;'}</td></tr>`).join('')}</table>
@@ -836,7 +893,7 @@ function renderMatchup(resetG) {
   const pOTwinA = home === 'n' ? _lg(wp.otwin[1] * dA) : home === 'a' ? _lg(wp.otwin[0] + wp.otwin[1] * dA) : 1 - _lg(wp.otwin[0] - wp.otwin[1] * dA);
   const xpA = 2 * pA + pOT * (1 - pOTwinA), xpB = 2 * (1 - pA) + pOT * pOTwinA;
   const nm = x => (S.find(s => s.abbr === x) || {}).name || x, at = home === 'b' ? '@' : home === 'a' ? 'vs.' : 'vs.';
-  $('mu-lede').innerHTML = `<b>${nm(a)} ${at} ${nm(b)}</b>${home === 'n' ? ' (neutral ice)' : ''}. Odds come from the power ratings plus home ice, rest and the goalies selected (likely starters by default); everything else is how the two teams compare and what to watch.${MU.rest.tired.length ? ` <b>Back-to-back:</b> ${MU.rest.tired.join(' and ')} played the day before${MU.rest.edge ? ` (about ${Math.abs(Math.round((_lg(MU.rest.logit) - 0.5) * 100))} win-% points, included)` : ' (both teams, so it cancels)'}. Teams on the second night won about ${(D.restVal || {}).win_pct_points_at_50 || 7.6} points less often and got ${Math.round(((D.restVal || {}).xg_share_per_rest_edge || 0.022) * 1000) / 10} points less of the expected goals last season.` : ''}`;
+  $('mu-lede').innerHTML = `<b>${nm(a)} ${at} ${nm(b)}</b>${home === 'n' ? ' (neutral ice)' : ''}${MU.rest.tired.length ? ` &bull; <b>Back-to-back:</b> ${MU.rest.tired.join(' and ')}${MU.rest.edge ? ` (about ${Math.abs(Math.round((_lg(MU.rest.logit) - 0.5) * 100))} win-% points, included in the odds)` : ' (both teams)'}` : ''}`;
   const tile = (l, v, s) => `<div class="hstat"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
   $('mu-head').innerHTML = tile(a + ' win', Math.round(pA * 100) + '%', `${ord(ra.rank)} in power, Tier ${ra.tier} &bull; ${sa.w}-${sa.l}-${sa.otl}`) + tile(b + ' win', Math.round((1 - pA) * 100) + '%', `${ord(rb.rank)} in power, Tier ${rb.tier} &bull; ${sb.w}-${sb.l}-${sb.otl}`)
     + tile('Overtime chance', Math.round(pOT * 100) + '%', 'regulation tie') + tile('Expected points', `${xpA.toFixed(2)} &ndash; ${xpB.toFixed(2)}`, `${a} &ndash; ${b}`)
@@ -855,13 +912,13 @@ function renderMatchup(resetG) {
     ['Discipline', SR(ra, 'penTaken', true), SR(rb, 'penTaken', true), 'fewest penalties = 1st'], ['Faceoffs', SR(ra, 'fo'), SR(rb, 'fo'), 'little effect on goals'], ['Hits', SR(ra, 'hits'), SR(rb, 'hits'), 'style, not quality'], ['Rebounds created', SR(ra, 'rebounds'), SR(rb, 'rebounds'), '']];
   const cellR = (x, y) => x == null ? '&mdash;' : `<span class="pill ${y != null && x + 7 < y ? 'p-green' : y != null && x > y + 7 ? 'p-red' : 'p-grey'}">${ord(x)}</span>`;
   $('mu-tape').innerHTML = `<h3>Tale of the tape <span class="small">league ranks, 1st = best; green = a clear edge (8+ spots)</span></h3><table><tr><th>Area</th><th>${a}</th><th>${b}</th><th></th></tr>${rows.map(([l, x, y, note]) => `<tr><td>${l}</td><td>${cellR(x, y)}</td><td>${cellR(y, x)}</td><td class="small">${note}</td></tr>`).join('')}</table>
-    <p class="small" style="margin-top:6px">Style ranks pool this season with last season at half weight (mostly last season until about 15 games). Lineup ranks are talent of each team's best possible lineup.</p>`;
+    `;
   MU.E = muEngine(a, b, home, gA, gB, MU.rest); muRenderInsight(MU.E, a, b);
   // ---- key players
   const pl = (r, t) => `<div style="margin-bottom:8px"><b>${t}</b><div class="small">${(r.top || []).map((nmx, i) => { const P_ = (D.playersLeague || []).find(p => p.n === nmx && p.t === t); return `${P_ ? `<a class="tm" href="#" onclick="setTeam('${t}','roster');showProfile.scroll=true;showProfile('${P_.id}','ro-prof');return false;">${nmx}</a>` : nmx} <b>${r.topV ? sp(r.topV[i]) : ''}</b>${P_ && P_.arch ? ` <span style="color:var(--mute)">(${P_.arch})</span>` : ''}`; }).join('<br>')}</div>${goalieLine(r)}</div>`;
   const scl = t => { const L = MU.E && MU.E.scorers ? MU.E.scorers[t] : []; return L.length ? `<div class="small" style="margin:-4px 0 8px"><b>Most likely to score (${t}):</b> ${L.map(s => `${s.n.split(' ').slice(-1)[0]} ${Math.round(s.p * 100)}%`).join(', ')}</div>` : ''; };
   $('mu-players').innerHTML = `<h3>Who to watch <span class="small">top skaters by impact in their role; goalies rated as if starting</span></h3>${pl(ra, a)}${scl(a)}${pl(rb, b)}${scl(b)}
-    <p class="small">Scoring chance = his own shot quality per minute (this season and three before, shrunk toward typical) x expected ice time x how many chances the opponent allows, with finishing heavily regressed. Backtested on ${(D.scorerVal || {}).n || ''} player-games this season: predicted ${Math.round(((D.scorerVal || {}).mean_pred || 0) * 1000) / 10}% vs. actual ${Math.round(((D.scorerVal || {}).mean_obs || 0) * 1000) / 10}%; the top tenth predicted ${Math.round(((D.scorerVal || {}).top10pct_pred || 0) * 100)}%, scored ${Math.round(((D.scorerVal || {}).top10pct_obs || 0) * 100)}%.</p>`;
+    `;
   muDetail(a, b, ra, rb);
   // ---- expected box score (benchmarks to compare with the live game)
   const TR = D.teamRates || {}, A_ = TR[a], B_ = TR[b];
@@ -878,7 +935,7 @@ function renderMatchup(resetG) {
       <tr><td>Shots on goal</td><td><b>${sA.toFixed(0)}</b></td><td><b>${sB.toFixed(0)}</b></td></tr><tr><td>Expected goals</td><td><b>${xA.toFixed(1)}</b></td><td><b>${xB.toFixed(1)}</b></td></tr>
       <tr><td>High-danger shots</td><td><b>${hA.toFixed(0)}</b></td><td><b>${hB.toFixed(0)}</b></td></tr><tr><td>Penalties drawn</td><td><b>${ppA.toFixed(1)}</b></td><td><b>${ppB.toFixed(1)}</b></td></tr>
       <tr><td>Goals (model)</td><td><b>${MU.la.toFixed(1)}</b></td><td><b>${MU.lb.toFixed(1)}</b></td></tr></table>
-      <p class="small" style="margin-top:6px">Each team's per-game rates (this season, plus last season at half weight) adjusted for the opponent: e.g. ${a}'s shots = ${a}'s shots per game x ${b}'s shots allowed per game / league average. Compare during the game: a team well above its expected-goals line is playing to its edge even if it's losing.</p>`;
+      `;
   } else $('mu-box').innerHTML = '<div class="lock">No team rates yet.</div>';
   // ---- share card (uses the same odds, paths, players and model score as above)
   { const aw = home === 'a' ? b : a, hm = home === 'a' ? a : b;
@@ -893,7 +950,7 @@ function renderMatchup(resetG) {
   $('mu-live').innerHTML = `<h3>Live win probability</h3><div class="ctl">${a} <input id="mu-sa" type="number" min="0" max="15" value="0" style="width:52px"> &ndash; <input id="mu-sb" type="number" min="0" max="15" value="0" style="width:52px"> ${b}
       &nbsp; Period <select id="mu-per"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">OT</option></select>
       Time left <input id="mu-tl" type="text" value="20:00" style="width:64px"></div><div id="mu-liveout"></div>
-      <p class="small" style="margin-top:6px">Goals arrive at each team's expected rate (calibrated so 0-0 at puck drop equals the pre-game odds); a tie after regulation goes to overtime at the model's overtime odds. Simplifications: trailing teams usually push and leading teams sit back (score effects), and empty-net goals aren't modeled, so late leads are slightly safer than shown. Not backtested on in-game data.</p>`;
+      `;
   const live = () => { const s1 = +$('mu-sa').value || 0, s2 = +$('mu-sb').value || 0, per = +$('mu-per').value, tl = ($('mu-tl').value || '0:00').split(':'), mins = (+tl[0] || 0) + (+tl[1] || 0) / 60;
     let p; if (per === 4) p = s1 > s2 ? 1 : s1 < s2 ? 0 : MU.pOTwinA; else p = muWinFromState(MU.la, MU.lb, Math.max(0, ((3 - per) * 20 + Math.min(20, mins)) / 60), s1 - s2, MU.pOTwinA);
     const nxt = (who) => per === 4 ? null : muWinFromState(MU.la, MU.lb, Math.max(0, ((3 - per) * 20 + Math.min(20, mins)) / 60), s1 - s2 + (who === 'a' ? 1 : -1), MU.pOTwinA);
@@ -909,7 +966,7 @@ function renderMatchup(resetG) {
   const xs = last.length ? last.reduce((s2, g) => s2 + (g[1] === a ? g[5] / (g[5] + g[6]) : g[6] / (g[5] + g[6])), 0) / last.length : null;
   $('mu-h2h').innerHTML = `<div class="grid2"><div><h3>This season</h3>${fin.length ? `<table>${fin.map(g => `<tr><td>${g[0].slice(5)}</td><td>${g[2]} ${g[5]} @ ${g[1]} ${g[4]}${g[6] > 3 ? (g[6] >= 5 ? ' (SO)' : ' (OT)') : ''}</td></tr>`).join('')}</table>` : '<div class="small">No meetings yet.</div>'}
       <div class="small" style="margin-top:6px">${left.length ? `Still to play: ${left.map(g => `${new Date(g[0] + 'T12:00').toLocaleDateString([], {month: 'short', day: 'numeric'})} (${g[2]} @ ${g[1]})`).join(', ')}` : 'No more meetings this season.'}</div></div>
-    <div><h3>Last season (2025-26)</h3>${last.length ? `<table><tr><th>Date</th><th>Score</th><th>${a} share of expected goals</th></tr>${last.map(g => `<tr><td>${g[0].slice(5)}</td><td>${g[2]} ${g[4]} @ ${g[1]} ${g[3]}</td><td>${Math.round((g[1] === a ? g[5] / (g[5] + g[6]) : g[6] / (g[5] + g[6])) * 100)}%</td></tr>`).join('')}</table><div class="small" style="margin-top:6px">${a} won ${wins} of ${last.length - sos} decided games${sos ? ` ; plus ${sos} shootout${sos > 1 ? 's' : ''} with the winner not recorded` : ''}, with ${Math.round(xs * 100)}% of expected goals on average. A few games say little: rosters change, and results swing on goaltending and finishing.</div>` : '<div class="small">No meetings last season (or one of the teams didn\'t exist under this code).</div>'}</div></div>`;
+    <div><h3>Last season (2025-26)</h3>${last.length ? `<table><tr><th>Date</th><th>Score</th><th>${a} share of expected goals</th></tr>${last.map(g => `<tr><td>${g[0].slice(5)}</td><td>${g[2]} ${g[4]} @ ${g[1]} ${g[3]}</td><td>${Math.round((g[1] === a ? g[5] / (g[5] + g[6]) : g[6] / (g[5] + g[6])) * 100)}%</td></tr>`).join('')}</table><div class="small" style="margin-top:6px">${a} won ${wins} of ${last.length - sos} decided games${sos ? ` ; plus ${sos} shootout${sos > 1 ? 's' : ''} with the winner not recorded` : ''}, with ${Math.round(xs * 100)}% of expected goals on average.</div>` : '<div class="small">No meetings last season (or one of the teams didn\'t exist under this code).</div>'}</div></div>`;
 }
 // ================= MATCHUP ENGINE: why the odds lean, how each team wins (validated stats only) =================
 // Stats are used only if they carry forward (params/matchup_validation.json): 5v5 chances, slot shots, power play / kill,
@@ -1033,17 +1090,7 @@ function muEngine(a, b, home, gA, gB, rest) {
     return o; };
   return {pA, water, C, rest: rest || {tired: []}, scorers: {[a]: muScorers(a, b, 3), [b]: muScorers(b, a, 3)}, paths: {[a]: paths(a, b), [b]: paths(b, a)}, luck: [...luck(a), ...luck(b)], ra, rb, LA, LB, ranks: {f5: t => rk('f5', t), a5: t => rk('a5', t, true), pp: t => rk('pp60', t), pk: t => rk('pk60', t, true)}};
 }
-function muRenderInsight(E, a, b) {
-  if (!E) { $('mu-edges').innerHTML = '<div class="lock">Not enough team data yet.</div>'; $('mu-why').innerHTML = ''; return; }
-  const fav = E.pA >= 0.5 ? a : b, mx = Math.max(0.04, ...E.water.map(w => Math.abs(w.dp)));
-  $('mu-why').innerHTML = `<h3>Why the odds lean ${fav} <span class="small">how ${a}'s ${Math.round(E.pA * 100)}% is built, starting from 50-50</span></h3>
-    <table><tr><td></td><td><div style="display:flex" class="small"><div style="width:50%;text-align:right;padding-right:6px">&#9664; toward ${a}</div><div style="width:50%;padding-left:6px">toward ${b} &#9654;</div></div></td><td></td></tr>${E.water.map(w => { const pc = Math.round(w.dp * 1000) / 10, wd = Math.round(Math.abs(w.dp) / mx * 45);
-      return `<tr><td style="width:42%">${w.l}</td><td><div style="display:flex;align-items:center"><div style="width:50%;display:flex;justify-content:flex-end">${w.dp > 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[a] || '#888'};border-radius:3px"></span>` : ''}</div><div style="width:2px;height:16px;background:var(--line)"></div><div style="width:50%">${w.dp < 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[b] || '#888'};border-radius:3px"></span>` : ''}</div></div></td><td style="width:70px;text-align:right"><b>${w.dp >= 0 ? '+' : ''}${pc.toFixed(1)}</b> <span class="small">${w.dp >= 0 ? a : b}</span></td></tr>`; }).join('')}</table>
-    <p class="small" style="margin-top:6px">Win-% points toward each team. The power rating weighs current roster talent, last season and this season's chances and goals (backtested weights), plus home ice and the goalies picked above. Early in the season most of it is roster and last season.</p>`;
-  const card = (t, o) => { const P = E.paths[t]; return `<div style="margin-bottom:10px"><b style="font-size:15px">How ${t} wins</b>${P.length ? P.map(x => `<div style="margin:6px 0 0 0;padding-left:10px;border-left:3px solid ${TEAM_COL[t] || 'var(--ice)'}"><b>${x.head}</b> <span class="pill ${x.tag ? 'p-grey' : x.rel >= 0.55 ? 'p-green' : x.rel >= 0.4 ? 'p-blue' : 'p-grey'}" title="How well this carries from one stretch of games to the next">${x.tag || relTag(x.rel)}</span><div class="small" style="color:var(--ink)">${x.body}</div><div class="small"><b>Watch:</b> ${x.watch}</div></div>`).join('') : '<div class="small">No clear structural edge; needs its goaltending or finishing to carry the night.</div>'}</div>`; };
-  $('mu-edges').innerHTML = `<h3>How each team wins <span class="small">the matchup, stat by stat, in goals per game</span></h3>${card(a, b)}${card(b, a)}
-    ${E.luck.length ? `<div class="small" style="margin-top:6px"><b>Running hot or cold (doesn't predict tonight):</b> ${E.luck.join('; ')}. Within a season, a team's finishing and save results in one set of games barely predict the next (odd-vs-even-game correlation ${MV.split.finishing} and ${MV.split.team_saves}), so these describe the past, not a plan.</div>` : ''}
-    <p class="small" style="margin-top:6px">Only stats that carry forward are used as paths: 5v5 chances (season-to-season r ${MV.yoy.chances_for_5v5}), slot shots (${MV.yoy.slot_shots_for_5v5}), power play (${MV.yoy.pp_chances}) and kill (${MV.yoy.pk_chances_against}), penalties (${MV.yoy.penalties_taken}), and goalie talent (shrunk). Faceoffs add nothing measurable to goal differential once chances are counted, and hits are a style (no effect on winning in an earlier test). Each team's rates pool this season with last season at half weight. "Expected goals" = shot quality: how often an NHL shot from that spot and type goes in.</p>`;
+function renderStatGlossary() {
   const gl = [['5v5 chances (expected goals)', 'Quality-weighted shots at even strength: how many goals a team\'s shots "should" produce.', MV.yoy.chances_for_5v5, 'Yes: even-strength shot counts and who controls the puck.'],
     ['Slot shots (high danger)', 'Shots from right in front: the most dangerous kind.', MV.yoy.slot_shots_for_5v5, 'Yes: net-front chances and rebounds.'],
     ['Power play / kill chances', 'Expected goals per 60 minutes at 5-on-4 for, and allowed at 4-on-5.', MV.yoy.pp_chances, 'Yes: zone time and shots on each power play.'],
@@ -1052,8 +1099,21 @@ function muRenderInsight(E, a, b) {
     ['Goaltending results', 'Goals saved vs. expected so far. Goalie talent (shrunk) is the predictive version.', MV.split.team_saves, 'In the moment only; past results barely predict.'],
     ['Faceoffs', 'Share of draws won.', MV.yoy.faceoffs, 'Visible, but small: no extra goal effect once chances are counted.'],
     ['Hits', 'Physical play recorded by arena scorers.', MV.yoy.hits, 'Visible, but a style; no effect on winning in our tests.']];
-  $('mu-gloss').innerHTML = `<h3>What these stats mean, and which ones you can watch</h3><table><tr><th>Stat</th><th>What it is</th><th>Carries over</th><th>Watchable in a game?</th></tr>${gl.map(([n, w, r, y]) => `<tr><td><b>${n}</b></td><td class="small wrap">${w}</td><td class="small">${r != null ? `${relTag(r)} (r ${r})` : ''}</td><td class="small wrap">${y}</td></tr>`).join('')}</table>
+  const el_ = $('g-statgloss'); if (!el_) return; el_.innerHTML = `<table><tr><th>Stat</th><th>What it is</th><th>Carries over</th><th>Watchable in a game?</th></tr>${gl.map(([n, w, r, y]) => `<tr><td><b>${n}</b></td><td class="small wrap">${w}</td><td class="small">${r != null ? `${relTag(r)} (r ${r})` : ''}</td><td class="small wrap">${y}</td></tr>`).join('')}</table>
     <p class="small" style="margin-top:6px">r = correlation of a team's number in one stretch with the next (season to season for most; odd vs. even games within 2025-26 for finishing and goaltending). 1 = fully repeatable, 0 = pure noise.</p>`;
+}
+function muRenderInsight(E, a, b) {
+  if (!E) { $('mu-edges').innerHTML = '<div class="lock">Not enough team data yet.</div>'; $('mu-why').innerHTML = ''; return; }
+  const fav = E.pA >= 0.5 ? a : b, mx = Math.max(0.04, ...E.water.map(w => Math.abs(w.dp)));
+  $('mu-why').innerHTML = `<h3>Why the odds lean ${fav} <span class="small">how ${a}'s ${Math.round(E.pA * 100)}% is built, starting from 50-50</span></h3>
+    <table><tr><td></td><td><div style="display:flex" class="small"><div style="width:50%;text-align:right;padding-right:6px">&#9664; toward ${a}</div><div style="width:50%;padding-left:6px">toward ${b} &#9654;</div></div></td><td></td></tr>${E.water.map(w => { const pc = Math.round(w.dp * 1000) / 10, wd = Math.round(Math.abs(w.dp) / mx * 45);
+      return `<tr><td style="width:42%">${w.l}</td><td><div style="display:flex;align-items:center"><div style="width:50%;display:flex;justify-content:flex-end">${w.dp > 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[a] || '#888'};border-radius:3px"></span>` : ''}</div><div style="width:2px;height:16px;background:var(--line)"></div><div style="width:50%">${w.dp < 0 ? `<span style="display:inline-block;height:12px;width:${wd}%;background:${TEAM_COL[b] || '#888'};border-radius:3px"></span>` : ''}</div></div></td><td style="width:70px;text-align:right"><b>${w.dp >= 0 ? '+' : ''}${pc.toFixed(1)}</b> <span class="small">${w.dp >= 0 ? a : b}</span></td></tr>`; }).join('')}</table>
+`;
+  const card = (t, o) => { const P = E.paths[t]; return `<div style="margin-bottom:10px"><b style="font-size:15px">How ${t} wins</b>${P.length ? P.map(x => `<div style="margin:6px 0 0 0;padding-left:10px;border-left:3px solid ${TEAM_COL[t] || 'var(--ice)'}"><b>${x.head}</b> <span class="pill ${x.tag ? 'p-grey' : x.rel >= 0.55 ? 'p-green' : x.rel >= 0.4 ? 'p-blue' : 'p-grey'}" title="How well this carries from one stretch of games to the next">${x.tag || relTag(x.rel)}</span><div class="small" style="color:var(--ink)">${x.body}</div><div class="small"><b>Watch:</b> ${x.watch}</div></div>`).join('') : '<div class="small">No clear structural edge; needs its goaltending or finishing to carry the night.</div>'}</div>`; };
+  $('mu-edges').innerHTML = `<h3>How each team wins <span class="small">the matchup, stat by stat, in goals per game</span></h3>${card(a, b)}${card(b, a)}
+    ${E.luck.length ? `<div class="small" style="margin-top:6px"><b>Running hot or cold (doesn't predict tonight):</b> ${E.luck.join('; ')}.</div>` : ''}
+`;
+
 }
 // ================= SHARE CARD =================
 const SH = {fmt: 'tall'};
@@ -1155,7 +1215,7 @@ function muShare(M) {
   el.innerHTML = `<h3>Share this preview <span class="small">image built from the analysis on this tab</span></h3>
     <div style="max-width:560px"><img id="sh-img" src="${url}" alt="Matchup preview image" title="${fn}" style="width:100%;border-radius:10px;border:1px solid var(--line)">
       <div class="small" style="margin-top:6px">Right-click or long-press the image to save it.</div></div>
-    <p class="small" style="margin-top:6px">Everything matches this tab, including any goalie you pick ("usual mix" leaves goalies unnamed). Team colors only, no logos.</p>`;
+`;
 }
 // ================= GAME RECAP (share graphic for a finished game of the selected team) =================
 const RC = {fmt: 'tall', gid: null, team: 'UTA'};   // one format: 1080x1350 (fits X, Instagram and texts)
@@ -1295,7 +1355,7 @@ function rcRender() {
     <div class="ctl" style="margin-bottom:8px"><select id="rc-game">${opts}</select></div>
     <div style="max-width:560px"><img src="${url}" alt="Game recap image" title="${fn}" style="width:100%;border-radius:10px;border:1px solid var(--line)">
       <div class="small" style="margin-top:6px">Right-click or long-press the image to save it.</div></div>
-    <p class="small" style="margin-top:8px"><b>Deserve-to-win</b> replays every shot as a goal with its own expected-goal probability; it answers "who had the better chances," not who played harder. Players: per-game Player Impact (MoneyPuck game data). Win chance through the game uses league-average scoring for both teams.</p>`;
+`;
   $('rc-game').onchange = () => { RC.gid = +$('rc-game').value; rcRender(); };
 }
 function _wrapC(ctx, text, cx, y, maxW, lh, maxLines) {   // centered wrap
@@ -1324,7 +1384,7 @@ function muDetail(a, b, ra, rb) {
     <tr><td>Penalties taken per game</td><td>${(ta.pt || 0).toFixed(1)}</td><td>${(tb.pt || 0).toFixed(1)}</td></tr>
     <tr><td>Penalties drawn per game</td><td>${(ta.pd || 0).toFixed(1)}</td><td>${(tb.pd || 0).toFixed(1)}</td></tr>
     <tr><td><b>This power play vs. that kill</b> (expected goals per 60)</td><td><b>${eA != null ? eA.toFixed(1) : '&mdash;'}</b></td><td><b>${eB != null ? eB.toFixed(1) : '&mdash;'}</b></td></tr></table>
-    <p class="small" style="margin-top:6px">"Chances" = expected goals per 60 minutes at 5-on-4 (league average about ${av('pp60').toFixed(1)}). The last row adjusts each power play for the other team's kill. Power-play results are noisy over short stretches.</p>`;
+    `;
   // ---- lines: Utah from the staff lineup, others from their last game
   const byLast = (L, nm) => { const k = nm.toLowerCase().replace(/[^a-z]/g, ''); return L.find(p => p.n.toLowerCase().replace(/[^a-z]/g, '').endsWith(k)) || null; };
   const linesOf = t => { if (t === 'UTA' && D.lineup && D.lineup.staff) return {src: 'current lineup', f: D.lineup.staff.forwards, d: D.lineup.staff.defense};
@@ -1388,7 +1448,7 @@ function showProfile(id, elId) {
       <div><h3>Usage <span class="small">this season + last</span></h3><table>${Object.keys(USE_L).filter(k => p.use && p.use[k] != null).map(k => `<tr><td>${USE_L[k][0]}</td><td><b>${USE_L[k][1](p.use[k])}</b></td><td>${p.useP[k] != null ? `<span class="pill p-grey" title="percentile among NHL ${posN}">${ord(p.useP[k]) || '0th'}</span>` : ''}</td></tr>`).join('')}</table></div></div>
     <h3 style="margin-top:10px">Most similar players <span class="small">by skills and usage, same position group</span></h3>
     ${cmpRows ? `<table><tr><th>Player</th><th>Age</th><th>Cap hit</th><th>Talent (pts)</th><th>Value vs. contract</th></tr>${cmpRows}</table>` : '<div class="small">Not enough data.</div>'}
-    <p class="small" style="margin-top:6px">"Repeats strongly/weakly" = how much that skill carries from one season to the next (year-to-year correlation); weakly repeating skills (finishing, takeaways vs. giveaways) are pulled harder toward average. Takeaways vs. giveaways: players who carry the puck a lot give it away more, so stars can rank low here. Penalty differential = penalties drawn minus taken. Usage percentiles are descriptive, not good or bad. Profiles describe; they don't predict.</p>`;
+    `;
   if (elId === 'ex-prof' || showProfile.scroll) { showProfile.scroll = false; try { el.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch (e) {} }
 }
 const GLAB = {gsax: 'Goals saved above expected', ld: 'Low-danger shots', md: 'Medium-danger shots', hd: 'High-danger shots', reb: 'Rebound control', frz: 'Freezing the puck'};
@@ -1403,7 +1463,7 @@ function showGoalieProfile(p, el, elId) {
     <p style="margin:8px 0">${thin ? `Not enough NHL minutes yet for a goalie profile (about ${p.profMin}; goalie numbers need several seasons to mean much).` : (p.archTxt || '')}</p>
     <div class="grid2"><div><h3>Shot-stopping <span class="small">percentile among NHL goalies</span></h3>${thin ? '<div class="small">&mdash;</div>' : `<table>${Object.keys(GLAB).filter(k => p.gprof[k] != null).map(k => `<tr><td>${GLAB[k]}</td><td>${pbar(p.gprof[k])} <b>${ord(p.gprof[k]) || '0th'}</b></td><td class="small">${rel[k] ? relLabel(rel[k].r) : ''}</td></tr>`).join('')}</table>`}</div>
       <div><h3>Workload</h3><table><tr><td>Share of team's games this season</td><td><b>${u.share != null ? Math.round(u.share * 100) + '%' : '&mdash;'}</b></td></tr><tr><td>Share of games last season</td><td><b>${u.share25 != null ? Math.round(u.share25 * 100) + '%' : '&mdash;'}</b></td></tr><tr><td>Shots on goal faced per 60</td><td><b>${u.sog60 != null ? u.sog60 : '&mdash;'}</b></td></tr></table></div></div>
-    <p class="small" style="margin-top:6px">Goalie numbers are the noisiest in hockey: even shot-stopping overall repeats only weakly from season to season, so every number here is pooled over up to four seasons and pulled hard toward average. Rebound control and freezing repeat more. "Talent as a starter" is what he'd add over a full starter's workload, the number to use when asking "what if he starts?"</p>`;
+    `;
   if (elId === 'ex-prof' || showProfile.scroll) { showProfile.scroll = false; try { el.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch (e) {} }
 }
 // ---------------- team needs, surplus and fits (screening)
@@ -1413,7 +1473,7 @@ function renderNeeds(x) {
   $('nd-needs').innerHTML = `<h3>Needs</h3>${N.needs.length ? N.needs.map(n => `<div style="padding:5px 0;border-bottom:1px solid var(--line)"><b>${n.label}</b> <span class="pill p-red">${ord(n.rank)}</span> <span class="small">${sp(n.gap)} standings points per 84 games vs. the average team</span></div>`).join('') : '<div class="small">No part of the game clearly below the league.</div>'}
     ${N.slot ? `<div style="padding:5px 0"><b>Weakest lineup slot:</b> ${N.slot.label} <span class="pill p-grey">${ord(N.slot.rank)}</span></div>` : ''}
     ${N.strengths.length ? `<div class="small" style="margin-top:6px">Strengths: ${N.strengths.map(n => `${n.label} (${ord(n.rank)})`).join(', ')}</div>` : ''}
-    <p class="small" style="margin-top:6px">Skills are summed over the players this team has been dressing, weighted by ice time (scaled to a normal game); driving play and defense use the team's own 5v5 chance rates (this season, plus last season at half weight). A need = clearly below the league (about the bottom quarter); ranks out of 32.</p>`;
+    `;
   $('nd-surplus').innerHTML = `<h3>Possible moves</h3>${N.surplus.length ? `<table><tr><th>Player</th><th>Cap hit</th><th>Why</th></tr>${N.surplus.map(s => `<tr><td><a class="tm" href="#" onclick="setTeam('${x}','roster');showProfile.scroll=true;showProfile('${s.id}','ro-prof');return false;"><b>${s.n}</b></a><span class="sub">${s.pos}</span></td><td>${s.cap ? money(s.cap) : '&mdash;'}</td><td class="small wrap">${s.why.join('; ')}</td></tr>`).join('')}</table>` : '<div class="small">No extras or clearly overpaid players.</div>'}
     <p class="small" style="margin-top:6px">Weakest regulars in the best lineup by talent: ${N.weakest.F ? N.weakest.F.n + ' (F)' : '&mdash;'}, ${N.weakest.D ? N.weakest.D.n + ' (D)' : '&mdash;'}. A fit must be more talented than the player he would replace.</p>`;
   const odds = {}; (PW ? PW.rows : []).forEach(r => odds[r.team] = r.pPlayoff);
@@ -1423,7 +1483,7 @@ function renderNeeds(x) {
     let F = (D.playersLeague || []).filter(q => q.t !== x && (q.g === 'F' || q.g === 'D') && !q.ng && q.prof && q.cap && q.cap <= maxCap && (elc || !q.elc) && (!sell || (odds[q.t] ?? 1) < 0.35))
       .map(q => { const w = N.weakest[q.g]; const cov = needKeys.filter(k => (q.prof[k] || 0) >= 70); return w && cov.length && q.tal > w.tal ? {q, w, cov, gain: q.tal - w.tal} : null; }).filter(Boolean);
     F.sort((a, b) => srt === 'gain' ? b.gain - a.gain : srt === 'vs' ? (b.q.vs ?? -99) - (a.q.vs ?? -99) : a.q.cap - b.q.cap);
-    $('nd-fits').innerHTML = !needKeys.length ? '<div class="small">No clear skill needs, so no fits to screen.</div>' : F.length ? `<table><tr><th>Player</th><th>Age</th><th>Cap hit</th><th>Value vs. contract</th><th>Talent gain</th><th>Covers</th><th>His team's playoff odds</th></tr>${F.slice(0, 15).map(f => `<tr><td><a class="tm" href="#" onclick="setTeam('${f.q.t}','roster');showProfile.scroll=true;showProfile('${f.q.id}','ro-prof');return false;"><b>${f.q.n}</b></a><span class="sub">${f.q.pos} &bull; ${f.q.t}</span></td><td>${f.q.age != null ? Math.floor(f.q.age) : '&mdash;'}</td><td>${money(f.q.cap)}${f.q.elc ? ' <span class="pill p-grey">ELC</span>' : ''}</td><td>${f.q.vs != null ? sp(pt(f.q.vs)) : '&mdash;'}</td><td><b>${sp(pt(f.gain))}</b><span class="sub">over ${f.w.n}</span></td><td class="small wrap">${f.cov.map(k => COMP_L[k]).join(', ')}</td><td>${odds[f.q.t] != null ? Math.round(odds[f.q.t] * 100) + '%' : '&mdash;'}</td></tr>`).join('')}</table><p class="small" style="margin-top:6px">${F.length} players pass the screen (showing 15). Talent gain = his talent minus the player he'd replace, in standings points per standard season. Covers = need areas where he's at the 70th percentile or better. "Sellers" are judged on today's playoff odds, which mean little before about 20 games.</p>` : '<div class="small">No players pass the screen with these filters.</div>';
+    $('nd-fits').innerHTML = !needKeys.length ? '<div class="small">No clear skill needs, so no fits to screen.</div>' : F.length ? `<table><tr><th>Player</th><th>Age</th><th>Cap hit</th><th>Value vs. contract</th><th>Talent gain</th><th>Covers</th><th>His team's playoff odds</th></tr>${F.slice(0, 15).map(f => `<tr><td><a class="tm" href="#" onclick="setTeam('${f.q.t}','roster');showProfile.scroll=true;showProfile('${f.q.id}','ro-prof');return false;"><b>${f.q.n}</b></a><span class="sub">${f.q.pos} &bull; ${f.q.t}</span></td><td>${f.q.age != null ? Math.floor(f.q.age) : '&mdash;'}</td><td>${money(f.q.cap)}${f.q.elc ? ' <span class="pill p-grey">ELC</span>' : ''}</td><td>${f.q.vs != null ? sp(pt(f.q.vs)) : '&mdash;'}</td><td><b>${sp(pt(f.gain))}</b><span class="sub">over ${f.w.n}</span></td><td class="small wrap">${f.cov.map(k => COMP_L[k]).join(', ')}</td><td>${odds[f.q.t] != null ? Math.round(odds[f.q.t] * 100) + '%' : '&mdash;'}</td></tr>`).join('')}</table><p class="small" style="margin-top:6px">${F.length} players pass the screen (showing 15).</p>` : '<div class="small">No players pass the screen with these filters.</div>';
   };
   ['nd-cap', 'nd-sell', 'nd-elc', 'nd-sort'].forEach(id => $(id).onchange = run);
   run();
@@ -1500,7 +1560,13 @@ inits.finder = initExplorer;
 renderers.finder = () => { if (window.exRun) window.exRun(); };
 
 // ================= METHOD =================
+function goGuide(id) {
+  showTab('method');
+  setTimeout(() => { const e = $(id); if (!e) return; if (e.tagName === 'DETAILS') e.open = true; try { e.scrollIntoView({behavior: 'smooth', block: 'start'}); } catch (x) {} }, 60);
+}
 function initMethod() {
+  try { renderPlayoffModelNotes(); } catch (e) { console.warn(e); }
+  try { renderStatGlossary(); } catch (e) { console.warn(e); }
   const IM = D.model.impact, DR = IM.drivers;
   $('impact-recipe').innerHTML = `<h3>What counts in Player Impact</h3><ul style="margin:6px 0 0 18px"><li><b>Driving play:</b> the team's expected goals and shot attempts for and against with him on the ice, compared with the team's average; adjusted for zone starts.</li><li><b>Playmaking, finishing and his own shot quality</b>, each weighted by how much it signals real impact in other seasons.</li><li><b>Defense and puck battles:</b> chances allowed vs. the team's average, blocks, takeaways, defensive-zone giveaways.</li><li><b>Power play and penalty kill</b> are measured the same way. <b>Penalties</b> drawn/taken: 0.17 goals each. <b>Faceoffs</b>: 0.01 goals per net win.</li><li><b>Goalies:</b> goals saved above expected.</li></ul>`;
   $('impact-drivers').innerHTML = `<h3>What separates players</h3><p>Each input's share of the spread in Impact between NHL skaters (500+ min, 2025-26):</p><table style="margin-top:6px">${Object.entries(DR).filter(([k]) => partNames[k]).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<tr><td>${partNames[k]}</td><td style="text-align:right"><b>${Math.max(0, v).toFixed(0)}%</b></td></tr>`).join('')}</table><p style="margin-top:6px">Out of sample, Impact predicts a player's on-ice goal differential relative to his team at r = ${IM.validation.impact.all} (points per 60: ${IM.validation.points60.all}).</p>`;

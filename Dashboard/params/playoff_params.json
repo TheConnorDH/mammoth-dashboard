@@ -1,5 +1,5 @@
 {
- "_note": "Playoff series model and Cup simulation. Fitted on 165 playoff series 2013-14..2024-25 (excl. 2019-20 bubble): P(team A wins series) = logistic(alpha * (b_power * power-rating difference + b_elite * difference in elite skaters counted up to 2)). Power rating = end-of-season power formula (goals/game); elite = top-12 F and top-6 D by ice time with talent >= 90th percentile at the position. v1.2.0: counting only the first two elite skaters improved leave-one-season-out log-loss from 0.6595 to 0.6468; the full Cup simulation scored the same as the linear version (within simulation noise), alpha 0.7 kept. Experiments: calibration/experiments/cup_odds_backtest_*.",
+ "_note": "Playoff series model and Cup simulation. Fitted on 165 playoff series 2013-14..2024-25 (excl. 2019-20 bubble). v1.3.0: P(A wins series) = average of two models that predicted past series about equally well once the choice itself was tested fairly: (1) every elite skater counted, (2) only the first two counted. Each: logistic(alpha * (b_power * power-rating gap + b_elite * elite gap)). Leave-one-season-out log-loss: power only 0.6624, every elite 0.6595, first two 0.6468, average 0.6509; with the threshold and count chosen fairly (nested) 0.6613. They disagree most for teams with 0 elite skaters (14 past series), where the evidence is thinnest, so the average is used. Elite = top-12 F and top-6 D by ice time with talent >= 90th percentile at the position. alpha 0.7 from the full Cup backtest (both models tied there).",
  "b_power": 1.609,
  "b_elite": 0.561,
  "alpha": 0.7,
@@ -7,7 +7,8 @@
  "n_series": 165,
  "series_backtest": {
   "favorite_won": {
-   "Power ranking + first two elite skaters (adopted)": 0.606,
+   "Average of the two elite versions (adopted)": 0.606,
+   "Power ranking + first two elite skaters": 0.606,
    "Power ranking + elite skaters (every one counted)": 0.63,
    "Power ranking": 0.618,
    "Regular-season xG differential": 0.6,
@@ -20,7 +21,8 @@
    "Goalie talent": 0.497
   },
   "prob_score": {
-   "Power ranking + first two elite skaters (adopted)": 6.7,
+   "Average of the two elite versions (adopted)": 6.1,
+   "Power ranking + first two elite skaters": 6.7,
    "Power ranking + elite skaters (every one counted)": 4.8,
    "Power ranking": 4.4,
    "Regular-season xG differential": 3.1,
@@ -61,5 +63,19 @@
   "note": "Every Cup winner 2013-14..2024-25 (excl. 2019-20) had at least 2 elite (top-10%) skaters; 7 of 11 had 0 or 1 superstar (top 2%)."
  },
  "favorites": "Each season's model favorite (avg ~13% Cup) won 0 of 8 Cups in the backtest (about 1 expected), so treat Cup odds as low-confidence.",
- "elite_cap": 2
+ "elite_cap": 2,
+ "blend": [
+  {
+   "b_power": 1.558,
+   "b_elite": 0.15,
+   "elite_cap": 99,
+   "label": "every elite skater counted"
+  },
+  {
+   "b_power": 1.609,
+   "b_elite": 0.561,
+   "elite_cap": 2,
+   "label": "first two elite skaters"
+  }
+ ]
 }
