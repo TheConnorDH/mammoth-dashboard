@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-24",
+ "fetched": "2026-10-25",
  "failed": [],
  "teams": {
   "ANA": [
@@ -4627,7 +4627,7 @@
     "playerId": "8482110",
     "name": "Dawson Mercer",
     "pos": "C",
-    "number": null
+    "number": 19
    },
    {
     "playerId": "8476480",
@@ -4717,7 +4717,7 @@
     "playerId": "8482076",
     "name": "Nico Daws",
     "pos": "G",
-    "number": null
+    "number": 35
    },
    {
     "playerId": "8479973",
