@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-25",
+ "fetched": "2026-10-26",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1220,6 +1220,12 @@
     "number": 24
    },
    {
+    "playerId": "8486130",
+    "name": "Dylan Hryckowian",
+    "pos": "R",
+    "number": 46
+   },
+   {
     "playerId": "8484829",
     "name": "Justin Hryckowian",
     "pos": "C",
@@ -1266,6 +1272,12 @@
     "name": "Tyler Seguin",
     "pos": "C",
     "number": 91
+   },
+   {
+    "playerId": "8483514",
+    "name": "Matthew Seminoff",
+    "pos": "R",
+    "number": 43
    },
    {
     "playerId": "8479351",
@@ -2842,12 +2854,6 @@
     "number": 26
    },
    {
-    "playerId": "8481525",
-    "name": "Matthew Robertson",
-    "pos": "D",
-    "number": 29
-   },
-   {
     "playerId": "8482073",
     "name": "Braden Schneider",
     "pos": "D",
@@ -2872,16 +2878,10 @@
     "number": 70
    },
    {
-    "playerId": "8477484",
-    "name": "Spencer Martin",
-    "pos": "G",
-    "number": 41
-   },
-   {
     "playerId": "8473503",
     "name": "James Reimer",
     "pos": "G",
-    "number": null
+    "number": 47
    },
    {
     "playerId": "8478048",

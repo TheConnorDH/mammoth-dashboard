@@ -44,3 +44,5 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8484242,Brayden Yager,C,WPG,2005-01-03,180,"5' 11""",CAN,R,29,C,NHL API player landing 2026-10-23
 8485545,Michal Postava,G,DET,2002-02-28,222,"6' 1""",CZE,L,35,G,NHL API player landing 2026-10-23
 8484900,Cooper Black,G,FLA,2001-06-14,245,"6' 9""",USA,L,31,G,NHL API player landing 2026-10-23
+8486130,Dylan Hryckowian,R,DAL,2004-05-19,180,"5' 10""",CAN,R,46,R,NHL API player landing 2026-10-26
+8483514,Matthew Seminoff,R,DAL,2003-12-27,189,"6' 0""",USA,R,43,R,NHL API player landing 2026-10-26
