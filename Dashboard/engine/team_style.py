@@ -1,6 +1,13 @@
-"""Team style tags (descriptive, not predictive): what stands out about how each team plays, relative to the
+"""Team style tags (descriptive, not predictive): what stands out about HOW each team plays, relative to the
 rest of the league. Pools this season with last season (last season counted at half weight, so this season
-takes over by about midseason), then tags traits in the league's top or bottom ~20%."""
+takes over by about midseason), then tags traits in the league's top or bottom ~20%.
+How GOOD a team is at something (defense, special teams, finishing, goaltending) lives in Strengths and
+Weaknesses, not here. Validated 2026-10-26 (calibration/experiments/team_style_validation.*): tags kept repeat
+next season 45-67% of the time (chance 20%); dropped as style or as too noisy: Quality over quantity (40%),
+Protects the slot (41%), Finishing team (37%), Goaltending-driven (40%), Strong penalty kill (28%), and the
+quality tags Stingy/Leaky defense and Dangerous power play."""
+
+ord_ = lambda n: f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 LAST_W = 0.5
 
@@ -82,11 +89,7 @@ def build(cur_rows, last_rows, season_cur="2026", season_last="2025", players=No
         ("pace", "high", .8, "High-event", "lots of shot attempts both ways"),
         ("pace", "low", .2, "Low-event", "few shot attempts either way"),
         ("cf", "high", .8, "Puck possession", "out-attempts opponents at 5v5"),
-        ("quality", "high", .8, "Quality over quantity", "high-danger looks per shot"),
         ("volume", "high", .8, "Shoots from everywhere", "high shot volume"),
-        ("xga", "low", .2, "Stingy defense", "allows little shot quality at 5v5"),
-        ("xga", "high", .8, "Leaky defense", "allows a lot of shot quality at 5v5"),
-        ("hdAgainst", "low", .2, "Protects the slot", "few high-danger shots against"),
         ("rebounds", "high", .8, "Crashes the net", "creates a lot of rebounds"),
         ("hits", "high", .85, "Physical", "high hit rate"),
         ("blocks", "high", .85, "Blocks shots", "blocks a lot of shots"),
@@ -95,10 +98,6 @@ def build(cur_rows, last_rows, season_cur="2026", season_last="2025", players=No
         ("penTaken", "high", .85, "Undisciplined", "takes a lot of penalties"),
         ("penDrawn", "high", .85, "Draws penalties", "earns a lot of power plays"),
         ("fo", "high", .85, "Wins faceoffs", "strong on the dot"),
-        ("pp", "high", .8, "Dangerous power play", "creates a lot of PP chances"),
-        ("pk", "low", .2, "Strong penalty kill", "allows little on the PK"),
-        ("finish", "high", .85, "Finishing team", "scores more than shot quality predicts (partly luck)"),
-        ("goalie", "high", .85, "Goaltending-driven", "goalies save more than expected"),
         ("age", "low", .15, "Young roster", "minutes go to young players"),
         ("age", "high", .85, "Veteran roster", "minutes go to experienced players"),
         ("star", "high", .85, "Star-driven", "talent concentrated in a few players"),
@@ -115,6 +114,18 @@ def build(cur_rows, last_rows, season_cur="2026", season_last="2025", players=No
                 cand.append((abs(p - 0.5), tag, why))
         cand.sort(reverse=True)
         ranks = {k: sorted(teams, key=lambda x: -F[x].get(k, -1e9)).index(t) + 1 for k in f}
-        out[t] = {"tags": [{"tag": n, "why": w} for _, n, w in cand[:4]], "label": cand[0][1] if cand else "Balanced", "ranks": ranks, "n": len(teams),
+        tags = [{"tag": n, "why": w} for _, n, w in cand[:4]]
+        if not cand:   # nothing clears the bar: name the team's most distinctive trait, labeled as such
+            best = None
+            for k, side, thr, tag, why in rules:
+                if k not in f:
+                    continue
+                p = _pct(col(k), f[k]); lean = p - 0.5 if side == "high" else 0.5 - p
+                if lean > 0 and (best is None or lean > best[0]):
+                    rk = ranks[k] if side == "high" else len(teams) + 1 - ranks[k]
+                    best = (lean, tag, rk)
+            if best:
+                tags = [{"tag": f"Closest to: {best[1]}", "why": f"{ord_(best[2])} of {len(teams)}; no trait clears the tag bar", "kind": "best"}]
+        out[t] = {"tags": tags, "label": cand[0][1] if cand else "Balanced", "ranks": ranks, "n": len(teams),
                   "mostlyLastSeason": bool(cur_gp is not None and cur_gp.get(t, 0) < 15)}
     return out

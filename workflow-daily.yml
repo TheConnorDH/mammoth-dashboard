@@ -1,0 +1,116 @@
+name: Daily dashboard update
+
+on:
+  # The morning update runs up to four times; early attempts publish only once Utah's latest game is in every data
+  # source, the final attempt publishes with whatever is available, and once a day is published the rest skip.
+  # Main trigger: an outside scheduler (cron-job.org, see SETUP.md) presses "Run workflow" with attempt = early/final
+  # at 2:17, 3:47, 5:17 (early) and 6:47 am Mountain (final), because GitHub's own schedule often starts hours late.
+  # GitHub's schedule below stays as a backup (times UTC; MDT = UTC-6, MST = UTC-7).
+  schedule:
+    - cron: "17 8 * * *"    # 2:17 am MDT
+    - cron: "47 9 * * *"    # 3:47 am MDT
+    - cron: "17 11 * * *"   # 5:17 am MDT
+    - cron: "47 13 * * *"   # 7:47 am MDT / 6:47 am MST  (final attempt; an hour after the outside scheduler's final in summer)
+  workflow_dispatch:         # "Run workflow" button (manual = rebuild now) and the outside scheduler (early / final)
+    inputs:
+      attempt:
+        description: "manual = rebuild and publish now; early / final = a morning-update attempt (outside scheduler)"
+        type: choice
+        options: [manual, early, final]
+        default: manual
+  push:                      # a code change on main rebuilds the site right away (the bot's own daily commits don't trigger this)
+    branches: [main]
+    paths: ["Dashboard/**", "automation/**", "VERSION", ".github/workflows/daily.yml"]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      status: ${{ steps.run.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 30          # enough history to see whether today's update is already published
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install numpy
+
+      # big, unchanging inputs (last season + 2008-2024 history + the model's history cache): downloaded once, then reused
+      - uses: actions/cache@v4
+        with:
+          path: |
+            Source Data
+            Dashboard/inputs/history/moneypuck
+            ~/.mammoth_cache
+          key: mammoth-history-v2-${{ hashFiles('Dashboard/calibration/fit_impact.py') }}
+
+      - id: skip
+        run: |
+          # morning-update attempts (GitHub's schedule or the outside scheduler) stop once today's update is published
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.attempt }}" = "early" ] || [ "${{ inputs.attempt }}" = "final" ]; then
+            echo "daily=1" >> "$GITHUB_OUTPUT"
+            # check the latest main, not the commit this run was queued on (a queued run may predate this morning's publish);
+            # dates in Mountain time, so a very late backup run in the evening can't mark the next morning as done
+            git fetch --depth=30 origin "${GITHUB_REF_NAME}" && git reset --hard FETCH_HEAD
+            if git log -30 --format=%s | grep -q "Daily update $(TZ=America/Denver date +%F)"; then
+              echo "Already published this morning; nothing to do."; echo "status=skipped" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - id: run
+        if: steps.skip.outputs.status != 'skipped'
+        env:
+          # Preferred: Workload Identity Federation (repository variables; no stored key). Fallback: an API key secret.
+          ANTHROPIC_FEDERATION_RULE_ID: ${{ vars.ANTHROPIC_FEDERATION_RULE_ID }}
+          ANTHROPIC_ORGANIZATION_ID: ${{ vars.ANTHROPIC_ORGANIZATION_ID }}
+          ANTHROPIC_SERVICE_ACCOUNT_ID: ${{ vars.ANTHROPIC_SERVICE_ACCOUNT_ID }}
+          ANTHROPIC_WORKSPACE_ID: ${{ vars.ANTHROPIC_WORKSPACE_ID }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # final attempt: GitHub's last scheduled time, the outside scheduler's "final", a manual run, or a code push
+          FLAG="--final-attempt"
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "47 13 * * *" ]; then FLAG=""; fi
+          if [ "${{ inputs.attempt }}" = "early" ]; then FLAG=""; fi
+          python automation/daily.py $FLAG
+
+      - if: steps.run.outputs.status == 'published'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Save state (box scores, lineup, brief, roster, trend history)
+        if: steps.run.outputs.status == 'published'
+        continue-on-error: true
+        run: |
+          git config user.name "mammoth-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Dashboard/config Dashboard/inputs/nhl Dashboard/inputs/bio_supplement.csv Dashboard/history/snapshots.json Dashboard/history/last_run.json Dashboard/history/pregame_odds.json
+          # only morning-update attempts write "Daily update <date>" (the skip check looks for it); pushes and manual runs say "Rebuild"
+          if [ "${{ steps.skip.outputs.daily }}" = "1" ]; then MSG="Daily update $(TZ=America/Denver date +%F)"; else MSG="Rebuild $(TZ=America/Denver date +%F)"; fi
+          git diff --cached --quiet || git commit -m "$MSG"
+          git pull --rebase -X theirs origin "${GITHUB_REF_NAME}" || true
+          git push
+
+  deploy:
+    needs: update
+    if: needs.update.outputs.status == 'published'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

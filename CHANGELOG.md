@@ -2,6 +2,33 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.4.0 (2026-10-26)
+
+**New**
+- **Games tab.** Every NHL game of the season, browsable by date (arrows, a date picker, a strip of nearby game days, and an optional team filter). Each game opens on the same page:
+  - **Finished games:** score, deserve-to-win, the numbers (shots, expected goals, dangerous shots, power play, goalies), the chance race, every shot on a rink, the season series, and **Player Impact in this game for both teams** as bars on one scale, best to worst, with each player's stat line. These are the same per-game values as each team's game-by-game stars. Bars show **where each player's Impact came from** (driving play, shot creation, finishing, playmaking, takeaways vs. giveaways, defense, penalties, faceoffs; each vs. the position average) or the total only. Skaters set the scale, so a big goalie night runs off the end instead of shrinking everyone else.
+  - Teams with near-identical colors (e.g. DET-NJD, BOS-NSH) get a grey home color in that game's bars, charts and graphic.
+  - Postponed games are marked; finished games still waiting on MoneyPuck data say so.
+  - **Upcoming games:** win odds (power ratings + home ice + rest), overtime chance, back-to-backs, how the two teams compare (record, power rank, projection, playoff odds, goal and shot-quality differential, elite skaters, last 5, likely goalie, top players), the season series, and a link to the full matchup preview.
+  - **Odds before the game:** each morning's odds are now saved, so finished games show what the model expected beforehand, with an "upset" tag when the winner had under 40%. Games before 1.4.0 have none (back-filling would use hindsight).
+  - Links into the Games tab from the recap card, the Overview's last game, and the Roster tab's game by game.
+- **Recap graphic shows every player's Impact for both teams** (bars, away left, home right) in place of the best/worst lists. The Games tab draws it for any finished game, from either team's point of view.
+- **Integrity check:** "Games tab adds up" (every played game with MoneyPuck data has both teams' values; Utah's match its own game stars).
+
+**Fixed**
+- After switching light/dark mode, links into the Games and Matchup tabs could open the previous selection.
+
+**Changed (style tags, validated)**
+- Tested every style tag on 14 past seasons: does a player tagged from seasons t-2..t still show the trait in season t+1? Each player tag's cut is now the loosest at which at least 55% of tagged players are still top-20% at it next season (chance is 20%); rates are pulled toward the position average by ice time (chosen leave-one-season-out).
+  - Kept: Shooter and Playmaker (top 20%), Physical, Shot blocker, Puck thief, Draws penalties (top 15%), Play driver (now top 10%, 5-on-5; it repeated 45% of the time at the old top-20% cut, 55% at top 10%).
+  - **Dropped:** Finisher (scoring above shot quality repeated at most 49% even for the top 5%) and Shutdown (at most 42%).
+  - **New: one weak spot** per player when it repeats at least half the time: Penalty-prone, Low shot threat, Gets out-chanced (red chip).
+  - **New: best trait** when no tag clears the bar (dashed chip), e.g. "Best trait: takeaways", so a player isn't left blank or oversold.
+- **Team style tags now describe how a team plays, not how good it is.** Dropped the quality tags (Stingy defense, Leaky defense, Dangerous power play; Strengths and Weaknesses covers those) and the ones that didn't repeat (Quality over quantity 40%, Protects the slot 41%, Finishing team 37%, Goaltending-driven 40%, Strong penalty kill 28%). The rest repeat 45-67% of the time. A team with no tag shows its closest trait.
+
+**Changed (updates)**
+- **On-time morning updates.** GitHub's own schedule was starting runs 6-7 hours late. The workflow now accepts an outside scheduler (cron-job.org, setup in SETUP.md section 6) that starts the morning attempts at 2:17, 3:47, 5:17 and 6:47 am Mountain; GitHub's schedule stays as a backup, and any attempt after the day is published stops in seconds. "Already published today" now uses the Mountain date and checks the latest commit (a queued attempt no longer republishes). GitHub's backup final attempt moved to 13:47 UTC. Deserve-to-win now uses one value per game everywhere (seeded by the game). The **Run workflow** button still rebuilds right away (attempt: manual).
+
 ## 1.3.0 (2026-10-24)
 
 **Changed (model)**

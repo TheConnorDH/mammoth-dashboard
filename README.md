@@ -7,6 +7,7 @@ An objective, data-only view of the Utah Mammoth's season, with every other NHL 
 ## What's on it
 Pick any team at the top of the page; every tab follows it.
 - **Overview:** the daily brief (Utah), executive summary, game recap graphic, next 10 games, last game's best and worst players.
+- **Games:** every NHL game by date. Finished games with both teams' player values, shots and chances; upcoming games with win odds and a comparison.
 - **Team:** how the team is built and plays, needs and possible moves, season outlook, strengths and weaknesses, shot maps.
 - **Roster:** every player's Impact and Talent, player profiles, value vs. contract, game by game, lines and goaltending.
 - **Matchup:** any two teams head to head, with a shareable preview graphic.
@@ -22,7 +23,7 @@ Pick any team at the top of the page; every tab follows it.
 This is an independent fan project. It is not affiliated with the NHL, the Utah Mammoth or MoneyPuck.
 
 ## How it updates
-- `.github/workflows/daily.yml` runs `automation/daily.py` up to four times each morning, between about 2:15 and 6:45 am Mountain time. An early run publishes only once Utah's latest game is in every data source; the last run publishes with whatever is available.
+- `.github/workflows/daily.yml` runs `automation/daily.py` up to four times each morning, at about 2:15, 3:45, 5:15 and 6:45 am Mountain time, started by an outside scheduler (GitHub's own schedule, often hours late, is the backup; see SETUP.md). An early run publishes only once Utah's latest game is in every data source; the last run publishes with whatever is available; once the day is published, later attempts stop.
 - Pipeline: download and check the inputs (including every team's NHL roster) → set the lineup from the last game's ice time → build (`Dashboard/build.py`) → write the brief (Claude API; a plain template if a check fails) → rebuild → integrity checks → publish.
 - A push of code to `main` also rebuilds the site right away.
 - If something fails, the previous page stays up and GitHub emails the repository owner. Each run's report is under the **Actions** tab.
@@ -30,7 +31,7 @@ This is an independent fan project. It is not affiliated with the NHL, the Utah 
 ## In this repository
 | Path | What it is |
 |---|---|
-| `Dashboard/` | Model and page build (`build.py`, `template.html`), config and saved state |
+| `Dashboard/` | Model and page build (`build.py`, `template.html`), config and saved state (including each morning's game odds, `history/pregame_odds.json`) |
 | `automation/` | Daily job: downloads, data checks, lineup, brief |
 | `Dashboard/HANDOFF.md` | Model and design notes |
 | `SETUP.md` | How to set up your own copy |

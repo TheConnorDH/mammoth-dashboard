@@ -1,9 +1,15 @@
 """Player style tags, derived from his own numbers (descriptive, not predictive): what stands out about how he
 plays relative to other NHL players at his position. Pools this season with the previous two (weights 1/.7/.4 on
-counts), per-60 rates, league percentiles among position peers with enough ice time."""
-import math
+counts), per-60 rates shrunk toward the position mean by ice time, league percentiles among position peers with
+enough ice time. Only traits that repeat from season to season are tagged (params/style_params.json); one weak
+spot at most; a player with no tag gets his strongest trait, labeled as such."""
+import bisect, json, math, os
 
 W = [1.0, 0.7, 0.4]
+
+
+def _ord(n):
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
 def num(x):
@@ -60,37 +66,59 @@ def build(skater_seasons, goalie_seasons=None):
         f["pp_ixg60"] = (pp["I_F_xGoals"] / (pp["icetime"] / 3600)) if pp and pp["icetime"] > 600 else None
         f["pk_pg"] = (pk["icetime"] / 60 / gp) if pk else 0.0
         feats[pid] = f
-    peers = {g: [f for f in feats.values() if f["grp"] == g and f["min"] >= 500] for g in ("F", "D")}
+    # validated rules (params/style_params.json): shrink each rate toward the position mean by pooled minutes, then
+    # percentile among position peers with 500+ pooled minutes; each tag's cut is set so that most tagged players
+    # still show the trait next season
+    SP = json.load(open(os.path.join(os.path.dirname(__file__), "..", "params", "style_params.json")))
+    elig = {g: [f for f in feats.values() if f["grp"] == g and f["rawmin"] >= 150] for g in ("F", "D")}
+    peers = {g: [f for f in elig[g] if f["min"] >= 500] for g in ("F", "D")}
+    keys = {r["feat"]: r["k"] for r in list(SP["tags"].values()) + list(SP["weak"].values())}
+    for g in ("F", "D"):
+        for c, k in keys.items():
+            vals = [f[c] for f in elig[g] if f.get(c) is not None]
+            mu = sum(vals) / len(vals) if vals else 0.0
+            for f in elig[g]:
+                if f.get(c) is not None:
+                    f["s_" + c] = mu + (f[c] - mu) * (f["min"] / (f["min"] + k) if k else 1.0)
+    pv = {(g, c): sorted(f["s_" + c] for f in peers[g] if "s_" + c in f) for g in ("F", "D") for c in keys}
+    def pct(g, c, f):
+        v = f.get("s_" + c); L = pv[(g, c)]
+        return None if v is None or not L else bisect.bisect_left(L, v) / len(L)
     out = {}
     for pid, f in feats.items():
-        g = f["grp"]; pr = peers[g]
+        g = f["grp"]
         if f["rawmin"] < 150:
             out[pid] = {"tags": [], "label": "Not enough NHL ice time yet"}
             continue
-        cand = []
-        def add(name, p, thr, why):
-            if p >= thr:
-                cand.append((p, name, why))
-        if "relF" in f: add("Play driver", _pct([x["relF"] for x in pr if "relF" in x], f["relF"]), 0.8, "team creates more chances with him on")
-        if "relA" in f: add("Shutdown", _pct([x["relA"] for x in pr if "relA" in x], f["relA"], higher=False), 0.8, "team allows fewer chances with him on")
-        add("Shooter", _pct([x["ixg60"] for x in pr], f["ixg60"]), 0.8, "generates a lot of shot quality himself")
-        if f["shots"] >= 150: add("Finisher", _pct([x["fin60"] for x in pr if x["shots"] >= 150], f["fin60"]), 0.85, "scores more than his shot quality predicts")
-        add("Playmaker", _pct([x["a160"] for x in pr], f["a160"]), 0.8, "lots of primary assists")
-        add("Physical", _pct([x["hits60"] for x in pr], f["hits60"]), 0.85, "high hit rate")
-        add("Shot blocker", _pct([x["blk60"] for x in pr], f["blk60"]), 0.85, "blocks a lot of shots")
-        add("Puck thief", _pct([x["tk60"] for x in pr], f["tk60"]), 0.85, "high takeaway rate")
-        add("Draws penalties", _pct([x["pd60"] for x in pr], f["pd60"]), 0.85, "draws penalties often")
-        add("Penalty-prone", _pct([x["pt60"] for x in pr], f["pt60"]), 0.88, "takes penalties often")
+        cand, weak = [], []
+        for name, r in SP["tags"].items():
+            p = pct(g, r["feat"], f)
+            if p is not None and p >= r["thr"]:
+                cand.append((p, name, r["why"]))
         fw, fl = f["fo"]
         if fw + fl >= 300 and fw / (fw + fl) >= 0.55: cand.append((0.5 + fw / (fw + fl) - 0.5, "Faceoff ace", f"{100 * fw / (fw + fl):.0f}% on faceoffs"))
         if f["pp_ixg60"] is not None and f["pp_pg"] >= (1.5 if g == "F" else 1.2):
-            add("Power-play weapon", _pct([x["pp_ixg60"] for x in pr if x["pp_ixg60"] is not None], f["pp_ixg60"]), 0.7, "big power-play shot threat")
+            pr = [x for x in peers[g] if x["pp_ixg60"] is not None]
+            p = sum(1 for x in pr if x["pp_ixg60"] < f["pp_ixg60"]) / len(pr) if pr else 0
+            if p >= 0.7: cand.append((p, "Power-play weapon", "big power-play shot threat"))
         if f["pk_pg"] >= (1.5 if g == "F" else 2.0): cand.append((0.75, "Penalty killer", f"{f['pk_pg']:.1f} PK min/game"))
-        cand.sort(reverse=True)
+        for name, r in SP["weak"].items():
+            p = pct(g, r["feat"], f)
+            if p is None:
+                continue
+            if (r["side"] == "high" and p >= r["thr"]) or (r["side"] == "low" and p <= 1 - r["thr"]):
+                weak.append((abs(p - 0.5), name, r["why"]))
+        cand.sort(reverse=True); weak.sort(reverse=True)
         tags = [{"tag": n, "why": w} for _, n, w in cand[:3]]
+        if weak:
+            tags.append({"tag": weak[0][1], "why": weak[0][2], "kind": "weak"})
+        if not cand:   # no trait clears the bar: name his strongest one, clearly as a relative strength
+            best = max(((pct(g, r["feat"], f), r["feat"]) for r in SP["tags"].values() if pct(g, r["feat"], f) is not None), default=None)
+            if best:
+                tags.insert(0, {"tag": f"Best trait: {SP['best_label'][best[1]]}", "why": f"{_ord(round(best[0] * 100))} percentile among {'forwards' if g == 'F' else 'defensemen'}; no trait clears the tag bar", "kind": "best"})
         role = ("Top-line minutes" if f["tpg"] >= 18.5 else "Middle-six minutes" if f["tpg"] >= 15 else "Depth minutes") if g == "F" else \
                ("Top-pair minutes" if f["tpg"] >= 22 else "Second-pair minutes" if f["tpg"] >= 19 else "Third-pair minutes")
-        out[pid] = {"tags": tags, "label": tags[0]["tag"] if tags else "No standout trait", "role": role}
+        out[pid] = {"tags": tags, "label": cand[0][1] if cand else "No standout trait", "role": role}
     # goalies
     for gw, rows in zip(W, goalie_seasons or []):
         pass

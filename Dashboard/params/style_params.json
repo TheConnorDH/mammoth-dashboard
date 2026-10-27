@@ -1,0 +1,18 @@
+{
+  "_note": "Player style tags (engine/style.py). Validated 2026-10-26 on 2010-11..2023-24 (calibration/experiments/style_tags_validation.*, style_tags_thresholds.*): a tag from seasons t-2..t (pooled 1/.7/.4) vs. the trait in season t+1. Each tag's percentile cut is the loosest tested (80/85/90/95th) at which at least 55% of tagged players are top-20% at that trait next season (chance: 20%). Shrinkage k (minutes) toward the position mean chosen leave-one-season-out. Dropped: Finisher (best 49% even at the 95th percentile) and Shutdown (best 42%). Weak spots: bottom tail at which 50%+ are bottom-20% next season.",
+  "tags": {
+    "Shooter":         {"feat": "ixg60", "thr": 0.80, "k": 500,  "why": "generates a lot of shot quality himself", "precision": 0.66},
+    "Playmaker":       {"feat": "a160",  "thr": 0.80, "k": 1000, "why": "lots of primary assists", "precision": 0.60},
+    "Physical":        {"feat": "hits60","thr": 0.85, "k": 0,    "why": "high hit rate", "precision": 0.83},
+    "Shot blocker":    {"feat": "blk60", "thr": 0.85, "k": 500,  "why": "blocks a lot of shots", "precision": 0.71},
+    "Puck thief":      {"feat": "tk60",  "thr": 0.85, "k": 500,  "why": "high takeaway rate", "precision": 0.59},
+    "Draws penalties": {"feat": "pd60",  "thr": 0.85, "k": 500,  "why": "draws penalties often", "precision": 0.63},
+    "Play driver":     {"feat": "relF",  "thr": 0.90, "k": 1000, "why": "team creates more chances with him on (5-on-5)", "precision": 0.55}
+  },
+  "weak": {
+    "Penalty-prone":    {"feat": "pt60",  "side": "high", "thr": 0.88, "k": 500,  "why": "takes penalties often", "precision": 0.79},
+    "Low shot threat":  {"feat": "ixg60", "side": "low",  "thr": 0.85, "k": 500,  "why": "rarely generates shot quality himself", "precision": 0.62},
+    "Gets out-chanced": {"feat": "relF",  "side": "low",  "thr": 0.90, "k": 1000, "why": "team creates fewer chances with him on (5-on-5)", "precision": 0.52}
+  },
+  "best_label": {"ixg60": "shooting", "a160": "playmaking", "hits60": "physical play", "blk60": "shot blocking", "tk60": "takeaways", "pd60": "drawing penalties", "relF": "driving play"}
+}

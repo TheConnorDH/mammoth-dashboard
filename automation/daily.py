@@ -91,6 +91,8 @@ def main():
         summary("- Blocking check failed: not publishing (yesterday's page stays up)."); return "failed"
     site = os.path.join(REPO, "site"); shutil.rmtree(site, ignore_errors=True); os.makedirs(site)
     shutil.copy(P("output", "mammoth_dashboard.html"), os.path.join(site, "index.html"))
+    if os.path.isdir(P("output", "games")):      # Games tab: one file of played-game details per date, fetched on demand
+        shutil.copytree(P("output", "games"), os.path.join(site, "games"))
     write_text(os.path.join(site, ".nojekyll"), "")
     import datetime as _dt
     write_text(P("history", "last_run.json"), json.dumps({"published_utc": _dt.datetime.utcnow().isoformat(timespec="seconds"), "record": d["team"]["rec"],

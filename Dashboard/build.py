@@ -22,6 +22,7 @@ import contracts as contracts_mod
 import player_profile as profile_mod
 import needs as needs_mod
 import recap as recap_mod
+import games as games_mod
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 HOCKEY = os.path.dirname(BASE)
@@ -786,7 +787,7 @@ def main():
                                    "imp": round(q_["gaa"], 2), "ise": round(q_.get("se", 0), 2), "ipct": ls_.get("pct"),
                                    "tal": q_["tstd"], "tsd": round(q_["tstd_sd"], 2), "tpct": lt_.get("pct"), "trank": lt_.get("rank"), "tn": lt_.get("n"),
                                    "r10": lt_.get("r10"), "r90": lt_.get("r90"), "role": round(q_.get("talent84") or 0, 1),
-                                   "sty": [x_["tag"] for x_ in sty_.get("tags", [])], "styWhy": [x_["why"] for x_ in sty_.get("tags", [])], "sRole": sty_.get("role"),
+                                   "sty": [x_["tag"] for x_ in sty_.get("tags", [])], "styWhy": [x_["why"] for x_ in sty_.get("tags", [])], "styK": [x_.get("kind", "") for x_ in sty_.get("tags", [])], "sRole": sty_.get("role"),
                                    "ng": bool(q_.get("noGames")), **({"from": q_["mpTeam"]} if q_.get("mpTeam") else {}),
                                    **({"cap": q_["aav"], "elc": bool(q_.get("elc")), "vs": q_.get("vsContract"), "vsLo": q_.get("vsLo"), "vsHi": q_.get("vsHi"),
                                        "exp": q_.get("expectedForPay"), "vsRaw": q_.get("vsRaw"), "vsRawLo": q_.get("vsRawLo"), "vsRawHi": q_.get("vsRawHi"), "expRaw": q_.get("expRaw")} if q_.get("aav") else {}),
@@ -974,6 +975,7 @@ def main():
     goalie_band = lambda tal_: None if starter_pct(tal_) is None else ("below the starter floor" if starter_pct(tal_) < 20 else ("a borderline starter" if starter_pct(tal_) < 40 else "starter quality"))
     # ---- power rankings (needs MoneyPuck game-by-game files)
     power_out = None
+    game_odds_ = {}     # game id -> model odds for unplayed games (filled by the league simulation below)
     if "skaters" in games_files and "goalies" in games_files:
         pwp = json.load(open(P("params", "power_params.json")))
         prev_gd = {r["team"]: (num(r["goalsFor"]) - num(r["goalsAgainst"])) / num(r["games_played"])
@@ -1068,6 +1070,15 @@ def main():
             series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite_cap": ppo.get("elite_cap", 99), "blend": ppo.get("blend"), "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
             lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7, series=series_)
             bw_ = wpp["win"][1]
+            # single-game odds for every unplayed game (Games tab): same model as the next-10 tables (ratings + home ice + rest)
+            lgw_ = lambda x: 1 / (1 + math.exp(-x))
+            for g_ in sched:
+                if g_["state"] in (6, 7) or g_["home"] not in rat or g_["away"] not in rat:
+                    continue
+                d_ = rat[g_["home"]] - rat[g_["away"]]
+                game_odds_[str(g_["id"])] = {"pH": round(lgw_(wpp["win"][0] + wpp["win"][1] * d_ + REST_LOGIT * rest_edge(g_["home"], g_["away"], g_["date"])), 3),
+                                             "pOT": round(lgw_(wpp["ot"][0] + wpp["ot"][1] * abs(d_)), 3),
+                                             "b2b": [t_ for t_ in (g_["home"], g_["away"]) if b2b_(t_, g_["date"])]}
             for r_ in prows:
                 q_ = lsim.get(r_["team"])
                 if q_:
@@ -1563,6 +1574,50 @@ def main():
                 L_.append(rc_)
             recaps_all[t_] = sorted(L_, key=lambda r_: r_["gid"])[-5:]
 
+    # ---- Games tab: every game of the season (played: both teams' Player Impact, shots, goalies; upcoming: odds).
+    # Played-game details go to output/games/<date>.json (fetched by the page on demand); the index is embedded.
+    games_index, games_days = None, {}
+    if os.path.exists(P("inputs", "nhl", "league_schedule.json")):
+        try:      # game dates are local; the morning update runs in Mountain time
+            from zoneinfo import ZoneInfo
+            mt_today_ = datetime.datetime.now(ZoneInfo("America/Denver")).date().isoformat()
+        except Exception:
+            mt_today_ = now.date().isoformat()
+        pre_path_ = P("history", "pregame_odds.json")
+        pre_ = json.load(open(pre_path_)) if os.path.exists(pre_path_) else {}
+        games_index, games_days, pre_ = games_mod.build(json.load(open(P("inputs", "nhl", "league_schedule.json")))["games"],
+                                                       games_files if full_mp else {}, P("inputs", "moneypuck", "shots_2026.csv"), raw26, "2026", ip, means25, impact,
+                                                       odds=game_odds_, pregame=pre_, today=mt_today_)
+        json.dump(pre_, open(pre_path_, "w"), separators=(",", ":"), sort_keys=True)
+        gdir_ = P("output", "games"); shutil.rmtree(gdir_, ignore_errors=True); os.makedirs(gdir_)
+        for d_, v_ in games_days.items():
+            json.dump(v_, open(os.path.join(gdir_, d_ + ".json"), "w"), separators=(",", ":"))
+        # check: every final game with MoneyPuck game data has both teams' values, and Utah's match its own game stars
+        dets_ = {gid_: v_ for d_ in games_days.values() for gid_, v_ in d_.items()}
+        fin_mp_ = [str(g_["id"]) for g_ in games_index if g_["f"] and str(g_["id"]) in set(pg_gaa)] if pg_gaa else []
+        both_ = all(len(v_["players"].get("h", [])) >= 15 and len(v_["players"].get("a", [])) >= 15 for v_ in dets_.values())
+        gap_u_ = 0.0
+        for gid_ in fin_mp_:
+            v_ = dets_.get(gid_)
+            if not v_: gap_u_ = 99; break
+            side_ = [p_ for s_ in ("h", "a") for p_ in v_["players"][s_]]
+            for nm_, q_ in pg_gaa[gid_].items():
+                m_ = next((p_ for p_ in side_ if p_[0] == nm_), None)
+                if m_: gap_u_ = max(gap_u_, abs(m_[2] - q_["gaa"]))
+        checks.append({"check": "Games tab adds up", "ok": both_ and gap_u_ < 0.011 and len(games_index) >= 1300,
+                       "detail": f"{len(games_index)} games in the schedule, {len(dets_)} played games with both teams' player values (15+ players a side: {'yes' if both_ else 'no'}); Utah's values match its game-by-game stars within {gap_u_:.2f} goals."})
+
+    # recap share graphic: both teams' player values for each game (same values as the Games tab)
+    recaps_uta = recap_mod.build(P("inputs", "moneypuck", "shots_2026.csv"), P("inputs", "moneypuck_games", "goalies_games.csv"), P("inputs", "nhl", "boxscores"), TEAM)
+    dets_by_id_ = {gid_: v_ for d_ in games_days.values() for gid_, v_ in d_.items()}
+    for t_, L_ in [(TEAM, recaps_uta)] + list(recaps_all.items()):
+        for rc_ in L_:
+            v_ = dets_by_id_.get(str(rc_["id"]))
+            if v_:
+                rc_["pl"] = {s_: [[p_[0], p_[1], p_[2]] for p_ in v_["players"][s_]] for s_ in ("h", "a")}
+                if v_.get("deserve") is not None:     # one deserve-to-win value per game, the same as the Games tab
+                    rc_["deserve"] = v_["deserve"] if rc_["home"] == t_ else round(1 - v_["deserve"], 3)
+
     # ---- snapshot history (trend lines)
     hist_path = P("history", "snapshots.json")
     hist = json.load(open(hist_path)) if os.path.exists(hist_path) else []
@@ -1591,8 +1646,8 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
-        "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recap_mod.build(P("inputs", "moneypuck", "shots_2026.csv"), P("inputs", "moneypuck_games", "goalies_games.csv"), P("inputs", "nhl", "boxscores"), TEAM),
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,
         "lineups": lineup_mod.league(players_league, PPAR["impact_goal_slope"] * PPAR["points_per_goal"]) if players_league else None, "shots": shotmap.build(P("inputs", "moneypuck", "shots_2026.csv"), TEAM) if os.path.exists(P("inputs", "moneypuck", "shots_2026.csv")) else None,

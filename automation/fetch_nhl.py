@@ -34,7 +34,7 @@ def utah_schedule():
 
 
 def league_schedule(start="2026-09-28", end="2027-04-30"):
-    """Every regular-season game: {'id','date','home','away','state','hs','as','period'}; state 7 = final, 1 = not final."""
+    """Every regular-season game: {'id','date','start' (UTC),'home','away','state','hs','as','period'}; state 7 = final, 1 = not final."""
     games, d = {}, start
     while d and d <= end:
         j = get_json(f"{API}/schedule/{d}")
@@ -43,7 +43,7 @@ def league_schedule(start="2026-09-28", end="2027-04-30"):
                 if g.get("gameType") != 2:
                     continue
                 fin = g.get("gameState") in FINAL
-                games[g["id"]] = {"id": g["id"], "date": day["date"], "home": g["homeTeam"]["abbrev"], "away": g["awayTeam"]["abbrev"],
+                games[g["id"]] = {"id": g["id"], "date": day["date"], "start": g.get("startTimeUTC"), "sched": g.get("gameScheduleState"), "home": g["homeTeam"]["abbrev"], "away": g["awayTeam"]["abbrev"],
                                   "state": 7 if fin else 1, "hs": g["homeTeam"].get("score", 0) if fin else 0,
                                   "as": g["awayTeam"].get("score", 0) if fin else 0,
                                   "period": (g.get("periodDescriptor") or {}).get("number", 3) if fin else 1}
