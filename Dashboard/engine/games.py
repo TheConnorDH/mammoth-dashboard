@@ -70,7 +70,8 @@ def _stats(S):
 def build(sched, games_files, shots_path, team_rows, season, ip, means, impact, odds=None, pregame=None, today=None):
     """sched: league schedule games. games_files: {'skaters','goalies'} MoneyPuck game-by-game paths.
     odds: {game id: {'pH','pOT','b2b'}} for games not yet played (current model). pregame: stored odds by game id.
-    Returns (index, details_by_date, pregame_updated)."""
+    Returns (index, details_by_date, pregame_updated, per_player) with per_player = {team: [(date, game id,
+    {player id: (Impact, minutes)})...]} for the Impact windows on the Players tab."""
     odds = odds or {}; pregame = dict(pregame or {})
     sk, gl = {}, {}
     if games_files.get("skaters"):
@@ -84,7 +85,7 @@ def build(sched, games_files, shots_path, team_rows, season, ip, means, impact, 
                 if r["season"] == season:
                     r["team"] = r["playerTeam"]; r["games_played"] = "1"; gl.setdefault(r["gameId"], []).append(r)
     shots = _shots(shots_path)
-    index, details = [], {}
+    index, details, per_team = [], {}, {}
     for g in sorted(sched, key=lambda g: (g["date"], g.get("start") or "", g["id"])):
         gid = str(g["id"]); short = str(int(gid) - int(season) * 1000000) if gid.startswith(season) else gid
         fin = g["state"] in (6, 7)
@@ -118,6 +119,7 @@ def build(sched, games_files, shots_path, team_rows, season, ip, means, impact, 
                         det["goalies"].append({"name": r["name"], "team": t, "sa": sa, "ga": ga, "xga": round(_n(r["xGoals"]), 2), "toi": round(_n(r["icetime"]) / 60, 1)})
                 # [name, position group, Impact in goals, stat line, parts]  skaters: G, A, SOG, TOI; goalies: saves, shots, saves vs
                 # expected, TOI. parts: where the Impact came from, in PARTS order (goals; each vs. the position average)
+                per_team.setdefault(t, []).append((g["date"], g["id"], {v["id"]: (v["gaa"], v["toi"]) for v in res if v["toi"] > 0}))
                 det["players"][side] = sorted([[v["name"], v["grp"], round(v["gaa"], 2), line.get(v["id"]),
                                                 [round((v.get("parts") or {}).get(k, 0.0), 2) for k in PARTS] if v["grp"] != "G" else None]
                                                for v in res if v["toi"] > 0], key=lambda x: -x[2])
@@ -126,4 +128,4 @@ def build(sched, games_files, shots_path, team_rows, season, ip, means, impact, 
             row["det"] = 1
             details.setdefault(g["date"], {})[gid] = det
         index.append(row)
-    return index, details, pregame
+    return index, details, pregame, per_team

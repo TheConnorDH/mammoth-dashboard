@@ -296,3 +296,6 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 - Style tags: `params/style_params.json` (cuts, shrinkage k, precisions) read by `engine/style.py`; tag kinds '' / 'weak' / 'best' (`styK` in playersLeague; chips styled `.tagchip.weak/.best`). Team tags in `engine/team_style.py` (quality/noisy tags removed; "Closest to" fallback). Validation scripts in `calibration/experiments/style_tags_*`, `team_style_validation.*`.
 - Workflow: `workflow_dispatch` input `attempt` (manual/early/final) for the outside scheduler (SETUP.md section 6); skip/commit dates in America/Denver; fetch-depth 30.
 - New check: "Games tab adds up".
+
+## Oct 26: v1.5.0
+- Impact windows: `games.build` also returns per-team per-game {player id: (Impact, minutes)}; build.py sums each player's last 5/10/20 games for his current team into playersLeague `win` {N: [impact, minutes, games]}, adds `toiS` (season minutes) and `D.winTeamN` (team games per window). Page: `winStat`, `winPct`, `winRel`, `per60Cell`, `QMIN` (qualified = 7.5 / 9.5 / 30 min per team game for F / D / G); Players tab controls `ex-win`, `ex-qual`, rank keys `imp60` / `impw`; Roster per-60 column.

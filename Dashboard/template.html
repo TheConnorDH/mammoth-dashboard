@@ -293,7 +293,9 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <select id="ex-type"></select>
       <select id="ex-band"><option value="">All calibers</option><option>Superstar</option><option>Elite</option><option>Top of lineup</option><option>Middle</option><option>Depth</option><option>Fringe</option><option>Starter quality</option><option>Borderline starter</option><option>Below starter floor</option></select>
       <button class="tab" id="ex-reset" type="button">Reset filters</button>
-      <select id="ex-rank" title="What # ranks by"><option value="tal">Rank by talent</option><option value="vs">Rank by value vs. contract (in his role)</option><option value="vsRaw">Rank by value vs. contract (raw talent)</option></select>
+      <select id="ex-win" title="Window for Impact and Impact per 60"><option value="season">Impact: season</option><option value="20">Impact: last 20 team games</option><option value="10">Impact: last 10 team games</option><option value="5">Impact: last 5 team games</option></select>
+      <label class="small" title="At least half a regular's minutes over the team's games in the window"><input type="checkbox" id="ex-qual"> Qualified only</label>
+      <select id="ex-rank" title="What # ranks by"><option value="tal">Rank by talent</option><option value="imp60">Rank by Impact per 60 (window)</option><option value="impw">Rank by Impact (window)</option><option value="vs">Rank by value vs. contract (in his role)</option><option value="vsRaw">Rank by value vs. contract (raw talent)</option></select>
       <select id="ex-n"><option value="50">Show 50</option><option value="100">100</option><option value="250">250</option><option value="1000">All</option></select>
     </div>
     <div class="card" id="ex-prof" style="display:none;margin-bottom:14px"></div>
@@ -307,6 +309,8 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
     <div class="card">
     <details open id="g-terms"><summary>Key terms</summary><dl>
       <dt>Player Impact</dt><dd>How much a player has changed his team's goal differential this season, compared with the same team when he's off the ice, in his actual minutes. Shown in goals or in standings points (2 points = 1 win).</dd>
+      <dt>Impact per 60 and windows</dt><dd>Impact divided by minutes on ice, per 60 minutes: what a player produced per minute, so a depth player who makes the most of 9 minutes can be compared with a top-liner. On the Players tab, pick the window: the season, or his team's last 20, 10 or 5 games (the sum of his per-game Impact in those games). Percentiles compare qualified players at the same position across the NHL. Unlike Talent, nothing is pooled or pulled toward average, so it describes this stretch, not how good he is.</dd>
+      <dt>Qualified</dt><dd>At least half a regular's minutes over his team's games in the window: 7.5 minutes per team game for forwards, 9.5 for defensemen, 30 for goalies. The floor grows with the window and through the season (10 team games: 75 minutes for a forward). It keeps tiny samples from topping the per-60 lists, but even qualified samples are noisy: the page shows how much of the per-60 spread is real at the median qualified sample, from the model's reliability (half the spread is real at about 630 minutes for forwards, 960 for defensemen; goalies need far more).</dd>
       <dt>Talent</dt><dd>How good a player is, regardless of ice time: his Impact pooled over this season and up to three earlier ones, pulled toward average when the sample is small, adjusted for age, and stated at a standard workload so a 4th-liner and a 1st-liner are compared on equal minutes.</dd>
       <dt>Standings points vs. average</dt><dd>The common unit for players and teams: how many standings points a player or team adds over an average one across a season (84 games).</dd>
       <dt>Likely range</dt><dd>Where the true value probably sits given the sample: the dark bar is 50%, the light bar 90%. Early in a season ranges are wide.</dd>
@@ -1077,10 +1081,10 @@ function renderRoster(x) {
   $('ro-title').innerHTML = `${st.name || x} Roster <span class="tag">${isU ? 'ALL ACTIVE PLAYERS' : L.length + ' PLAYERS THIS SEASON'}</span>`;
   if (!L.length) { ['c-forest', 'c-parts'].forEach(k => { if (charts[k]) { charts[k].destroy(); delete charts[k]; } }); $('h2h').innerHTML = $('parts-tabs').innerHTML = '';
     $('roster-table').innerHTML = `<div class="lock">${st.name || x} hasn't played a game yet, so no players have appeared for them this season.</div>`; return; }
-  $('roster-table').innerHTML = `<table><tr><th title="Team rank by talent &middot; rank at his position on the team (F1 = best forward) &middot; tier">Team rank / tier</th><th>Player</th><th>Pos</th><th>Age</th><th>GP</th><th>Impact this season (pts)</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Style</th><th>Role</th><th>In his role (pts / 84 GP, his minutes)</th>${hasCap ? '<th>Cap hit</th>' : ''}</tr>${L.map(r => `<tr>
+  $('roster-table').innerHTML = `<table><tr><th title="Team rank by talent &middot; rank at his position on the team (F1 = best forward) &middot; tier">Team rank / tier</th><th>Player</th><th>Pos</th><th>Age</th><th>GP</th><th>Impact this season (pts)</th><th title="Season Impact per 60 minutes on ice; percentile among qualified NHL players at his position (qualified = at least half a regular's minutes over the team's games)">Per 60 min (pts)</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Style</th><th>Role</th><th>In his role (pts / 84 GP, his minutes)</th>${hasCap ? '<th>Cap hit</th>' : ''}</tr>${L.map(r => `<tr>
     <td><b>${r.rk}</b> <span class="small">${r.grp}${r.prk}</span> <span class="pill" style="background:${tierCol(r.tier)};color:${tierInk(r.tier)}">T${r.tier}</span></td>
     <td><a class="tm" href="#roster" onclick="showProfile.scroll=true;showProfile('${r.id}','ro-prof');return false;"><b>${r.name}</b></a>${PLID[r.id] && PLID[r.id].arch ? `<span class="sub">${PLID[r.id].arch}</span>` : ''}${r.num != null ? ` <span class="small">#${r.num}</span>` : ''}${r.status ? ` <span class="pill p-amber">${r.status}</span>` : ''}</td><td>${r.pos}</td><td>${r.age != null ? Math.floor(r.age) : '&mdash;'}</td><td>${r.gp}</td>
-    <td${r.ng ? '' : goalsTitle(r.imp)}>${r.ng ? '<span class="small">no games yet</span>' : `<b>${sp(pt(r.imp), 2)}</b> ${pctPill(r.ipct)} ${verdictPill(r.vd)}<span class="sub">90%: ${sp(pt(r.imp - 1.645 * r.ise), 2)} to ${sp(pt(r.imp + 1.645 * r.ise), 2)}</span>`}</td>
+    <td${r.ng ? '' : goalsTitle(r.imp)}>${r.ng ? '<span class="small">no games yet</span>' : `<b>${sp(pt(r.imp), 2)}</b> ${pctPill(r.ipct)} ${verdictPill(r.vd)}<span class="sub">90%: ${sp(pt(r.imp - 1.645 * r.ise), 2)} to ${sp(pt(r.imp + 1.645 * r.ise), 2)}</span>`}</td><td>${PLID[r.id] ? per60Cell(PLID[r.id], 'season') : '&mdash;'}</td>
     <td${goalsTitle(r.tal)}><b>${sp(pt(r.tal))}</b> ${rbar(pt(r.tal), pt(r.tsd), -6, 6, tierCol(r.tier))}</td>
     <td>${bandPill(bandOf(r.tpct, r.grp, r.tal, r.tsd))} ${r.grp === 'G' ? gPill(r.tal) : pctPill(r.tpct)}${r.trank ? `<span class="sub">${ord(r.trank)} of ${r.tn} NHL ${({F: 'forwards', D: 'defensemen', G: 'goalies'}[r.grp] || 'players')}</span>` : ''}</td>
     <td class="wrap">${styleChips(r.sty, r.styWhy, r.styK)}</td><td class="small wrap">${r.sRole || ''}</td><td${goalsTitle(r.role)}>${sp(pt(r.role))}${r.grp === 'G' && PLID[r.id] && PLID[r.id].guse ? `<span class="sub">at ${Math.round(((PLID[r.id].guse.share25 != null && r.gp < 10) ? PLID[r.id].guse.share25 : PLID[r.id].guse.share) * 100)}% of starts</span>` : ''}</td>${hasCap ? `<td>${money(r.aav)}${r.elc ? ' <span class="pill p-grey" title="Entry-level contract: cheap by rule">ELC</span>' : ''}</td>` : ''}</tr>`).join('')}</table>
@@ -1792,6 +1796,37 @@ function muDetail(a, b, ra, rb) {
 }
 // ---------------- player profile (any skater) and comparables
 const PLID = {}; (D.playersLeague || []).forEach(p => PLID[p.id] = p);
+// ---- Impact windows and "qualified" (Players and Roster tabs). Windows = the player's current team's last N games
+// (sums of his per-game Impact) or the season. Qualified = at least half a regular's minutes over the team's games in
+// the window, so the floor grows with the window and as the season goes on.
+const QMIN = {F: 7.5, D: 9.5, G: 30};   // minutes per team game: half of a typical regular forward (15), defenseman (19), goalie (60)
+const WIN_L = {season: 'Season', '20': 'Last 20 team games', '10': 'Last 10 team games', '5': 'Last 5 team games'};
+function winStat(p, w) {
+  const tn = (((D.winTeamN || {})[p.t] || {})[w]) || 0;
+  let imp = null, min = 0, gp = 0;
+  if (w === 'season') { if (!p.ng) { imp = p.imp; min = p.toiS || 0; gp = p.gp; } }
+  else { const a = (p.win || {})[w]; if (a) { imp = a[0]; min = a[1]; gp = a[2]; } }
+  const floor = (QMIN[p.g] || 7.5) * tn;
+  return {imp, min, gp, tn, floor, q: imp != null && tn > 0 && min >= floor, per60: imp != null && min > 0 ? imp / min * 60 : null};
+}
+const _winPct = {};
+function winPct(w) {   // per-60 percentile among qualified players at the same position, league-wide, for window w
+  if (_winPct[w]) return _winPct[w];
+  const out = {}, by = {F: [], D: [], G: []};
+  (D.playersLeague || []).forEach(p => { const x = winStat(p, w); if (x.q && by[p.g]) by[p.g].push([p.id, x.per60, x.min]); });
+  Object.values(by).forEach(L => { const v = L.map(r => r[1]).sort((a, b) => a - b); L.forEach(([id, x]) => out[id] = Math.round(100 * v.filter(y => y < x).length / Math.max(1, v.length - 1))); });
+  out._by = by; return (_winPct[w] = out);
+}
+// how much of the spread in per-60 among qualified players is real at the median qualified sample (model reliability:
+// minutes / (minutes + k), k = minutes at which half of the spread is real; params from the Impact fit)
+function winRel(w) {
+  const B = winPct(w)._by, R = ((D.model || {}).impact || {}).reliability || {}, med = L => { const v = L.map(r => r[2]).sort((a, b) => a - b); return v.length ? v[Math.floor(v.length / 2)] : null; };
+  return ['F', 'D', 'G'].map(g => { const m = med(B[g]), k = (R[g] || {}).k_min; return {g, n: B[g].length, m, rel: m != null && k ? m / (m + k) : null}; });
+}
+const per60Cell = (p, w) => { const x = winStat(p, w); if (x.per60 == null) return '<span class="small">&mdash;</span>';
+  const pc = x.q ? winPct(w)[p.id] : null;
+  return x.q ? `<b>${sp(pt(x.per60), 2)}</b> ${pctPill(pc)}<span class="sub">${Math.round(x.min)} min</span>`
+    : `<span style="color:var(--mute)">${sp(pt(x.per60), 2)}</span><span class="sub" title="Qualified at ${Math.round(x.floor)}+ minutes (half a regular's minutes over ${x.tn} team games)">not qualified: ${Math.round(x.min)} of ${Math.round(x.floor)} min</span>`; };
 const COMP_L = {play_driving: 'Driving play', shot_creation: 'Shot creation', finishing: 'Finishing', playmaking: 'Playmaking', defense: 'Defense', puck_battles: 'Takeaways vs. giveaways', penalties: 'Penalty differential', faceoffs: 'Faceoffs'};
 const USE_L = {toi: ['Ice time per game', v => v.toFixed(1) + ' min'], pp: ['Power-play share', v => Math.round(v * 100) + '%'], pk: ['Penalty-kill share', v => Math.round(v * 100) + '%'], oz: ['Offensive-zone starts', v => Math.round(v * 100) + '%'], hits: ['Hits per 60', v => v.toFixed(1)], blocks: ['Blocked shots per 60', v => v.toFixed(1)], hd: ['Shots from the slot (high danger)', v => Math.round(v * 100) + '%']};
 const relLabel = r => r >= 0.6 ? 'repeats strongly' : r >= 0.4 ? 'repeats moderately' : 'repeats weakly';
@@ -1892,12 +1927,15 @@ function initExplorer() {
   const run = () => {
     const t = $('ex-team').value, cf = $('ex-conf').value, dv = $('ex-div').value, ps = $('ex-pos').value, q = $('ex-q').value.toLowerCase(), bd = $('ex-band').value;
     const amin = +$('ex-amin').value || 0, amax = +$('ex-amax').value || 99, n = +$('ex-n').value, rk = $('ex-rank').value || 'tal';
-    const rkName = {tal: 'talent', vs: 'value vs. contract in his role', vsRaw: 'value vs. contract on raw talent'}[rk];
+    const w = $('ex-win').value || 'season', qOnly = $('ex-qual').checked || rk === 'imp60';
+    PL.forEach(p => { p._w = winStat(p, w); p.imp60 = p._w.q || !qOnly ? p._w.per60 : null; p.impw = p._w.imp; });
+    const rkName = {tal: 'talent', vs: 'value vs. contract in his role', vsRaw: 'value vs. contract on raw talent', imp60: `Impact per 60 (${WIN_L[w].toLowerCase()})`, impw: `Impact (${WIN_L[w].toLowerCase()})`}[rk];
     // peer group = team / conference / division / position / age; ranks are counted inside it
     const ageOn = amin > 17 || amax < 45;
     const peer = PL.filter(p => (!t || p.t === t) && (!cf || p.cf === cf) && (!dv || p.dv === dv)
       && (!ps || (ps === 'F' ? p.g === 'F' : ps === 'D' ? p.g === 'D' : ps === 'G' ? p.g === 'G' : p.pos === ps)) && (!ageOn || (p.age != null && p.age >= amin && p.age <= amax + 0.99))
-      && (rk === 'tal' || p[rk] != null))     // ranking by value: only skaters with a matched cap hit
+      && (rk === 'tal' || p[rk] != null)     // ranking by value: only skaters with a matched cap hit; by Impact: players with games in the window
+      && (!qOnly || p._w.q))
       .sort((a, b) => b[rk] - a[rk]);
     peer.forEach((p, i) => p._rk = i + 1);
     // band and name search only hide rows; they don't renumber
@@ -1909,20 +1947,20 @@ function initExplorer() {
     const peerDesc = (t || cf || dv || ps || ageOn) ? `<b>#</b> = rank by ${rkName} among ${peer.length} ${peerName}` : `<b>#</b> = rank by ${rkName} among all ${peer.length} ${rk === 'tal' ? 'players' : 'skaters with a cap hit'}`;
     const vcell = (v, lo, hi, role) => { if (v == null) return '&mdash;'; const lo90 = role ? v - (v - lo) * 1.645 / 1.96 : lo, hi90 = role ? v + (hi - v) * 1.645 / 1.96 : hi;
       return `<b style="color:${lo90 > 0 ? 'var(--green)' : hi90 < 0 ? 'var(--red)' : 'var(--ink)'}">${sp(pt(v))}</b><span class="sub">90%: ${sp(pt(lo90))} to ${sp(pt(hi90))}</span>`; };
-    $('ex-table').innerHTML = `<div class="small" style="margin-bottom:6px">${total} players match${total > n ? `, showing the top ${n} by ${rkName}` : ''}. ${peerDesc}${bd || q || ty ? ' (caliber, player type and search filters hide rows but keep these ranks)' : ''}. Clicking a column header re-sorts but ranks stay with the player.${t ? ` <a href="#roster" onclick="setTeam('${t}','roster');return false;">Open the ${t} roster page &rarr;</a>` : ''}</div>
-    <table><tr><th>#</th><th>Player</th><th>Team</th><th>Age</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Impact this season (pts)</th><th>In his role (pts / 84 GP, his minutes)</th><th>Cap hit</th><th title="In his role (talent x his actual minutes) minus what his cap hit buys on the open market">Value vs. contract: in his role</th><th title="Raw talent at a standard workload minus what his cap hit buys on the open market">Value vs. contract: raw talent</th><th>Style</th></tr>${rows.map((p, i) => `<tr${p.t === TM ? ' class="me"' : ''}>
+    $('ex-table').innerHTML = `<div class="small" style="margin-bottom:6px">${total} players match${total > n ? `, showing the top ${n} by ${rkName}` : ''}. ${peerDesc}${bd || q || ty ? ' (caliber, player type and search filters hide rows but keep these ranks)' : ''}. Clicking a column header re-sorts but ranks stay with the player.<br><b>${WIN_L[w]}</b>: Impact = his total over ${w === 'season' ? 'the season' : `his team's last ${w} games`}; per 60 = that total per 60 minutes on ice. <b>Qualified</b> = at least half a regular's minutes over the team's games in the window (forwards ${QMIN.F}, defensemen ${QMIN.D}, goalies ${QMIN.G} min per team game)${qOnly ? '; unqualified players hidden' : ''}. ${winRel(w).filter(r => r.rel != null).map(r => `${({F: 'Forwards', D: 'Defensemen', G: 'Goalies'})[r.g]}: about ${Math.round(r.rel * 100)}% of the per-60 spread is real at the median qualified sample (${Math.round(r.m)} min)`).join('; ')}.${t ? ` <a href="#roster" onclick="setTeam('${t}','roster');return false;">Open the ${t} roster page &rarr;</a>` : ''}</div>
+    <table><tr><th>#</th><th>Player</th><th>Team</th><th>Age</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Impact: ${WIN_L[w].toLowerCase()} (pts)</th><th title="Impact per 60 minutes on ice in the window; percentile among qualified players at his position">Per 60 min (pts)</th><th>In his role (pts / 84 GP, his minutes)</th><th>Cap hit</th><th title="In his role (talent x his actual minutes) minus what his cap hit buys on the open market">Value vs. contract: in his role</th><th title="Raw talent at a standard workload minus what his cap hit buys on the open market">Value vs. contract: raw talent</th><th>Style</th></tr>${rows.map((p, i) => `<tr${p.t === TM ? ' class="me"' : ''}>
       <td>${p._rk}</td><td><a class="tm" href="#finder" onclick="showProfile('${p.id}','ex-prof');return false;"><b>${p.n}</b></a><span class="sub">${p.pos}${p.arch ? ' &bull; ' + p.arch : (p.sRole ? ' &bull; ' + p.sRole : '')}</span></td><td><a class="tm" href="#roster" title="Open ${p.t} roster" onclick="setTeam('${p.t}','roster');return false;">${p.t}</a></td><td>${p.age != null ? Math.floor(p.age) : '&mdash;'}<span class="sub">${p.gp} GP</span></td>
       <td><b>${sp(pt(p.tal))}</b> ${rbar(pt(p.tal), pt(p.tsd), -6, 6, p.t === TM ? '#6CACE3' : '#7A8590')}</td>
       <td>${bandPill(p.band)} ${p.g === 'G' ? gPill(p.tal) : pctPill(p.tpct)}<span class="sub">${p.trank ? ord(p.trank) + ' of ' + p.tn + ' NHL ' + ({F: 'forwards', D: 'defensemen', G: 'goalies'}[p.g] || 'players') + (p.r10 ? ' (likely ' + p.r10 + '-' + p.r90 + ')' : '') : ''}</span></td>
-      <td>${p.ng ? '<span class="small">no games yet</span>' : sp(pt(p.imp), 2) + ' ' + pctPill(p.ipct)}</td><td>${sp(pt(p.role))}</td>
+      <td>${w === 'season' ? (p.ng ? '<span class="small">no games yet</span>' : sp(pt(p.imp), 2) + ' ' + pctPill(p.ipct)) : (p._w.imp == null ? '<span class="small">no games in window</span>' : `${sp(pt(p._w.imp), 2)}<span class="sub">${p._w.gp} of ${p._w.tn} GP</span>`)}</td><td>${per60Cell(p, w)}</td><td>${sp(pt(p.role))}</td>
       <td>${p.cap ? money(p.cap) + (p.elc ? ' <span class="pill p-grey" title="Entry-level contract: cheap by rule">ELC</span>' : '') : '&mdash;'}</td>
       <td>${vcell(p.vs, p.vsLo, p.vsHi, true)}</td><td>${vcell(p.vsRaw, p.vsRawLo, p.vsRawHi, false)}</td>
       <td class="wrap">${styleChips(p.sty, p.styWhy, p.styK)}</td></tr>`).join('')}</table>`;
   };
-  ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-n', 'ex-amin', 'ex-amax', 'ex-rank', 'ex-type'].forEach(id => $(id).onchange = run);
+  ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-n', 'ex-amin', 'ex-amax', 'ex-rank', 'ex-type', 'ex-win', 'ex-qual'].forEach(id => $(id).onchange = run);
   $('ex-q').oninput = run;
   window.exRun = run;
-  $('ex-reset').onclick = () => { ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-q', 'ex-type'].forEach(id => $(id).value = ''); $('ex-rank').value = 'tal'; $('ex-amin').value = 17; $('ex-amax').value = 45; run(); };
+  $('ex-reset').onclick = () => { ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-q', 'ex-type'].forEach(id => $(id).value = ''); $('ex-rank').value = 'tal'; $('ex-win').value = 'season'; $('ex-qual').checked = false; $('ex-amin').value = 17; $('ex-amax').value = 45; run(); };
   run();
 }
 inits.finder = initExplorer;

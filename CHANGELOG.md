@@ -2,6 +2,11 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.5.0 (2026-10-26)
+
+**New**
+- **Impact per 60 and Impact windows.** The Players tab can show Impact for the season or the player's team's last 20, 10 or 5 games, plus Impact per 60 minutes with a percentile among qualified players at his position, and can rank by either. **Qualified** = at least half a regular's minutes over the team's games in the window (7.5 min per team game for forwards, 9.5 for defensemen, 30 for goalies), so the floor scales with the window and the season. The note above the table says how much of the per-60 spread is real at the median qualified sample (early in the season, not much). The Roster tab adds a season per-60 column.
+
 ## 1.4.0 (2026-10-26)
 
 **New**

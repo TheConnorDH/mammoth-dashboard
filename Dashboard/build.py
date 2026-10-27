@@ -783,7 +783,7 @@ def main():
             cf_, dv_ = st_conf.get(q_["team"], (None, None)); lt_ = lg_trank.get(q_["id"]) or {}; ls_ = lg_srank.get(q_["id"]) or {}
             sty_ = STY.get(q_["id"], {})
             players_league.append({"id": q_["id"], "n": q_["name"], "t": q_["team"], "cf": cf_, "dv": dv_, "g": q_["grp"], "pos": q_.get("posFull") or pos_of.get(q_["id"], q_["grp"]),
-                                   "age": round(q_["age"], 1) if q_.get("age") is not None else None, "gp": q_["gp"], "tpg": round(q_.get("tpg") or 0, 1),
+                                   "age": round(q_["age"], 1) if q_.get("age") is not None else None, "gp": q_["gp"], "tpg": round(q_.get("tpg") or 0, 1), "toiS": 0.0 if q_.get("noGames") else round(q_.get("toi") or 0, 1),
                                    "imp": round(q_["gaa"], 2), "ise": round(q_.get("se", 0), 2), "ipct": ls_.get("pct"),
                                    "tal": q_["tstd"], "tsd": round(q_["tstd_sd"], 2), "tpct": lt_.get("pct"), "trank": lt_.get("rank"), "tn": lt_.get("n"),
                                    "r10": lt_.get("r10"), "r90": lt_.get("r90"), "role": round(q_.get("talent84") or 0, 1),
@@ -1576,7 +1576,7 @@ def main():
 
     # ---- Games tab: every game of the season (played: both teams' Player Impact, shots, goalies; upcoming: odds).
     # Played-game details go to output/games/<date>.json (fetched by the page on demand); the index is embedded.
-    games_index, games_days = None, {}
+    games_index, games_days, win_team_n = None, {}, {}
     if os.path.exists(P("inputs", "nhl", "league_schedule.json")):
         try:      # game dates are local; the morning update runs in Mountain time
             from zoneinfo import ZoneInfo
@@ -1585,10 +1585,31 @@ def main():
             mt_today_ = now.date().isoformat()
         pre_path_ = P("history", "pregame_odds.json")
         pre_ = json.load(open(pre_path_)) if os.path.exists(pre_path_) else {}
-        games_index, games_days, pre_ = games_mod.build(json.load(open(P("inputs", "nhl", "league_schedule.json")))["games"],
+        games_index, games_days, pre_, games_pt_ = games_mod.build(json.load(open(P("inputs", "nhl", "league_schedule.json")))["games"],
                                                        games_files if full_mp else {}, P("inputs", "moneypuck", "shots_2026.csv"), raw26, "2026", ip, means25, impact,
                                                        odds=game_odds_, pregame=pre_, today=mt_today_)
         json.dump(pre_, open(pre_path_, "w"), separators=(",", ":"), sort_keys=True)
+        # Impact windows for the Players tab: each player's Impact and minutes over his current team's last 5 / 10 / 20 games
+        # (sums of the per-game values), and how many games each team has in each window (sets the "qualified" floor)
+        win_team_n = {}
+        id_team_ = {p_["id"]: p_["t"] for p_ in players_league} if players_league else {}
+        win_ = {}
+        for t_, L_ in games_pt_.items():
+            L_ = sorted(L_)
+            for N_ in (5, 10, 20):
+                W_ = L_[-N_:]; win_team_n.setdefault(t_, {})[str(N_)] = len(W_)
+                for _, _, vals_ in W_:
+                    for pid_, (v_, m_) in vals_.items():
+                        if id_team_.get(pid_) != t_:
+                            continue
+                        a_ = win_.setdefault(pid_, {}).setdefault(str(N_), [0.0, 0.0, 0])
+                        a_[0] += v_; a_[1] += m_; a_[2] += 1
+        team_gp_ = {s_["abbr"]: s_.get("gp") or 0 for s_ in standings}
+        for p_ in players_league or []:
+            w_ = win_.get(p_["id"])
+            if w_:
+                p_["win"] = {k_: [round(a_[0], 2), round(a_[1], 1), a_[2]] for k_, a_ in w_.items()}
+        win_team_n = {t_: {**v_, "season": team_gp_.get(t_, 0)} for t_, v_ in win_team_n.items()}
         gdir_ = P("output", "games"); shutil.rmtree(gdir_, ignore_errors=True); os.makedirs(gdir_)
         for d_, v_ in games_days.items():
             json.dump(v_, open(os.path.join(gdir_, d_ + ".json"), "w"), separators=(",", ":"))
@@ -1646,7 +1667,7 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
         "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,
