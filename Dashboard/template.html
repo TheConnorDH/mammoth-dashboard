@@ -152,7 +152,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
   <section><div class="card" id="rc-card"></div></section>
   <section><div class="grid2">
     <div class="card"><h3>Next 10 games</h3><div id="next10"></div></div>
-    <div class="card"><h3>Last game: best and worst</h3><div id="last-stars"></div><div id="cd-wrap"><h3 style="margin-top:14px">Countdowns</h3><div id="countdowns"></div></div></div>
+    <div class="card"><h3>Last game: standouts</h3><div id="last-stars"></div><div id="cd-wrap"><h3 style="margin-top:14px">Countdowns</h3><div id="countdowns"></div></div></div>
   </div></section>
 </div>
 
@@ -275,7 +275,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
     <p class="lede"><b>In his role</b> = value in the minutes he plays. <b>Raw talent</b> = value at a standard workload. Both vs. what his cap hit buys.</p>
     <div class="tabs" id="val-tabs"></div><div class="grid2"><div class="card" id="val-table"></div><div class="card"><div class="chart tall"><canvas id="c-value"></canvas></div><div class="small" id="val-quad" style="margin-top:8px"></div></div></div></section>
   </div>
-  <section><h2>Game by Game</h2><p class="lede" id="pg-lede">Best and worst three by Impact in each game (from MoneyPuck game data). Green ★★★ = best, red ★★★ = worst.</p><div class="card" id="per-game"></div></section>
+  <section><h2>Game by Game</h2><p class="lede" id="pg-lede"></p><div class="card" id="per-game"></div></section>
   <section><h2>Deployment</h2><div class="grid2"><div class="card" id="lineup-card"></div><div class="card"><h3>Lines and pairs this season (5v5)</h3><div id="mp-lines"></div></div></div>
     <div class="card" style="margin-top:14px"><h3>Goaltending</h3><div id="goalies"></div></div></section>
 </div>
@@ -373,6 +373,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <ul><li><b>Finished games</b>: score, deserve-to-win (every shot replayed 20,000 times at its expected-goal value; empty-net shots left out), shots and chances, goalies, every shot on a rink, and <b>Player Impact in this game</b> for both teams: the full Impact model run on that game alone, so a player is compared with his own team in that same game. <b>Where it came from</b> splits each bar into the same parts as the season bars (each measured against the average forward or defenseman): positives stack right of zero, negatives left, and the tick marks the total. Skaters set the scale; a goalie's saves vs. expected can run off the end. One game is mostly noise (about half a goal of uncertainty for a skater), so use it to see who drove a night, not to judge a player.</li>
         <li><b>Upcoming games</b>: win odds from the power ratings, home ice and rest (a team on the second night of a back-to-back loses some win probability), as of the morning update, plus how the two teams compare and the season series.</li>
         <li><b>Odds before the game</b>: from version 1.4.0 on, each morning's odds are saved, so finished games show what the model expected beforehand, and an <b>upset</b> tag marks a winner the model gave under 40%. Earlier games have none; filling them in now would use results the model didn't have then.</li>
+        <li><b>Standouts</b> (&#9650;) and <b>rough nights</b> (&#9660;) replace a fixed top and bottom three. Zero is already a player's team level that night (Impact compares him with his own team in that game), so a standout is a player at least one typical single-game swing above it at his position: the root mean square of all this season's game values for forwards, defensemen or goalies (early on, forwards about 0.44 goals, defensemen 0.31, goalies 1.6). At most 4 a side; on a night when nobody clears the bar, the closest player is named instead. Used on the Overview, the Roster tab's game by game, the Games tab and the recap graphic. A stricter "statistically clear" rule was considered and rejected: one game is too small a sample, so it would flag fewer than one player per team per game.</li>
         <li>A game's player values appear once MoneyPuck posts its game-by-game data, usually by the next morning.</li></ul></details>
     <details id="g-recap"><summary>Game recap and preview graphics</summary>
       <p>Recaps show the score, deserve-to-win, the expected-goals race, the numbers, every player's Impact in the game for both teams (bars, best to worst), and the game-winner (win chance through the game uses league-average scoring for both teams, so it ignores team strength). The Games tab draws the recap for any finished game from either team's point of view. Previews match the Matchup tab, including any goalies you pick. Team colors only, no logos.</p></details>
@@ -562,6 +563,16 @@ function md(s) { const lines = s.split('\n'); let h = '', ul = false; const il =
     if (ln.startsWith('## ')) h += `<h2>${il(ln.slice(3))}</h2>`; else if (ln.trim()) h += `<p>${il(ln)}</p>`; } if (ul) h += '</ul>'; return h; }
 const starPill = (i, good) => `<span class="pill ${good ? 'p-green' : 'p-red'}" style="min-width:42px;text-align:center">${['★★★', '★★', '★'][i]}</span>`;
 const starRow = (x, i, good) => `<div style="padding:3px 0">${starPill(i, good)} <b>${x.name}</b> <span class="small">${x.pos} &bull; <span title="${sp(x.score * PPI, 2)} standings points">${sp(x.score, 2)} goals</span> &bull; ${x.line}</span></div>`;
+// game standouts: players at least one typical single-game spread above (up) or below (down) zero at their position,
+// at most 4 a side (built in build.py; thresholds in D.standoutThr). Old entries without them fall back to best/worst 3.
+const sdRow = (x, good) => `<div style="padding:3px 0"><span class="pill ${good ? 'p-green' : 'p-red'}" style="min-width:26px;text-align:center">${good ? '&#9650;' : '&#9660;'}</span> <b>${x.name}</b> <span class="small">${x.pos} &bull; <span title="${sp(x.score * PPI, 2)} standings points">${sp(x.score, 2)} goals</span>${x.line ? ' &bull; ' + x.line : ''}</span></div>`;
+function standoutsHTML(g, compact) {
+  if (!g.up && !g.down) return `<div class="small" style="font-weight:800;color:var(--green);margin-top:6px">BEST</div>${(g.best || []).map((q, i) => starRow(q, i, true)).join('')}<div class="small" style="font-weight:800;color:var(--red);margin-top:6px">WORST</div>${(g.worst || []).map((q, i) => starRow(q, i, false)).join('')}`;
+  const near = (x, w) => x ? `<div class="small" style="padding:3px 0">None tonight. Closest: <b>${x.name}</b> ${sp(x.score, 2)}</div>` : '<div class="small">None</div>';
+  const up = `<div><div class="small" style="font-weight:800;color:var(--green);margin-top:6px">STANDOUTS</div>${g.up.length ? g.up.map(q => sdRow(q, true)).join('') : near(g.nearUp)}</div>`;
+  const dn = `<div><div class="small" style="font-weight:800;color:var(--red);margin-top:6px">ROUGH NIGHTS</div>${g.down.length ? g.down.map(q => sdRow(q, false)).join('') : near(g.nearDown)}</div>`;
+  return compact ? up + dn : `<div class="grid2" style="gap:10px">${up}${dn}</div>`;
+}
 const today = new Date();
 function renderOverview(x) {
   const isU = x === 'UTA', EX = isU ? (D.exec || {items: []}) : ((D.execAll || {})[x] || {items: [], gp: 0, confidence: 'low'});
@@ -583,7 +594,7 @@ function renderOverview(x) {
   // last game: best and worst
   const PG = isU ? (D.perGame || []) : (((D.teamExtra || {})[x] || {}).perGame || []);
   const PGd = PG.filter(g => !g.pending), PGw = PG.filter(g => g.pending);
-  $('last-stars').innerHTML = (PGw.length ? `<div class="lock" style="padding:8px 10px;margin-bottom:8px">${PGw.map(g => `${g.date.slice(5)} vs ${g.opp} (${g.score})`).join(', ')}: waiting for MoneyPuck's game-by-game data, so no player values yet.</div>` : '') + (PGd.length ? `<div class="small">${PGd[0].date.slice(5)} vs ${PGd[0].opp} (${PGd[0].score}) <a class="glink" style="margin-left:6px" href="#games" onclick="gmGoTab('${PGd[0].date}', ${PGd[0].id});return false;">Full game, both teams &rsaquo;</a></div><div class="small" style="font-weight:800;color:var(--green);margin-top:6px">BEST</div>${PGd[0].best.map((q, i) => starRow(q, i, true)).join('')}<div class="small" style="font-weight:800;color:var(--red);margin-top:6px">WORST</div>${PGd[0].worst.map((q, i) => starRow(q, i, false)).join('')}` : (PGw.length ? '' : '<div class="small">No games yet.</div>'));
+  $('last-stars').innerHTML = (PGw.length ? `<div class="lock" style="padding:8px 10px;margin-bottom:8px">${PGw.map(g => `${g.date.slice(5)} vs ${g.opp} (${g.score})`).join(', ')}: waiting for MoneyPuck's game-by-game data, so no player values yet.</div>` : '') + (PGd.length ? `<div class="small">${PGd[0].date.slice(5)} vs ${PGd[0].opp} (${PGd[0].score}) <a class="glink" style="margin-left:6px" href="#games" onclick="gmGoTab('${PGd[0].date}', ${PGd[0].id});return false;">Full game, both teams &rsaquo;</a></div>${standoutsHTML(PGd[0], true)}` : (PGw.length ? '' : '<div class="small">No games yet.</div>'));
   $('cd-wrap').style.display = isU ? '' : 'none';
   if (isU) $('countdowns').innerHTML = D.countdowns.map(c => { const d = Math.ceil((new Date(c.date + 'T12:00') - today) / 864e5); return `<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line)"><span class="small">${c.label}</span><b>${d > 0 ? d + ' days' : 'done'}</b></div>`; }).join('');
 }
@@ -960,8 +971,16 @@ const GM_PARTS = ['play_driving', 'shot_creation', 'finishing', 'playmaking', 'p
 // both teams' per-game Impact on one scale. Mode 'parts' stacks where it came from (each part vs. the position average:
 // positives to the right of zero, negatives to the left, the tick is the total); 'total' shows the total only.
 // The scale is set by skaters; a goalie's saves vs. expected can run off the end (marked with an arrow).
+function gmStand(L) {   // names of a team's standouts (up) and rough nights (down) in one game; same rule as build.py
+  const T = D.standoutThr || {F: 0.44, D: 0.31, G: 1.6}, th = p => T[p[1]] || 0.44;
+  return {up: new Set(L.filter(p => p[2] >= th(p)).sort((a, b) => b[2] - a[2]).slice(0, 4).map(p => p[0])),
+          down: new Set(L.filter(p => p[2] <= -th(p)).sort((a, b) => a[2] - b[2]).slice(0, 4).map(p => p[0]))};
+}
 function gmImpact(g, det) {
   const mode = GMX.mode || 'parts', A = det.players.a || [], H = det.players.h || [];
+  const SA = gmStand(A), SH = gmStand(H), mark = (t, p) => { const S = t === g.a ? SA : SH; return S.up.has(p[0]) ? '<span style="color:var(--green);font-weight:900" title="Standout">&#9650;</span> ' : S.down.has(p[0]) ? '<span style="color:var(--red);font-weight:900" title="Rough night">&#9660;</span> ' : ''; };
+  const sumL = (t, S, L) => { const u = L.filter(p => S.up.has(p[0])), d = L.filter(p => S.down.has(p[0])), nm = p => p[0].split(' ').slice(-1)[0] + ' ' + sp(p[2], 2);
+    return `<div><b>${t}</b> <span style="color:var(--green)">&#9650;</span> ${u.length ? u.map(nm).join(', ') : '<span class="small">none</span>'} &nbsp; <span style="color:var(--red)">&#9660;</span> ${d.length ? d.map(nm).join(', ') : '<span class="small">none</span>'}</div>`; };
   const pos = p => (p[4] || []).filter(v => v > 0).reduce((s, v) => s + v, 0), neg = p => -(p[4] || []).filter(v => v < 0).reduce((s, v) => s + v, 0);
   const span = p => mode === 'parts' && p[4] ? Math.max(pos(p), neg(p), Math.abs(p[2])) : Math.abs(p[2]);
   const sk = [...A, ...H].filter(p => p[1] !== 'G'), mx = Math.max(0.4, ...(sk.length ? sk : [...A, ...H]).map(span));
@@ -982,10 +1001,11 @@ function gmImpact(g, det) {
   };
   const tip = p => `${p[0]}: ${line(p)}. Total ${sp(p[2], 2)}${p[4] ? ' = ' + GM_PARTS.map((k, i) => [k, p[4][i]]).filter(([k, x]) => Math.abs(x) >= 0.005).map(([k, x]) => `${partNames[k]} ${sp(x, 2)}`).join(', ') : p[1] === 'G' ? ' (saves vs. expected)' : ''}`;
   const col = (t, L) => `<div><h3 style="display:flex;align-items:center;gap:8px"><span class="gm-sw" style="background:${gmC(g, t)}"></span>${tmName(t)}</h3>${L.map(p => { const c = p[2] >= 0 ? '--green' : '--red';
-      return `<div class="gm-ir" title="${tip(p)}"><div class="nm">${p[0]}<span class="sub">${p[1]}</span><div class="small" style="overflow:hidden;text-overflow:ellipsis">${line(p)}</div></div>
+      return `<div class="gm-ir" title="${tip(p)}"><div class="nm">${mark(t, p)}${p[0]}<span class="sub">${p[1]}</span><div class="small" style="overflow:hidden;text-overflow:ellipsis">${line(p)}</div></div>
         <div class="gm-bars"><div class="z"></div>${bar(p)}</div><div class="v" style="color:var(${c})">${sp(p[2], 2)}</div></div>`; }).join('')}</div>`;
   const legend = mode === 'parts' ? `<div class="legend">${GM_PARTS.map(k => `<span class="tagchip" style="background:transparent"><span class="gm-sw" style="display:inline-block;width:9px;height:9px;margin-right:4px;background:${partCols[k]}"></span>${partNames[k]}</span>`).join('')}<span class="tagchip" style="background:transparent"><span class="gm-sw" style="display:inline-block;width:9px;height:9px;margin-right:4px;background:${partCols.goaltending}"></span>Goaltending (saves vs. expected)</span><span class="small">Tick = total. Hover a bar for its value.</span></div>` : '';
   return `<h3>Player Impact in this game <span class="small">goals vs. an average player at his position, both teams on one scale, best to worst</span></h3>
+    <div class="small" style="margin:4px 0 8px;display:grid;gap:2px"><div><b>Standouts</b> (&#9650;) and <b>rough nights</b> (&#9660;): at least one typical game's swing above or below zero at his position (forwards ${sp((D.standoutThr || {}).F || 0.44, 2)}, defensemen ${sp((D.standoutThr || {}).D || 0.31, 2)}, goalies ${sp((D.standoutThr || {}).G || 1.6, 1)} goals), at most 4 a side.</div>${sumL(g.a, SA, A)}${sumL(g.h, SH, H)}</div>
     <div class="tabs" style="margin-top:6px"><button class="tab${mode === 'parts' ? ' on' : ''}" data-m="parts">Where it came from</button><button class="tab${mode === 'total' ? ' on' : ''}" data-m="total">Total only</button></div>${legend}
     <div class="gm-imp">${col(g.a, A)}${col(g.h, H)}</div>
     <p class="small" style="margin-top:8px">The full Impact model run on this game alone (the same values as each team's game-by-game stars), split into the same parts as the season bars on the Roster tab. One game is mostly noise: a single skater's value is uncertain by about half a goal either way. Goalies: saves vs. expected; the scale follows the skaters, so a big goalie night runs off the end (&rsaquo;).</p>`;
@@ -1686,17 +1706,19 @@ function rcImage(R) {
   let py = tall ? ny + (BARS ? 26 : 30) + rows.length * rh + (BARS ? 14 : 26) : cy0 + ch + 74; const px = tall ? P : LW + 20, pw = tall ? W - 2 * P : W - LW - 20 - P;
   if (BARS) {
     // every player's Impact in this game, both teams on one scale (away left, home right; best to worst)
-    label('PLAYER IMPACT IN THIS GAME  (GOALS VS. AVERAGE)', px, py);
+    label('PLAYER IMPACT IN THIS GAME  (GOALS VS. AVERAGE;  ▲ STANDOUT  ▼ ROUGH NIGHT)', px, py);
     const GW = 30, cwid = (pw - GW) / 2, nmW = 142, valW = 52, mx = Math.max(0.4, ...[...R.pl.a, ...R.pl.h].filter(p => p[1] !== 'G').map(p => Math.abs(p[2])));   // skaters set the scale; a goalie can run off the end
     const nRows = Math.max(R.pl.a.length, R.pl.h.length), y0 = py + 30, bottom = H - 56 - 64, rH = Math.min(17, (bottom - y0) / Math.max(nRows, 1));
     const fs = Math.max(10, Math.min(13, rH - 3));
+    const STD = {[a]: gmStand(R.pl.a), [h]: gmStand(R.pl.h)};
     [[a, R.pl.a, px], [h, R.pl.h, px + cwid + GW]].forEach(([t, L, x0]) => {
       c.fillStyle = col(t); c.fillRect(x0, py + 8, 26, 5); T(t, x0 + 32, py + 15, F('800', 13), INK);
       const zx = x0 + nmW + (cwid - nmW - valW) / 2, half = (cwid - nmW - valW) / 2 - 4;
       c.strokeStyle = 'rgba(255,255,255,.25)'; c.lineWidth = 1; c.beginPath(); c.moveTo(zx, y0 - 4); c.lineTo(zx, y0 + rH * L.length - 2); c.stroke();
       L.forEach((p, i) => { const y = y0 + i * rH, v = p[2], w = Math.min(half, Math.abs(v) / mx * half), gcol = v >= 0 ? '#4CC183' : '#F07A6C';
         if (i % 2) { c.fillStyle = 'rgba(255,255,255,.03)'; c.fillRect(x0, y, cwid, rH); }
-        T(C.last(p[0]) + (p[1] === 'G' ? ' (G)' : ''), x0 + 2, y + rH - 4, F('600', fs), INK);
+        const st_ = STD[t].up.has(p[0]) ? 1 : STD[t].down.has(p[0]) ? -1 : 0;
+        T((st_ > 0 ? '▲ ' : st_ < 0 ? '▼ ' : '') + C.last(p[0]) + (p[1] === 'G' ? ' (G)' : ''), x0 + 2, y + rH - 4, F(st_ ? '800' : '600', fs), st_ > 0 ? '#4CC183' : st_ < 0 ? '#F07A6C' : INK);
         c.fillStyle = gcol; c.fillRect(v >= 0 ? zx : zx - w, y + 2, Math.max(1, w), rH - 4);
         if (Math.abs(v) / mx > 1) T(v >= 0 ? '›' : '‹', v >= 0 ? zx + w + 3 : zx - w - 3, y + rH - 4, F('900', fs + 2), gcol, v >= 0 ? 'left' : 'right');
         T((v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2), x0 + cwid, y + rH - 4, F('700', fs), gcol, 'right'); });
@@ -1897,9 +1919,9 @@ function teamExtras(x) {
   const isU = x === 'UTA', E = (D.teamExtra || {})[x] || {};
   if (teamExtras.last !== x) { pgAll = false; teamExtras.last = x; }
   const PGx = isU ? (D.perGame || []) : (E.perGame || []);
-  $('pg-lede').innerHTML = `Best and worst three by Impact in each game (from MoneyPuck game data${isU ? '' : '; latest 10 games'}). Green ★★★ = best, red ★★★ = worst.`;
+  $('pg-lede').innerHTML = `Standouts and rough nights by Impact in each game${isU ? '' : ' (latest 10 games)'}: players at least one typical game's swing above or below their team's level that night. <a class="glink" href="#method" onclick="goGuide('g-games');return false;">How this works &rsaquo;</a>`;
   const drawPG = () => { const list = pgAll ? PGx : PGx.slice(0, 5);
-    $('per-game').innerHTML = PGx.length ? list.map(g => `<div style="padding:10px 0;border-bottom:1px solid var(--line)"><b>${g.date.slice(5)} vs ${g.opp}</b> <span class="small">(${g.score})</span> <a class="glink" style="margin-left:6px" href="#games" onclick="gmGoTab('${g.date}', ${g.id});return false;">Full game &rsaquo;</a>${g.pending ? '' : `<div class="grid2" style="gap:10px;margin-top:6px"><div><div class="small" style="font-weight:800;color:var(--green)">BEST</div>${g.best.map((q, i) => starRow(q, i, true)).join('')}</div><div><div class="small" style="font-weight:800;color:var(--red)">WORST</div>${g.worst.map((q, i) => starRow(q, i, false)).join('')}</div></div>`}</div>`).join('') + (PGx.length > 5 ? `<button class="tab" id="pg-more" style="margin-top:10px">${pgAll ? 'Show latest 5' : 'Show all ' + PGx.length}</button>` : '') : '<div class="small">No games with MoneyPuck game data yet.</div>';
+    $('per-game').innerHTML = PGx.length ? list.map(g => `<div style="padding:10px 0;border-bottom:1px solid var(--line)"><b>${g.date.slice(5)} vs ${g.opp}</b> <span class="small">(${g.score})</span> <a class="glink" style="margin-left:6px" href="#games" onclick="gmGoTab('${g.date}', ${g.id});return false;">Full game &rsaquo;</a>${g.pending ? '' : standoutsHTML(g, false)}</div>`).join('') + (PGx.length > 5 ? `<button class="tab" id="pg-more" style="margin-top:10px">${pgAll ? 'Show latest 5' : 'Show all ' + PGx.length}</button>` : '') : '<div class="small">No games with MoneyPuck game data yet.</div>';
     const b = $('pg-more'); if (b) b.onclick = () => { pgAll = !pgAll; drawPG(); }; };
   drawPG();
   // deployment: Utah = staff lineup from config; other teams = last game's lines, inferred from 5v5 ice time

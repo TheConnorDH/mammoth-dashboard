@@ -1628,6 +1628,39 @@ def main():
         checks.append({"check": "Games tab adds up", "ok": both_ and gap_u_ < 0.011 and len(games_index) >= 1300,
                        "detail": f"{len(games_index)} games in the schedule, {len(dets_)} played games with both teams' player values (15+ players a side: {'yes' if both_ else 'no'}); Utah's values match its game-by-game stars within {gap_u_:.2f} goals."})
 
+    # ---- game standouts: players at least one typical single-game spread (root mean square of this season's game values
+    # at his position) above or below zero, at most 4 a side; zero is already his team's level in that game. Until the
+    # season has enough games, the spreads come from the first weeks of 2026-27 (F 0.44, D 0.31, G 1.6 goals).
+    sd_vals_ = {"F": [], "D": [], "G": []}
+    for d_ in games_days.values():
+        for v_ in d_.values():
+            for s_ in ("h", "a"):
+                for p_ in v_["players"].get(s_, []):
+                    if p_[1] in sd_vals_: sd_vals_[p_[1]].append(p_[2])
+    FALL_ = {"F": 0.44, "D": 0.31, "G": 1.6}
+    standout_thr = {g_: (round(math.sqrt(sum(x_ * x_ for x_ in L_) / len(L_)), 2) if len(L_) >= (300 if g_ != "G" else 100) else FALL_[g_]) for g_, L_ in sd_vals_.items()}
+    def _sline(p_):
+        L_ = p_[3]
+        if not L_: return ""
+        return f"{L_[0]}/{L_[1]} saves" if p_[1] == "G" else f"{L_[0]}G {L_[1]}A, {L_[2]} SOG"
+    def standouts(players_):
+        sk_ = [{"name": p_[0], "pos": p_[1], "score": p_[2], "line": _sline(p_)} for p_ in players_]
+        up_ = sorted([x_ for x_ in sk_ if x_["score"] >= standout_thr.get(x_["pos"], 0.44)], key=lambda x_: -x_["score"])[:4]
+        dn_ = sorted([x_ for x_ in sk_ if x_["score"] <= -standout_thr.get(x_["pos"], 0.44)], key=lambda x_: x_["score"])[:4]
+        out_ = {"up": up_, "down": dn_}
+        if sk_ and not up_: out_["nearUp"] = max(sk_, key=lambda x_: x_["score"])
+        if sk_ and not dn_: out_["nearDown"] = min(sk_, key=lambda x_: x_["score"])
+        return out_
+    gidx_ = {str(g_["id"]): g_ for g_ in (games_index or [])}
+    def _attach(entry_, team_):
+        g_ = gidx_.get(str(entry_["id"])); v_ = dets_by_id_.get(str(entry_["id"]))
+        if g_ and v_:
+            entry_.update(standouts(v_["players"].get("h" if g_["h"] == team_ else "a", [])))
+    dets_by_id_ = {gid_: v_ for d_ in games_days.values() for gid_, v_ in d_.items()}
+    for e_ in per_game: _attach(e_, TEAM)
+    for t_, x_ in team_extra.items():
+        for e_ in x_.get("perGame", []): _attach(e_, t_)
+
     # recap share graphic: both teams' player values for each game (same values as the Games tab)
     recaps_uta = recap_mod.build(P("inputs", "moneypuck", "shots_2026.csv"), P("inputs", "moneypuck_games", "goalies_games.csv"), P("inputs", "nhl", "boxscores"), TEAM)
     dets_by_id_ = {gid_: v_ for d_ in games_days.values() for gid_, v_ in d_.items()}
@@ -1667,7 +1700,7 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "standoutThr": standout_thr, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
         "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,

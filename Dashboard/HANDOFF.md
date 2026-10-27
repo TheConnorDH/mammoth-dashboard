@@ -299,3 +299,6 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 
 ## Oct 26: v1.5.0
 - Impact windows: `games.build` also returns per-team per-game {player id: (Impact, minutes)}; build.py sums each player's last 5/10/20 games for his current team into playersLeague `win` {N: [impact, minutes, games]}, adds `toiS` (season minutes) and `D.winTeamN` (team games per window). Page: `winStat`, `winPct`, `winRel`, `per60Cell`, `QMIN` (qualified = 7.5 / 9.5 / 30 min per team game for F / D / G); Players tab controls `ex-win`, `ex-qual`, rank keys `imp60` / `impw`; Roster per-60 column.
+
+## Oct 26: v1.6.0
+- Standouts: build.py computes `D.standoutThr` (RMS of this season's per-game values by F/D/G; fallbacks until 300 skater / 100 goalie values) and attaches `up` / `down` (max 4) and `nearUp` / `nearDown` to every perGame entry (Utah and teamExtra) from the Games-tab details. Page: `standoutsHTML`, `sdRow`, `gmStand` (same rule, used in the Games bars and rcImage). Old entries fall back to best/worst.
