@@ -1628,28 +1628,33 @@ def main():
         checks.append({"check": "Games tab adds up", "ok": both_ and gap_u_ < 0.011 and len(games_index) >= 1300,
                        "detail": f"{len(games_index)} games in the schedule, {len(dets_)} played games with both teams' player values (15+ players a side: {'yes' if both_ else 'no'}); Utah's values match its game-by-game stars within {gap_u_:.2f} goals."})
 
-    # ---- game standouts: players at least one typical single-game spread (root mean square of this season's game values
-    # at his position) above or below zero, at most 4 a side; zero is already his team's level in that game. Until the
-    # season has enough games, the spreads come from the first weeks of 2026-27 (F 0.44, D 0.31, G 1.6 goals).
+    # ---- game standouts: a skater's game Impact minus his teammates' average that night (so a blowout or a strong
+    # opponent doesn't make a whole team look good or bad), at least one typical swing (root mean square of those
+    # centered values this season, by position) above or below. Goalies: saves vs. expected, not centered (it doesn't
+    # depend on his teammates' scoring). No cap. Fallbacks until there are enough games: F 0.42, D 0.31, G 1.6 goals.
+    def _center(players_):
+        sk_ = [p_ for p_ in players_ if p_[1] != "G"]; mu_ = sum(p_[2] for p_ in sk_) / len(sk_) if sk_ else 0.0
+        return [(p_, p_[2] - (mu_ if p_[1] != "G" else 0.0)) for p_ in players_]
     sd_vals_ = {"F": [], "D": [], "G": []}
     for d_ in games_days.values():
         for v_ in d_.values():
             for s_ in ("h", "a"):
-                for p_ in v_["players"].get(s_, []):
-                    if p_[1] in sd_vals_: sd_vals_[p_[1]].append(p_[2])
-    FALL_ = {"F": 0.44, "D": 0.31, "G": 1.6}
+                for p_, c_ in _center(v_["players"].get(s_, [])):
+                    if p_[1] in sd_vals_: sd_vals_[p_[1]].append(c_)
+    FALL_ = {"F": 0.42, "D": 0.31, "G": 1.6}
     standout_thr = {g_: (round(math.sqrt(sum(x_ * x_ for x_ in L_) / len(L_)), 2) if len(L_) >= (300 if g_ != "G" else 100) else FALL_[g_]) for g_, L_ in sd_vals_.items()}
     def _sline(p_):
         L_ = p_[3]
         if not L_: return ""
         return f"{L_[0]}/{L_[1]} saves" if p_[1] == "G" else f"{L_[0]}G {L_[1]}A, {L_[2]} SOG"
     def standouts(players_):
-        sk_ = [{"name": p_[0], "pos": p_[1], "score": p_[2], "line": _sline(p_)} for p_ in players_]
-        up_ = sorted([x_ for x_ in sk_ if x_["score"] >= standout_thr.get(x_["pos"], 0.44)], key=lambda x_: -x_["score"])[:4]
-        dn_ = sorted([x_ for x_ in sk_ if x_["score"] <= -standout_thr.get(x_["pos"], 0.44)], key=lambda x_: x_["score"])[:4]
+        sk_ = [{"name": p_[0], "pos": p_[1], "score": p_[2], "rel": round(c_, 2), "line": _sline(p_)} for p_, c_ in _center(players_)]
+        # both: clearly above his teammates AND a good game in itself (a positive value), and the mirror for rough nights
+        up_ = sorted([x_ for x_ in sk_ if x_["rel"] >= standout_thr.get(x_["pos"], 0.42) and x_["score"] > 0], key=lambda x_: -x_["rel"])
+        dn_ = sorted([x_ for x_ in sk_ if x_["rel"] <= -standout_thr.get(x_["pos"], 0.42) and x_["score"] < 0], key=lambda x_: x_["rel"])
         out_ = {"up": up_, "down": dn_}
-        if sk_ and not up_: out_["nearUp"] = max(sk_, key=lambda x_: x_["score"])
-        if sk_ and not dn_: out_["nearDown"] = min(sk_, key=lambda x_: x_["score"])
+        if sk_ and not up_: out_["nearUp"] = max(sk_, key=lambda x_: x_["rel"])
+        if sk_ and not dn_: out_["nearDown"] = min(sk_, key=lambda x_: x_["rel"])
         return out_
     gidx_ = {str(g_["id"]): g_ for g_ in (games_index or [])}
     def _attach(entry_, team_):

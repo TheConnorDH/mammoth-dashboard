@@ -2,10 +2,15 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.6.1 (2026-10-26)
+
+**Changed**
+- **Standouts are judged against teammates that night, and there is no cap.** Raw game values lean with the score (a team's summed skater values track the game's goal differential, r 0.67), so in 1.6.0 a team that won by 3+ averaged 4.8 standouts and one that lost by 3+ averaged 1.7. A skater now needs to be one typical swing (about 0.42 goals for forwards, 0.31 for defensemen) above or below his teammates' average that night; blowouts are now balanced (won by 3+: 3.7 standouts and 3.7 rough nights; lost by 3+: 2.4 and 2.6). A standout must also have a positive game in itself (a rough night a negative one), so the best player on a bad night isn't called a good game; in this season's games that never happened, because a team's average per skater stays small (-0.18 to +0.34 goals). Goalies stay on saves vs. expected (swing about 1.6), since that doesn't depend on teammates' scoring. The cap of 4 is gone (it hid real standouts in about 1 team-game in 5); the most so far is 7.
+
 ## 1.6.0 (2026-10-26)
 
 **Changed**
-- **Game standouts replace the fixed three best and worst.** A standout (&#9650;) or rough night (&#9660;) is a player at least one typical single-game swing above or below his team's level that night at his position (the spread of this season's game values: early on about 0.44 goals for forwards, 0.31 for defensemen, 1.6 for goalies), at most 4 a side; quiet nights name the closest player instead. In this season's 280 team-games, the old top three included a player under +0.5 goals in 22% of games. Shown on the Overview's last game, the Roster tab's game by game, the Games tab (marked in the bars, with a one-line summary for each team) and the recap graphic (marked in the bars).
+- **Game standouts replace the fixed three best and worst.** A standout (&#9650;) or rough night (&#9660;) is a player at least one typical single-game swing above or below his team's level that night at his position (the spread of this season's game values: early on about 0.44 goals for forwards, 0.31 for defensemen, 1.6 for goalies), at most 4 a side (changed in 1.6.1); quiet nights name the closest player instead. In this season's 280 team-games, the old top three included a player under +0.5 goals in 22% of games. Shown on the Overview's last game, the Roster tab's game by game, the Games tab (marked in the bars, with a one-line summary for each team) and the recap graphic (marked in the bars).
 
 ## 1.5.0 (2026-10-26)
 

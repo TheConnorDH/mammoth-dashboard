@@ -302,3 +302,4 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 
 ## Oct 26: v1.6.0
 - Standouts: build.py computes `D.standoutThr` (RMS of this season's per-game values by F/D/G; fallbacks until 300 skater / 100 goalie values) and attaches `up` / `down` (max 4) and `nearUp` / `nearDown` to every perGame entry (Utah and teamExtra) from the Games-tab details. Page: `standoutsHTML`, `sdRow`, `gmStand` (same rule, used in the Games bars and rcImage). Old entries fall back to best/worst.
+- v1.6.1: standouts center skaters on their team's mean game Impact that night (`rel`), thresholds = RMS of centered values by position; goalies uncentered; no cap.
