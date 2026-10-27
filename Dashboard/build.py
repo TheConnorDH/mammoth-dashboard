@@ -14,7 +14,7 @@ Writes:
   output/data.json                     everything the page renders
   output/mammoth_dashboard.html        self-contained page
 """
-import csv, json, os, re, glob, datetime, math, statistics, sys
+import bisect, csv, json, os, re, glob, datetime, math, statistics, sys
 sys.path[:0] = [os.path.join(os.path.dirname(os.path.abspath(__file__)), d) for d in ("engine", "calibration")]
 import gaa, models, impact, league, power, seasonsim, shotmap, style, team_style
 import lineup as lineup_mod
@@ -1628,10 +1628,12 @@ def main():
         checks.append({"check": "Games tab adds up", "ok": both_ and gap_u_ < 0.011 and len(games_index) >= 1300,
                        "detail": f"{len(games_index)} games in the schedule, {len(dets_)} played games with both teams' player values (15+ players a side: {'yes' if both_ else 'no'}); Utah's values match its game-by-game stars within {gap_u_:.2f} goals."})
 
-    # ---- game standouts: a skater's game Impact minus his teammates' average that night (so a blowout or a strong
-    # opponent doesn't make a whole team look good or bad), at least one typical swing (root mean square of those
-    # centered values this season, by position) above or below. Goalies: saves vs. expected, not centered (it doesn't
-    # depend on his teammates' scoring). No cap. Fallbacks until there are enough games: F 0.42, D 0.31, G 1.6 goals.
+    # ---- game standouts. A skater's game Impact minus his teammates' average that night (so a blowout or a strong
+    # opponent doesn't lift or sink a whole team); goalies: saves vs. expected (doesn't depend on teammates' scoring).
+    # That value's percentile among all of this season's nights at his position = the standout percentile. Standout:
+    # top 10% and a positive game; rough night: bottom 10% and a negative game (1 in 10 nights: about 2 per team per game,
+    # 12% of team-games with none; top 15% was ~3 a team nearly every night, top 5% left 42% of team-games empty). No cap. Until there are enough nights,
+    # percentiles come from a normal curve with the early-season spreads (F 0.42, D 0.31, G 1.6 goals).
     def _center(players_):
         sk_ = [p_ for p_ in players_ if p_[1] != "G"]; mu_ = sum(p_[2] for p_ in sk_) / len(sk_) if sk_ else 0.0
         return [(p_, p_[2] - (mu_ if p_[1] != "G" else 0.0)) for p_ in players_]
@@ -1642,19 +1644,33 @@ def main():
                 for p_, c_ in _center(v_["players"].get(s_, [])):
                     if p_[1] in sd_vals_: sd_vals_[p_[1]].append(c_)
     FALL_ = {"F": 0.42, "D": 0.31, "G": 1.6}
-    standout_thr = {g_: (round(math.sqrt(sum(x_ * x_ for x_ in L_) / len(L_)), 2) if len(L_) >= (300 if g_ != "G" else 100) else FALL_[g_]) for g_, L_ in sd_vals_.items()}
+    standout_q = {}      # per position: 101 quantiles of the centered values (empirical), or the fallback spread
+    for g_, L_ in sd_vals_.items():
+        L_ = sorted(L_)
+        if len(L_) >= (300 if g_ != "G" else 100):
+            standout_q[g_] = {"q": [round(L_[min(len(L_) - 1, int(round(k_ / 100 * (len(L_) - 1))))], 3) for k_ in range(101)], "n": len(L_)}
+        else:
+            standout_q[g_] = {"sd": FALL_[g_], "n": len(L_)}
+    def _pct(g_, v_):
+        Q_ = standout_q.get(g_) or {"sd": 0.42}
+        if "q" in Q_:
+            q_ = Q_["q"]
+            if v_ <= q_[0]: return 0.0
+            if v_ >= q_[-1]: return 100.0
+            k_ = bisect.bisect_right(q_, v_) - 1
+            return k_ + (v_ - q_[k_]) / (q_[k_ + 1] - q_[k_]) if q_[k_ + 1] > q_[k_] else float(k_)
+        return 50 * (1 + math.erf(v_ / Q_["sd"] / math.sqrt(2)))
     def _sline(p_):
         L_ = p_[3]
         if not L_: return ""
         return f"{L_[0]}/{L_[1]} saves" if p_[1] == "G" else f"{L_[0]}G {L_[1]}A, {L_[2]} SOG"
     def standouts(players_):
-        sk_ = [{"name": p_[0], "pos": p_[1], "score": p_[2], "rel": round(c_, 2), "line": _sline(p_)} for p_, c_ in _center(players_)]
-        # both: clearly above his teammates AND a good game in itself (a positive value), and the mirror for rough nights
-        up_ = sorted([x_ for x_ in sk_ if x_["rel"] >= standout_thr.get(x_["pos"], 0.42) and x_["score"] > 0], key=lambda x_: -x_["rel"])
-        dn_ = sorted([x_ for x_ in sk_ if x_["rel"] <= -standout_thr.get(x_["pos"], 0.42) and x_["score"] < 0], key=lambda x_: x_["rel"])
+        sk_ = [{"name": p_[0], "pos": p_[1], "score": p_[2], "rel": round(c_, 2), "pct": round(_pct(p_[1], c_)), "line": _sline(p_)} for p_, c_ in _center(players_)]
+        up_ = sorted([x_ for x_ in sk_ if x_["pct"] >= 90 and x_["score"] > 0], key=lambda x_: -x_["pct"])
+        dn_ = sorted([x_ for x_ in sk_ if x_["pct"] <= 10 and x_["score"] < 0], key=lambda x_: x_["pct"])
         out_ = {"up": up_, "down": dn_}
-        if sk_ and not up_: out_["nearUp"] = max(sk_, key=lambda x_: x_["rel"])
-        if sk_ and not dn_: out_["nearDown"] = min(sk_, key=lambda x_: x_["rel"])
+        if sk_ and not up_: out_["nearUp"] = max(sk_, key=lambda x_: x_["pct"])
+        if sk_ and not dn_: out_["nearDown"] = min(sk_, key=lambda x_: x_["pct"])
         return out_
     gidx_ = {str(g_["id"]): g_ for g_ in (games_index or [])}
     def _attach(entry_, team_):
@@ -1705,7 +1721,7 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "standoutThr": standout_thr, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "standoutQ": standout_q, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
         "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,
