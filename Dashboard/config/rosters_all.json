@@ -3530,6 +3530,12 @@
   ],
   "SJS": [
    {
+    "playerId": "8483428",
+    "name": "Filip Bystedt",
+    "pos": "C",
+    "number": 18
+   },
+   {
     "playerId": "8484801",
     "name": "Macklin Celebrini",
     "pos": "C",
@@ -3620,16 +3626,16 @@
     "number": 5
    },
    {
-    "playerId": "8484152",
-    "name": "Luca Cagnoni",
-    "pos": "D",
-    "number": 42
-   },
-   {
     "playerId": "8484806",
     "name": "Sam Dickinson",
     "pos": "D",
     "number": 6
+   },
+   {
+    "playerId": "8479333",
+    "name": "Libor Hajek",
+    "pos": "D",
+    "number": 24
    },
    {
     "playerId": "8480891",
@@ -3996,6 +4002,12 @@
     "name": "Bo Groulx",
     "pos": "C",
     "number": 29
+   },
+   {
+    "playerId": "8478057",
+    "name": "Dakota Joshua",
+    "pos": "C",
+    "number": 81
    },
    {
     "playerId": "8479968",
@@ -4864,12 +4876,6 @@
     "name": "Jack St. Ivany",
     "pos": "D",
     "number": 29
-   },
-   {
-    "playerId": "8481064",
-    "name": "Mitchell Gibson",
-    "pos": "G",
-    "number": 78
    },
    {
     "playerId": "8479292",
