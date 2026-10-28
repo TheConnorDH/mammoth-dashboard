@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-27",
+ "fetched": "2026-10-28",
  "failed": [],
  "teams": {
   "ANA": [
@@ -3080,6 +3080,12 @@
     "number": 71
    },
    {
+    "playerId": "8481848",
+    "name": "Jacob Gaucher",
+    "pos": "C",
+    "number": 78
+   },
+   {
     "playerId": "8483733",
     "name": "Nikita Grebenkin",
     "pos": "R",
@@ -4496,12 +4502,6 @@
     "number": 95
    },
    {
-    "playerId": "8480007",
-    "name": "Jonas Rondbjerg",
-    "pos": "R",
-    "number": 46
-   },
-   {
     "playerId": "8475913",
     "name": "Mark Stone",
     "pos": "R",
@@ -4566,6 +4566,12 @@
     "name": "Adin Hill",
     "pos": "G",
     "number": 33
+   },
+   {
+    "playerId": "8483523",
+    "name": "Cameron Whitehead",
+    "pos": "G",
+    "number": 39
    }
   ],
   "WPG": [
