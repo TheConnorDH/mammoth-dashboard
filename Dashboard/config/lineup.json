@@ -4,9 +4,9 @@
   "staff": {
     "forwards": [
       [
-        "Lee",
-        "Hayton",
-        "Yamamoto"
+        "Crouse",
+        "Schmaltz",
+        "Keller"
       ],
       [
         "Cooley",
@@ -14,9 +14,9 @@
         "Guenther"
       ],
       [
-        "Crouse",
-        "Schmaltz",
-        "Keller"
+        "Lee",
+        "Hayton",
+        "Yamamoto"
       ],
       [
         "O'Brien",
@@ -26,12 +26,12 @@
     ],
     "defense": [
       [
-        "Sergachev",
-        "Weegar"
-      ],
-      [
         "Schmidt",
         "Peeke"
+      ],
+      [
+        "Sergachev",
+        "Weegar"
       ],
       [
         "Simashev",
