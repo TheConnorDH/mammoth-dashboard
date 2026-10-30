@@ -48,3 +48,4 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8483514,Matthew Seminoff,R,DAL,2003-12-27,189,"6' 0""",USA,R,43,R,NHL API player landing 2026-10-26
 8483436,Artem Duda,D,UTA,2004-04-08,187,"6' 1""",RUS,L,84,D,NHL API player landing 2026-10-30
 8485468,Trey Taylor,D,DAL,2002-02-04,196,"6' 2""",CAN,L,27,D,NHL API player landing 2026-10-30
+8483428,Filip Bystedt,C,SJS,2004-02-04,210,"6' 3""",SWE,L,18,C,NHL API player landing 2026-10-30
