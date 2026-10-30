@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-29",
+ "fetched": "2026-10-30",
  "failed": [],
  "teams": {
   "ANA": [
@@ -58,6 +58,12 @@
     "number": 39
    },
    {
+    "playerId": "8485400",
+    "name": "Roger McQueen",
+    "pos": "C",
+    "number": 95
+   },
+   {
     "playerId": "8481754",
     "name": "Nikita Nesterenko",
     "pos": "C",
@@ -74,6 +80,12 @@
     "name": "Beckett Sennecke",
     "pos": "R",
     "number": 45
+   },
+   {
+    "playerId": "8478873",
+    "name": "Troy Terry",
+    "pos": "R",
+    "number": 19
    },
    {
     "playerId": "8478366",
@@ -122,6 +134,12 @@
     "name": "Pavel Mintyukov",
     "pos": "D",
     "number": 98
+   },
+   {
+    "playerId": "8484262",
+    "name": "Travis Mitchell",
+    "pos": "D",
+    "number": 34
    },
    {
     "playerId": "8482178",
@@ -718,12 +736,6 @@
     "name": "Damon Severson",
     "pos": "D",
     "number": 78
-   },
-   {
-    "playerId": "8477369",
-    "name": "Carson Soucy",
-    "pos": "D",
-    "number": 7
    },
    {
     "playerId": "8478460",
@@ -1372,6 +1384,12 @@
     "number": 93
    },
    {
+    "playerId": "8480326",
+    "name": "Sheldon Dries",
+    "pos": "C",
+    "number": 15
+   },
+   {
     "playerId": "8484471",
     "name": "Emmitt Finnie",
     "pos": "C",
@@ -1388,12 +1406,6 @@
     "name": "Keegan Kolesar",
     "pos": "R",
     "number": 55
-   },
-   {
-    "playerId": "8477946",
-    "name": "Dylan Larkin",
-    "pos": "C",
-    "number": 71
    },
    {
     "playerId": "8482802",
@@ -1466,12 +1478,6 @@
     "name": "John Gibson",
     "pos": "G",
     "number": 36
-   },
-   {
-    "playerId": "8485545",
-    "name": "Michal Postava",
-    "pos": "G",
-    "number": 35
    },
    {
     "playerId": "8480193",
@@ -1828,6 +1834,12 @@
     "number": 55
    },
    {
+    "playerId": "8482160",
+    "name": "Martin Chromiak",
+    "pos": "R",
+    "number": 42
+   },
+   {
     "playerId": "8477942",
     "name": "Kevin Fiala",
     "pos": "L",
@@ -1898,12 +1910,6 @@
     "name": "Taylor Ward",
     "pos": "R",
     "number": 17
-   },
-   {
-    "playerId": "8483756",
-    "name": "Jared Wright",
-    "pos": "R",
-    "number": 25
    },
    {
     "playerId": "8475692",
@@ -2076,6 +2082,12 @@
     "number": 25
    },
    {
+    "playerId": "8480075",
+    "name": "Cameron Crotty",
+    "pos": "D",
+    "number": 34
+   },
+   {
     "playerId": "8482122",
     "name": "Brock Faber",
     "pos": "D",
@@ -2092,6 +2104,12 @@
     "name": "Matt Kiersted",
     "pos": "D",
     "number": 26
+   },
+   {
+    "playerId": "8482781",
+    "name": "Carson Lambos",
+    "pos": "D",
+    "number": 55
    },
    {
     "playerId": "8476874",
@@ -2964,12 +2982,6 @@
     "number": 72
    },
    {
-    "playerId": "8480075",
-    "name": "Cameron Crotty",
-    "pos": "D",
-    "number": 5
-   },
-   {
     "playerId": "8482095",
     "name": "Tyler Kleven",
     "pos": "D",
@@ -3716,12 +3728,6 @@
     "name": "Jimmy Snuggerud",
     "pos": "R",
     "number": 21
-   },
-   {
-    "playerId": "8484230",
-    "name": "Otto Stenberg",
-    "pos": "C",
-    "number": 28
    },
    {
     "playerId": "8480459",
