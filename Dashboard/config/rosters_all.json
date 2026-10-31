@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-30",
+ "fetched": "2026-10-31",
  "failed": [],
  "teams": {
   "ANA": [
@@ -842,6 +842,12 @@
     "number": 22
    },
    {
+    "playerId": "8482766",
+    "name": "William Stromgren",
+    "pos": "L",
+    "number": 65
+   },
+   {
     "playerId": "8484234",
     "name": "Aydar Suniev",
     "pos": "L",
@@ -900,6 +906,12 @@
     "name": "Devin Cooley",
     "pos": "G",
     "number": 1
+   },
+   {
+    "playerId": "8482949",
+    "name": "Arsenii Sergeev",
+    "pos": "G",
+    "number": 35
    },
    {
     "playerId": "8481692",
@@ -1274,12 +1286,6 @@
     "number": 91
    },
    {
-    "playerId": "8483514",
-    "name": "Matthew Seminoff",
-    "pos": "R",
-    "number": 43
-   },
-   {
     "playerId": "8479351",
     "name": "Sam Steel",
     "pos": "C",
@@ -1454,12 +1460,6 @@
     "name": "Anton Johansson",
     "pos": "D",
     "number": 42
-   },
-   {
-    "playerId": "8484223",
-    "name": "Axel Sandin-Pellikka",
-    "pos": "D",
-    "number": 44
    },
    {
     "playerId": "8481542",
@@ -2046,12 +2046,6 @@
     "number": 49
    },
    {
-    "playerId": "8479972",
-    "name": "Mason Shaw",
-    "pos": "C",
-    "number": 18
-   },
-   {
     "playerId": "8481477",
     "name": "Nico Sturm",
     "pos": "C",
@@ -2104,12 +2098,6 @@
     "name": "Matt Kiersted",
     "pos": "D",
     "number": 26
-   },
-   {
-    "playerId": "8482781",
-    "name": "Carson Lambos",
-    "pos": "D",
-    "number": 55
    },
    {
     "playerId": "8476874",
@@ -3784,6 +3772,12 @@
     "number": 36
    },
    {
+    "playerId": "8484188",
+    "name": "Theo Lindstein",
+    "pos": "D",
+    "number": 4
+   },
+   {
     "playerId": "8482733",
     "name": "Logan Mailloux",
     "pos": "D",
@@ -4344,6 +4338,12 @@
     "number": 40
    },
    {
+    "playerId": "8484901",
+    "name": "Jacob Quillan",
+    "pos": "C",
+    "number": 62
+   },
+   {
     "playerId": "8482079",
     "name": "Marco Rossi",
     "pos": "C",
@@ -4496,6 +4496,12 @@
     "number": 95
    },
    {
+    "playerId": "8480007",
+    "name": "Jonas Rondbjerg",
+    "pos": "R",
+    "number": 46
+   },
+   {
     "playerId": "8475913",
     "name": "Mark Stone",
     "pos": "R",
@@ -4560,12 +4566,6 @@
     "name": "Adin Hill",
     "pos": "G",
     "number": 33
-   },
-   {
-    "playerId": "8483523",
-    "name": "Cameron Whitehead",
-    "pos": "G",
-    "number": 39
    }
   ],
   "WPG": [

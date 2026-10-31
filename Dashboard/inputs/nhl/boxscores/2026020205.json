@@ -5,8 +5,8 @@
  "away": "UTA",
  "uta_score": 4,
  "opp_score": 3,
- "uta_sog": 34,
- "opp_sog": 34,
+ "uta_sog": 35,
+ "opp_sog": 33,
  "last_period": "OT",
  "skaters": [
   {
@@ -34,7 +34,7 @@
    "pos": "R",
    "g": 0,
    "a": 1,
-   "sog": 2,
+   "sog": 3,
    "hits": 1,
    "toi": "17:53",
    "fo": 0.0,
@@ -373,8 +373,8 @@
  "goalies": [
   {
    "name": "Sebastian Cossa",
-   "sa": 34,
-   "sv": 31,
+   "sa": 33,
+   "sv": 30,
    "ga": 3,
    "toi": "63:07",
    "start": true,
