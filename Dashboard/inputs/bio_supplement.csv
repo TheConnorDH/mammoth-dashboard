@@ -49,3 +49,5 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8483436,Artem Duda,D,UTA,2004-04-08,187,"6' 1""",RUS,L,84,D,NHL API player landing 2026-10-30
 8485468,Trey Taylor,D,DAL,2002-02-04,196,"6' 2""",CAN,L,27,D,NHL API player landing 2026-10-30
 8483428,Filip Bystedt,C,SJS,2004-02-04,210,"6' 3""",SWE,L,18,C,NHL API player landing 2026-10-30
+8482160,Martin Chromiak,R,LAK,2002-08-20,187,"6' 0""",SVK,R,42,R,NHL API player landing 2026-11-01
+8482949,Arsenii Sergeev,G,CGY,2002-12-16,192,"6' 3""",RUS,L,35,G,NHL API player landing 2026-11-01

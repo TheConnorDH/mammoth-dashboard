@@ -1,5 +1,5 @@
 {
- "fetched": "2026-10-31",
+ "fetched": "2026-11-01",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1068,6 +1068,12 @@
   ],
   "COL": [
    {
+    "playerId": "8484149",
+    "name": "Gavin Brindley",
+    "pos": "C",
+    "number": 54
+   },
+   {
     "playerId": "8486171",
     "name": "T.J. Hughes",
     "pos": "R",
@@ -2052,6 +2058,12 @@
     "number": 49
    },
    {
+    "playerId": "8479972",
+    "name": "Mason Shaw",
+    "pos": "C",
+    "number": 18
+   },
+   {
     "playerId": "8481477",
     "name": "Nico Sturm",
     "pos": "C",
@@ -2672,6 +2684,12 @@
     "number": 77
    },
    {
+    "playerId": "8483448",
+    "name": "Isaiah George",
+    "pos": "D",
+    "number": 36
+   },
+   {
     "playerId": "8482516",
     "name": "Matthew Kessel",
     "pos": "D",
@@ -3150,12 +3168,6 @@
     "name": "David Jiricek",
     "pos": "D",
     "number": 5
-   },
-   {
-    "playerId": "8483760",
-    "name": "Hunter McDonald",
-    "pos": "D",
-    "number": 19
    },
    {
     "playerId": "8477499",
@@ -4131,12 +4143,6 @@
    }
   ],
   "UTA": [
-   {
-    "playerId": "8484388",
-    "name": "Daniil But",
-    "pos": "L",
-    "number": 50
-   },
    {
     "playerId": "8479619",
     "name": "Michael Carcone",
