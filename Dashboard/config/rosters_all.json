@@ -1176,6 +1176,12 @@
     "number": 42
    },
    {
+    "playerId": "8479387",
+    "name": "Keaton Middleton",
+    "pos": "D",
+    "number": 67
+   },
+   {
     "playerId": "8478038",
     "name": "Devon Toews",
     "pos": "D",
@@ -2028,12 +2034,6 @@
     "number": 97
    },
    {
-    "playerId": "8483478",
-    "name": "Rieger Lorenz",
-    "pos": "L",
-    "number": 61
-   },
-   {
     "playerId": "8477446",
     "name": "Michael McCarron",
     "pos": "C",
@@ -2511,7 +2511,7 @@
     "playerId": "8483524",
     "name": "Shane Wright",
     "pos": "C",
-    "number": null
+    "number": 15
    },
    {
     "playerId": "8479980",
@@ -3048,12 +3048,6 @@
     "name": "Denver Barkey",
     "pos": "C",
     "number": 86
-   },
-   {
-    "playerId": "8483731",
-    "name": "Alex Bump",
-    "pos": "L",
-    "number": 20
    },
    {
     "playerId": "8478047",
