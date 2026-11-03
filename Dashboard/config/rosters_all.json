@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-02",
+ "fetched": "2026-11-03",
  "failed": [],
  "teams": {
   "ANA": [
@@ -46,12 +46,6 @@
     "number": 17
    },
    {
-    "playerId": "8486052",
-    "name": "Nikita Klepov",
-    "pos": "R",
-    "number": 40
-   },
-   {
     "playerId": "8482408",
     "name": "Jeff Malott",
     "pos": "L",
@@ -62,6 +56,12 @@
     "name": "Roger McQueen",
     "pos": "C",
     "number": 95
+   },
+   {
+    "playerId": "8484201",
+    "name": "Nico Myatovic",
+    "pos": "L",
+    "number": 48
    },
    {
     "playerId": "8481754",
@@ -112,12 +112,6 @@
     "number": 55
    },
    {
-    "playerId": "8475324",
-    "name": "Nick Jensen",
-    "pos": "D",
-    "number": 4
-   },
-   {
     "playerId": "8481605",
     "name": "Jackson LaCombe",
     "pos": "D",
@@ -152,6 +146,12 @@
     "name": "Noah Warren",
     "pos": "D",
     "number": 47
+   },
+   {
+    "playerId": "8476316",
+    "name": "Laurent Brossoit",
+    "pos": "G",
+    "number": 31
    },
    {
     "playerId": "8480843",
@@ -1814,12 +1814,6 @@
     "number": 77
    },
    {
-    "playerId": "8484900",
-    "name": "Cooper Black",
-    "pos": "G",
-    "number": 31
-   },
-   {
     "playerId": "8474593",
     "name": "Jacob Markstrom",
     "pos": "G",
@@ -1916,12 +1910,6 @@
     "name": "Alex Turcotte",
     "pos": "C",
     "number": 15
-   },
-   {
-    "playerId": "8483406",
-    "name": "Taylor Ward",
-    "pos": "R",
-    "number": 17
    },
    {
     "playerId": "8475692",
@@ -2734,6 +2722,12 @@
     "number": 28
    },
    {
+    "playerId": "8482877",
+    "name": "Jaroslav Chmelar",
+    "pos": "R",
+    "number": 49
+   },
+   {
     "playerId": "8482157",
     "name": "Will Cuylle",
     "pos": "L",
@@ -2780,12 +2774,6 @@
     "name": "Gabe Perreault",
     "pos": "R",
     "number": 94
-   },
-   {
-    "playerId": "8479390",
-    "name": "Taylor Raddysh",
-    "pos": "R",
-    "number": 14
    },
    {
     "playerId": "8482460",
@@ -3310,6 +3298,12 @@
     "number": 58
    },
    {
+    "playerId": "8486169",
+    "name": "Jake Livanavage",
+    "pos": "D",
+    "number": 4
+   },
+   {
     "playerId": "8482470",
     "name": "Ilya Solovyov",
     "pos": "D",
@@ -3435,7 +3429,7 @@
     "playerId": "8484241",
     "name": "Matthew Wood",
     "pos": "R",
-    "number": null
+    "number": 71
    },
    {
     "playerId": "8478407",
@@ -3770,12 +3764,6 @@
     "name": "Theo Lindstein",
     "pos": "D",
     "number": 4
-   },
-   {
-    "playerId": "8482733",
-    "name": "Logan Mailloux",
-    "pos": "D",
-    "number": 23
    },
    {
     "playerId": "8476892",
@@ -4851,7 +4839,7 @@
     "playerId": "8482465",
     "name": "Rémi Poirier",
     "pos": "G",
-    "number": null
+    "number": 1
    },
    {
     "playerId": "8480313",
