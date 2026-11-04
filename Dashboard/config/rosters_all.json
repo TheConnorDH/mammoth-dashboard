@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-03",
+ "fetched": "2026-11-04",
  "failed": [],
  "teams": {
   "ANA": [
@@ -928,6 +928,12 @@
     "number": 59
    },
    {
+    "playerId": "8485554",
+    "name": "Dillon Boucher",
+    "pos": "L",
+    "number": 36
+   },
+   {
     "playerId": "8477987",
     "name": "Ryan Donato",
     "pos": "C",
@@ -1844,6 +1850,12 @@
     "name": "Martin Chromiak",
     "pos": "R",
     "number": 42
+   },
+   {
+    "playerId": "8483675",
+    "name": "Kenny Connors",
+    "pos": "C",
+    "number": 34
    },
    {
     "playerId": "8477942",
@@ -3098,12 +3110,6 @@
     "number": 39
    },
    {
-    "playerId": "8480021",
-    "name": "Jack Studnicka",
-    "pos": "C",
-    "number": 23
-   },
-   {
     "playerId": "8480015",
     "name": "Owen Tippett",
     "pos": "R",
@@ -3618,6 +3624,12 @@
     "name": "Dmitry Orlov",
     "pos": "D",
     "number": 9
+   },
+   {
+    "playerId": "8484421",
+    "name": "Eric Pohlkamp",
+    "pos": "D",
+    "number": 48
    },
    {
     "playerId": "8476885",
