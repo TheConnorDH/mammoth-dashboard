@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-04",
+ "fetched": "2026-11-05",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1490,6 +1490,12 @@
     "name": "John Gibson",
     "pos": "G",
     "number": 36
+   },
+   {
+    "playerId": "8485545",
+    "name": "Michal Postava",
+    "pos": "G",
+    "number": 35
    },
    {
     "playerId": "8480193",
@@ -3590,12 +3596,6 @@
     "number": 6
    },
    {
-    "playerId": "8479333",
-    "name": "Libor Hajek",
-    "pos": "D",
-    "number": 24
-   },
-   {
     "playerId": "8480891",
     "name": "Michael Kesselring",
     "pos": "D",
@@ -4472,12 +4472,6 @@
     "number": 95
    },
    {
-    "playerId": "8480007",
-    "name": "Jonas Rondbjerg",
-    "pos": "R",
-    "number": 46
-   },
-   {
     "playerId": "8475913",
     "name": "Mark Stone",
     "pos": "R",
@@ -4570,12 +4564,6 @@
     "number": 45
    },
    {
-    "playerId": "8483471",
-    "name": "Brad Lambert",
-    "pos": "C",
-    "number": 93
-   },
-   {
     "playerId": "8476392",
     "name": "Adam Lowry",
     "pos": "C",
@@ -4622,6 +4610,12 @@
     "name": "Gabriel Vilardi",
     "pos": "C",
     "number": 13
+   },
+   {
+    "playerId": "8484242",
+    "name": "Brayden Yager",
+    "pos": "C",
+    "number": 29
    },
    {
     "playerId": "8482459",
@@ -4804,12 +4798,6 @@
     "name": "Timothy Liljegren",
     "pos": "D",
     "number": 27
-   },
-   {
-    "playerId": "8475795",
-    "name": "Dylan McIlrath",
-    "pos": "D",
-    "number": 52
    },
    {
     "playerId": "8478911",

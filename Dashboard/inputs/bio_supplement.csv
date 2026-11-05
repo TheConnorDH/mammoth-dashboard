@@ -52,3 +52,5 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8482160,Martin Chromiak,R,LAK,2002-08-20,187,"6' 0""",SVK,R,42,R,NHL API player landing 2026-11-01
 8482949,Arsenii Sergeev,G,CGY,2002-12-16,192,"6' 3""",RUS,L,35,G,NHL API player landing 2026-11-01
 8484201,Nico Myatovic,L,ANA,2004-12-01,207,"6' 2""",CAN,L,48,L,NHL API player landing 2026-11-04
+8485554,Dillon Boucher,L,CHI,1997-04-16,220,"6' 0""",CAN,L,36,L,NHL API player landing 2026-11-05
+8484421,Eric Pohlkamp,D,SJS,2004-03-23,200,"5' 11""",USA,R,48,D,NHL API player landing 2026-11-05
