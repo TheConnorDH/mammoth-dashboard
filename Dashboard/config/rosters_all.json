@@ -654,6 +654,12 @@
     "number": 94
    },
    {
+    "playerId": "8478904",
+    "name": "Steven Lorentz",
+    "pos": "C",
+    "number": 18
+   },
+   {
     "playerId": "8477497",
     "name": "Sean Monahan",
     "pos": "C",
@@ -682,6 +688,12 @@
     "name": "Dmitri Voronkov",
     "pos": "L",
     "number": 10
+   },
+   {
+    "playerId": "8485469",
+    "name": "Jack Williams",
+    "pos": "C",
+    "number": 92
    },
    {
     "playerId": "8481161",
@@ -1642,12 +1654,6 @@
     "name": "Frederik Andersen",
     "pos": "G",
     "number": 30
-   },
-   {
-    "playerId": "8486540",
-    "name": "Brett Epp",
-    "pos": "G",
-    "number": null
    },
    {
     "playerId": "8477465",
