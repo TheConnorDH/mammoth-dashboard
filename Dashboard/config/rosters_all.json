@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-05",
+ "fetched": "2026-11-06",
  "failed": [],
  "teams": {
   "ANA": [
@@ -636,12 +636,6 @@
     "number": 83
    },
    {
-    "playerId": "8478046",
-    "name": "Danton Heinen",
-    "pos": "L",
-    "number": 58
-   },
-   {
     "playerId": "8482660",
     "name": "Kent Johnson",
     "pos": "C",
@@ -688,12 +682,6 @@
     "name": "Dmitri Voronkov",
     "pos": "L",
     "number": 10
-   },
-   {
-    "playerId": "8482126",
-    "name": "Emil Andrae",
-    "pos": "D",
-    "number": 36
    },
    {
     "playerId": "8481161",
@@ -900,12 +888,6 @@
     "name": "Devin Cooley",
     "pos": "G",
     "number": 1
-   },
-   {
-    "playerId": "8482949",
-    "name": "Arsenii Sergeev",
-    "pos": "G",
-    "number": 35
    },
    {
     "playerId": "8481692",
@@ -1660,6 +1642,12 @@
     "name": "Frederik Andersen",
     "pos": "G",
     "number": 30
+   },
+   {
+    "playerId": "8486540",
+    "name": "Brett Epp",
+    "pos": "G",
+    "number": null
    },
    {
     "playerId": "8477465",
@@ -2666,6 +2654,12 @@
     "number": 77
    },
    {
+    "playerId": "8477018",
+    "name": "Ben Hutton",
+    "pos": "D",
+    "number": 71
+   },
+   {
     "playerId": "8482516",
     "name": "Matthew Kessel",
     "pos": "D",
@@ -3358,6 +3352,12 @@
     "name": "Jordan Eberle",
     "pos": "R",
     "number": 7
+   },
+   {
+    "playerId": "8483442",
+    "name": "Jagger Firkus",
+    "pos": "R",
+    "number": 57
    },
    {
     "playerId": "8477919",
