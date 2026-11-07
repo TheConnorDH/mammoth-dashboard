@@ -1,5 +1,5 @@
 {
- "source": "NHL API roster, 2026-11-06",
+ "source": "NHL API roster, 2026-11-07",
  "players": [
   {
    "name": "Michael Carcone",
@@ -117,6 +117,15 @@
    "height": "5' 9\"",
    "weight": 178,
    "playerId": "8479977"
+  },
+  {
+   "name": "Gregor Biber",
+   "pos": "D",
+   "number": 94,
+   "shoots": "L",
+   "height": "6' 3\"",
+   "weight": 187,
+   "playerId": "8485010"
   },
   {
    "name": "Nick DeSimone",

@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-06",
+ "fetched": "2026-11-07",
  "failed": [],
  "teams": {
   "ANA": [
@@ -992,12 +992,6 @@
     "name": "Teuvo Teravainen",
     "pos": "C",
     "number": 86
-   },
-   {
-    "playerId": "8476952",
-    "name": "Dominic Toninato",
-    "pos": "C",
-    "number": 25
    },
    {
     "playerId": "8481524",
@@ -2878,12 +2872,6 @@
     "number": 70
    },
    {
-    "playerId": "8473503",
-    "name": "James Reimer",
-    "pos": "G",
-    "number": 47
-   },
-   {
     "playerId": "8478048",
     "name": "Igor Shesterkin",
     "pos": "G",
@@ -3302,12 +3290,6 @@
     "name": "Kris Letang",
     "pos": "D",
     "number": 58
-   },
-   {
-    "playerId": "8486169",
-    "name": "Jake Livanavage",
-    "pos": "D",
-    "number": 4
    },
    {
     "playerId": "8482470",
@@ -3748,12 +3730,6 @@
     "number": 6
    },
    {
-    "playerId": "8484151",
-    "name": "Quinton Burns",
-    "pos": "D",
-    "number": 42
-   },
-   {
     "playerId": "8478443",
     "name": "Brandon Carlo",
     "pos": "D",
@@ -3776,6 +3752,12 @@
     "name": "Theo Lindstein",
     "pos": "D",
     "number": 4
+   },
+   {
+    "playerId": "8482733",
+    "name": "Logan Mailloux",
+    "pos": "D",
+    "number": 23
    },
    {
     "playerId": "8476892",
@@ -4196,6 +4178,12 @@
     "name": "Kailer Yamamoto",
     "pos": "R",
     "number": 56
+   },
+   {
+    "playerId": "8485010",
+    "name": "Gregor Biber",
+    "pos": "D",
+    "number": 94
    },
    {
     "playerId": "8480084",
