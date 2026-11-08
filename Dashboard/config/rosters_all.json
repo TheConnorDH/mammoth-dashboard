@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-07",
+ "fetched": "2026-11-08",
  "failed": [],
  "teams": {
   "ANA": [
@@ -167,6 +167,12 @@
    }
   ],
   "BOS": [
+   {
+    "playerId": "8479591",
+    "name": "Michael Eyssimont",
+    "pos": "C",
+    "number": 81
+   },
    {
     "playerId": "8479987",
     "name": "Morgan Geekie",
@@ -2038,12 +2044,6 @@
     "name": "Maxim Shabanov",
     "pos": "R",
     "number": 49
-   },
-   {
-    "playerId": "8479972",
-    "name": "Mason Shaw",
-    "pos": "C",
-    "number": 18
    },
    {
     "playerId": "8481477",
@@ -4088,6 +4088,12 @@
     "number": 8
    },
    {
+    "playerId": "8482515",
+    "name": "Artur Akhtyamov",
+    "pos": "G",
+    "number": 70
+   },
+   {
     "playerId": "8475683",
     "name": "Sergei Bobrovsky",
     "pos": "G",
@@ -4652,12 +4658,6 @@
     "name": "Neal Pionk",
     "pos": "D",
     "number": 4
-   },
-   {
-    "playerId": "8483510",
-    "name": "Elias Salomonsson",
-    "pos": "D",
-    "number": 57
    },
    {
     "playerId": "8480049",

@@ -1,17 +1,20 @@
-## Utah lost 4-5 in overtime at Montréal; the Canadiens had the better chances
+## Utah loses 2-4 at Ottawa in a game the chances rated as even
 
-Utah has not played since Nov 5, when it lost 4-5 in overtime to the Montréal Canadiens on the road. The record is 10-6-1 with 21 points through 17 games, and Utah is 2nd in the Central Division. Montréal had more shots on goal (35 to 20) and more expected goals (4.6 to 3.6). Replaying every shot by its quality, Utah wins this game 36% of the time with average finishing and goaltending.
+Utah is 10-7-1 (21 points) after a 2-4 loss at the Ottawa Senators on Nov 7, which gives the team a one-game losing streak. Utah has played 18 games and sits 5th in the Central. Shots on goal were Utah 32, Ottawa 21. Expected goals, which measure the quality of chances, were 2.6 for each team. Replaying every shot by its quality, Utah wins 51% of the time.
 
 What the numbers showed:
-- **Chances.** Dangerous shots (10%+ chance to score) were 16 for Montréal and 14 for Utah. At 5v5, expected goals were Utah 2.0 and Montréal 1.8.
-- **Goaltending vs. expected.** Sebastian Cossa made 30 saves on 35 shots, allowing 5 goals on 4.6 expected, 0.4 goals worse than expected. Montréal's Jakub Dobes allowed 4 on 3.6 expected, also 0.4 worse than expected.
-- **Special teams.** Utah scored 3 power-play goals to Montréal's 1. Logan Cooley had 3 goals and 1 assist, 2 of the goals on the power play. Nick Schmaltz had 1 goal and 2 assists.
-- **Player Impact.** Best in goals: Dmitri Simashev (+0.39), Vincent Trocheck (+0.30), Nate Schmidt (+0.26). Lowest: Cossa (-0.40), Andrew Peeke (-0.35), Anders Lee (-0.31).
-- **Season process vs. results.** Utah has 21 points against 23.0 expected from shot quality. Season expected goals are 61.4 for and 46.7 against.
+- **Lineup.** A. Duda was in the lineup and Nate Schmidt was out compared with the previous game.
+- **Goaltending vs. expected.** Karel Vejmelka allowed 3 goals on 20 shots worth 2.6 expected goals, 0.4 goals worse than expected. Ottawa's Samuel Ersson allowed 2 on 32 shots worth 2.6 expected goals, 0.6 goals better than expected.
+- **Special teams.** Utah scored 0 power-play goals and Ottawa scored 1.
+- **Chance quality.** Ottawa had 9 dangerous shots (10%+ chance to score) to Utah's 6. At 5v5, expected goals were Utah 2.2 and Ottawa 2.4.
+- **Player Impact.** Clayton Keller rated best at +0.83 goals, with a goal and an assist. Logan Cooley was lowest at -0.85.
+- **Season process vs. results.** Utah has 21 points against 23.9 expected from shot quality. Expected goals for and against are 64.0 and 50.2.
 
-**Where Utah stands:** Power rank 9th (likely range 3rd-18th, previously 7th), Tier 2, rating +9.0 standings points per 84 games vs. an average team. The projection is 104 points, with an 80% range of 91-117. Playoff odds are 87%, down from 90%.
+**Where Utah stands:** Power rank 9th (likely range 4th-19th), unchanged from the previous 9th, in Tier 2. The rating is +8.3 standings points per 84 games vs. an average team. The projection is 102 points, with an 80% range of 89-115. Playoff odds are 84%, down from 87%.
 
 **What to watch next:**
-- Sat, Nov 7: at Ottawa Senators (ranked 13th). Utah win chance 49%.
-- Wed, Nov 11: at Vegas Golden Knights (ranked 8th). Utah win chance 45%.
-- Thu, Nov 12: vs
+- Wed, Nov 11: at Vegas Golden Knights (power rank 8th). Utah win chance 44%.
+- Thu, Nov 12: home vs. St. Louis Blues (19th), a Central Division game. Utah is on the second night of a back-to-back. Win chance 55%.
+- Sat, Nov 14: home vs. San Jose Sharks (29th). Win chance 71%.
+
+*Data note: MoneyPuck data through Nov 7; NHL results through Nov 7.*

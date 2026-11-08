@@ -1,17 +1,17 @@
 {
-  "as_of": "Game 17 (Nov 5 @ MTL)",
+  "as_of": "Game 18 (Nov 7 @ OTT)",
   "source": "Automated: lines and pairs from MoneyPuck 5v5 ice time in the last game; goalie starts from NHL box scores; scratches = roster skaters who didn't dress.",
   "staff": {
     "forwards": [
       [
-        "Lee",
-        "Hayton",
-        "Keller"
-      ],
-      [
         "Crouse",
         "Trocheck",
         "Cooley"
+      ],
+      [
+        "Lee",
+        "Hayton",
+        "Keller"
       ],
       [
         "Schmaltz",
@@ -31,19 +31,20 @@
       ],
       [
         "Simashev",
-        "DeSimone"
+        "Peeke"
       ],
       [
-        "Schmidt",
-        "Peeke"
+        "Duda",
+        "DeSimone"
       ]
     ],
-    "goalie": "Vejmelka (Games 1, 3, 4, 6-9, 11-13, 15); Cossa (Games 2, 5, 10, 14, 16, 17)",
+    "goalie": "Vejmelka (Games 1, 3, 4, 6-9, 11-13, 15, 18); Cossa (Games 2, 5, 10, 14, 16, 17)",
     "scratches": [
       "Yamamoto",
       "Biber",
       "Lamoureux",
       "Marino",
+      "Schmidt",
       "Tanev"
     ]
   },
