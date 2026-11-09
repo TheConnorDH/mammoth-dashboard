@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-08",
+ "fetched": "2026-11-09",
  "failed": [],
  "teams": {
   "ANA": [
@@ -890,6 +890,12 @@
     "number": 71
    },
    {
+    "playerId": "8481167",
+    "name": "Brayden Pachal",
+    "pos": "D",
+    "number": 94
+   },
+   {
     "playerId": "8484768",
     "name": "Zayne Parekh",
     "pos": "D",
@@ -1048,6 +1054,12 @@
     "number": 72
    },
    {
+    "playerId": "8482123",
+    "name": "Drew Commesso",
+    "pos": "G",
+    "number": 33
+   },
+   {
     "playerId": "8481519",
     "name": "Spencer Knight",
     "pos": "G",
@@ -1144,6 +1156,12 @@
     "name": "Brent Burns",
     "pos": "D",
     "number": 84
+   },
+   {
+    "playerId": "8482942",
+    "name": "Alex Gagne",
+    "pos": "D",
+    "number": 45
    },
    {
     "playerId": "8478454",
@@ -1372,12 +1390,6 @@
     "number": 18
    },
    {
-    "playerId": "8484160",
-    "name": "Nate Danielson",
-    "pos": "C",
-    "number": 29
-   },
-   {
     "playerId": "8479337",
     "name": "Alex DeBrincat",
     "pos": "R",
@@ -1406,12 +1418,6 @@
     "name": "Keegan Kolesar",
     "pos": "R",
     "number": 55
-   },
-   {
-    "playerId": "8481077",
-    "name": "John Leonard",
-    "pos": "L",
-    "number": 43
    },
    {
     "playerId": "8482802",
@@ -1484,12 +1490,6 @@
     "name": "John Gibson",
     "pos": "G",
     "number": 36
-   },
-   {
-    "playerId": "8485545",
-    "name": "Michal Postava",
-    "pos": "G",
-    "number": 35
    },
    {
     "playerId": "8480193",
@@ -1666,12 +1666,6 @@
     "name": "Devon Levi",
     "pos": "G",
     "number": 27
-   },
-   {
-    "playerId": "8477035",
-    "name": "Matt Tomkins",
-    "pos": "G",
-    "number": 90
    }
   ],
   "FLA": [
@@ -1686,6 +1680,12 @@
     "name": "Sam Bennett",
     "pos": "C",
     "number": 9
+   },
+   {
+    "playerId": "8483433",
+    "name": "Jack Devine",
+    "pos": "R",
+    "number": 38
    },
    {
     "playerId": "8474189",
@@ -1838,12 +1838,6 @@
     "name": "Quinton Byfield",
     "pos": "R",
     "number": 55
-   },
-   {
-    "playerId": "8482160",
-    "name": "Martin Chromiak",
-    "pos": "R",
-    "number": 42
    },
    {
     "playerId": "8483675",
@@ -2812,6 +2806,12 @@
     "number": 93
    },
    {
+    "playerId": "8481743",
+    "name": "Marc Del Gaizo",
+    "pos": "D",
+    "number": 27
+   },
+   {
     "playerId": "8480434",
     "name": "Sean Durzi",
     "pos": "D",
@@ -3010,12 +3010,6 @@
     "name": "Samuel Ersson",
     "pos": "G",
     "number": 30
-   },
-   {
-    "playerId": "8477992",
-    "name": "Jonas Johansson",
-    "pos": "G",
-    "number": 31
    },
    {
     "playerId": "8476999",
@@ -3232,6 +3226,12 @@
     "number": 71
    },
    {
+    "playerId": "8483487",
+    "name": "Rutger McGroarty",
+    "pos": "R",
+    "number": 2
+   },
+   {
     "playerId": "8478438",
     "name": "Tommy Novak",
     "pos": "C",
@@ -3390,6 +3390,12 @@
     "number": 59
    },
    {
+    "playerId": "8483012",
+    "name": "Logan Morrison",
+    "pos": "C",
+    "number": 96
+   },
+   {
     "playerId": "8483497",
     "name": "Jani Nyman",
     "pos": "R",
@@ -3487,12 +3493,6 @@
    }
   ],
   "SJS": [
-   {
-    "playerId": "8483428",
-    "name": "Filip Bystedt",
-    "pos": "C",
-    "number": 18
-   },
    {
     "playerId": "8484801",
     "name": "Macklin Celebrini",
@@ -3960,12 +3960,6 @@
     "name": "Dakota Joshua",
     "pos": "C",
     "number": 81
-   },
-   {
-    "playerId": "8479968",
-    "name": "Vinni Lettieri",
-    "pos": "C",
-    "number": 71
    },
    {
     "playerId": "8479772",
@@ -4664,6 +4658,12 @@
     "name": "Dylan Samberg",
     "pos": "D",
     "number": 54
+   },
+   {
+    "playerId": "8481567",
+    "name": "Henry Thrun",
+    "pos": "D",
+    "number": 8
    },
    {
     "playerId": "8482076",

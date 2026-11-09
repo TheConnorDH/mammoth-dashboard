@@ -1,20 +1,17 @@
-## Utah loses 2-4 at Ottawa in a game the chances rated as even
+## Utah lost 2-4 at Ottawa Senators
 
-Utah is 10-7-1 (21 points) after a 2-4 loss at the Ottawa Senators on Nov 7, which gives the team a one-game losing streak. Utah has played 18 games and sits 5th in the Central. Shots on goal were Utah 32, Ottawa 21. Expected goals, which measure the quality of chances, were 2.6 for each team. Replaying every shot by its quality, Utah wins 51% of the time.
+Utah is 10-7-1, 5th in the Central. Game 18 (Nov 7, away): Utah lost 2-4; shots on goal Utah 33, OTT 21. Expected goals Utah 2.6, OTT 2.6 (5v5: Utah 2.2, OTT 2.4); replaying every shot by its quality, Utah wins 51% of the time.
 
 What the numbers showed:
-- **Lineup.** A. Duda was in the lineup and Nate Schmidt was out compared with the previous game.
-- **Goaltending vs. expected.** Karel Vejmelka allowed 3 goals on 20 shots worth 2.6 expected goals, 0.4 goals worse than expected. Ottawa's Samuel Ersson allowed 2 on 32 shots worth 2.6 expected goals, 0.6 goals better than expected.
-- **Special teams.** Utah scored 0 power-play goals and Ottawa scored 1.
-- **Chance quality.** Ottawa had 9 dangerous shots (10%+ chance to score) to Utah's 6. At 5v5, expected goals were Utah 2.2 and Ottawa 2.4.
-- **Player Impact.** Clayton Keller rated best at +0.83 goals, with a goal and an assist. Logan Cooley was lowest at -0.85.
-- **Season process vs. results.** Utah has 21 points against 23.9 expected from shot quality. Expected goals for and against are 64.0 and 50.2.
 
-**Where Utah stands:** Power rank 9th (likely range 4th-19th), unchanged from the previous 9th, in Tier 2. The rating is +8.3 standings points per 84 games vs. an average team. The projection is 102 points, with an 80% range of 89-115. Playoff odds are 84%, down from 87%.
+- **Scoring.** Clayton Keller (1G 1A), Barrett Hayton (1G 0A).
+- **In net.** Samuel Ersson (OTT): allowed 2 on 32 shots worth 2.6 expected goals, 0.6 goals better than expected.
+- **In net.** Karel Vejmelka (UTA): allowed 3 on 20 shots worth 2.6 expected goals, 0.4 goals worse than expected.
+- **Player Impact (goals).** Best: Clayton Keller (+0.83), Kevin Stenlund (+0.53), Anders Lee (+0.52). Lowest: Logan Cooley (-0.85), Vincent Trocheck (-0.73), Lawson Crouse (-0.55).
+- **Process vs. results.** 21 points vs. 23.9 expected from shot quality; expected goals 64.0 for, 50.2 against.
 
-**What to watch next:**
-- Wed, Nov 11: at Vegas Golden Knights (power rank 8th). Utah win chance 44%.
-- Thu, Nov 12: home vs. St. Louis Blues (19th), a Central Division game. Utah is on the second night of a back-to-back. Win chance 55%.
-- Sat, Nov 14: home vs. San Jose Sharks (29th). Win chance 71%.
+**Where Utah stands:** 10th in the power rankings (likely 4th-19th), Tier 2, rated +8.3 standings points per 84 games vs. an average team. Projected 103 points (80% range 90-115), 84% playoff odds, previously 87%.
 
-*Data note: MoneyPuck data through Nov 7; NHL results through Nov 7.*
+**What to watch next:** Wednesday at Vegas Golden Knights (Utah 44%); Thursday vs. St. Louis Blues (Utah 55%); Saturday vs. San Jose Sharks (Utah 71%).
+
+*Data note: MoneyPuck data through Nov 7; NHL results through Nov 8. Brief generated automatically from the numbers on this page.*
