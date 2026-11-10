@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-09",
+ "fetched": "2026-11-10",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1064,12 +1064,6 @@
     "name": "Spencer Knight",
     "pos": "G",
     "number": 30
-   },
-   {
-    "playerId": "8482821",
-    "name": "Arvid Soderblom",
-    "pos": "G",
-    "number": 40
    }
   ],
   "COL": [
@@ -1356,6 +1350,12 @@
     "name": "Jake Oettinger",
     "pos": "G",
     "number": 29
+   },
+   {
+    "playerId": "8482465",
+    "name": "Rémi Poirier",
+    "pos": "G",
+    "number": 31
    }
   ],
   "DET": [
@@ -3742,18 +3742,6 @@
     "number": 17
    },
    {
-    "playerId": "8484790",
-    "name": "Adam Jiricek",
-    "pos": "D",
-    "number": 36
-   },
-   {
-    "playerId": "8484188",
-    "name": "Theo Lindstein",
-    "pos": "D",
-    "number": 4
-   },
-   {
     "playerId": "8482733",
     "name": "Logan Mailloux",
     "pos": "D",
@@ -3764,6 +3752,12 @@
     "name": "Colton Parayko",
     "pos": "D",
     "number": 55
+   },
+   {
+    "playerId": "8480157",
+    "name": "Calle Rosen",
+    "pos": "D",
+    "number": 43
    },
    {
     "playerId": "8481006",
@@ -3834,12 +3828,6 @@
     "number": 29
    },
    {
-    "playerId": "8483752",
-    "name": "Dominic James",
-    "pos": "C",
-    "number": 17
-   },
-   {
     "playerId": "8476453",
     "name": "Nikita Kucherov",
     "pos": "R",
@@ -3850,6 +3838,12 @@
     "name": "Ilya Mikheyev",
     "pos": "R",
     "number": 95
+   },
+   {
+    "playerId": "8484770",
+    "name": "Sam O'Reilly",
+    "pos": "R",
+    "number": 23
    },
    {
     "playerId": "8478010",
@@ -4014,6 +4008,12 @@
     "name": "John Tavares",
     "pos": "C",
     "number": 91
+   },
+   {
+    "playerId": "8482525",
+    "name": "Ryan Tverberg",
+    "pos": "C",
+    "number": 77
    },
    {
     "playerId": "8477425",
@@ -4788,6 +4788,12 @@
     "number": 42
    },
    {
+    "playerId": "8475718",
+    "name": "Justin Holl",
+    "pos": "D",
+    "number": 4
+   },
+   {
     "playerId": "8484873",
     "name": "Cole Hutson",
     "pos": "D",
@@ -4822,12 +4828,6 @@
     "name": "Charlie Lindgren",
     "pos": "G",
     "number": 79
-   },
-   {
-    "playerId": "8482465",
-    "name": "Rémi Poirier",
-    "pos": "G",
-    "number": 1
    },
    {
     "playerId": "8480313",

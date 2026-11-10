@@ -10,8 +10,8 @@ What the numbers showed:
 - **Player Impact (goals).** Best: Clayton Keller (+0.83), Kevin Stenlund (+0.53), Anders Lee (+0.52). Lowest: Logan Cooley (-0.85), Vincent Trocheck (-0.73), Lawson Crouse (-0.55).
 - **Process vs. results.** 21 points vs. 23.9 expected from shot quality; expected goals 64.0 for, 50.2 against.
 
-**Where Utah stands:** 10th in the power rankings (likely 4th-19th), Tier 2, rated +8.3 standings points per 84 games vs. an average team. Projected 103 points (80% range 90-115), 84% playoff odds, previously 87%.
+**Where Utah stands:** 10th in the power rankings (likely 4th-19th), Tier 2, rated +8.2 standings points per 84 games vs. an average team. Projected 102 points (80% range 89-115), 83% playoff odds, previously 87%.
 
 **What to watch next:** Wednesday at Vegas Golden Knights (Utah 44%); Thursday vs. St. Louis Blues (Utah 55%); Saturday vs. San Jose Sharks (Utah 71%).
 
-*Data note: MoneyPuck data through Nov 7; NHL results through Nov 8. Brief generated automatically from the numbers on this page.*
+*Data note: MoneyPuck data through Nov 7; NHL results through Nov 9. Brief generated automatically from the numbers on this page.*
