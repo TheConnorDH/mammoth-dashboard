@@ -54,3 +54,4 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8484201,Nico Myatovic,L,ANA,2004-12-01,207,"6' 2""",CAN,L,48,L,NHL API player landing 2026-11-04
 8485554,Dillon Boucher,L,CHI,1997-04-16,220,"6' 0""",CAN,L,36,L,NHL API player landing 2026-11-05
 8484421,Eric Pohlkamp,D,SJS,2004-03-23,200,"5' 11""",USA,R,48,D,NHL API player landing 2026-11-05
+8482525,Ryan Tverberg,C,TOR,2002-01-30,187,"5' 11""",CAN,R,77,C,NHL API player landing 2026-11-11

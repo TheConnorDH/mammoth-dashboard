@@ -1,17 +1,19 @@
-## Utah lost 2-4 at Ottawa Senators
+## Utah lost 2-4 at Ottawa despite level chance quality
 
-Utah is 10-7-1, 5th in the Central. Game 18 (Nov 7, away): Utah lost 2-4; shots on goal Utah 33, OTT 21. Expected goals Utah 2.6, OTT 2.6 (5v5: Utah 2.2, OTT 2.4); replaying every shot by its quality, Utah wins 51% of the time.
+Utah hasn't played since Nov 7, when it lost 2-4 away to the Ottawa Senators. The Mammoth are 10-7-1 after 18 games, with 21 points, and sit 5th in the Central. Shots on goal were Utah 33, OTT 21, and expected goals were level at 2.6 each. Replaying every shot by its quality, Utah wins 51% of the time.
 
 What the numbers showed:
+- **Lineup changes.** A. Duda came in and Nate Schmidt came out.
+- **Goaltending vs. expected.** Karel Vejmelka allowed 3 on 2.7 expected goals, 0.3 goals worse than expected. Samuel Ersson allowed 2 on 2.6, 0.6 goals better than expected.
+- **Special teams.** Power-play goals were Utah 0, OTT 1.
+- **Player Impact.** Clayton Keller was best in goals (+0.84). Logan Cooley was lowest (-0.87).
+- **Season process vs. results.** Utah has 21 points against 23.9 expected from shot quality.
 
-- **Scoring.** Clayton Keller (1G 1A), Barrett Hayton (1G 0A).
-- **In net.** Samuel Ersson (OTT): allowed 2 on 32 shots worth 2.6 expected goals, 0.6 goals better than expected.
-- **In net.** Karel Vejmelka (UTA): allowed 3 on 20 shots worth 2.6 expected goals, 0.4 goals worse than expected.
-- **Player Impact (goals).** Best: Clayton Keller (+0.83), Kevin Stenlund (+0.53), Anders Lee (+0.52). Lowest: Logan Cooley (-0.85), Vincent Trocheck (-0.73), Lawson Crouse (-0.55).
-- **Process vs. results.** 21 points vs. 23.9 expected from shot quality; expected goals 64.0 for, 50.2 against.
+**Where Utah stands:** Power rank 10th (previously 9th), likely range 4th-19th, Tier 2. The rating is +8.1 standings points per 84 games vs. an average team. The projection is 102 points, with an 80% range of 89-115. Playoff odds are 81%, down from 87%.
 
-**Where Utah stands:** 10th in the power rankings (likely 4th-19th), Tier 2, rated +8.2 standings points per 84 games vs. an average team. Projected 102 points (80% range 89-115), 83% playoff odds, previously 87%.
+**What to watch next:**
+- Wednesday, Nov 11, at Vegas (8th): Utah win chance 44%.
+- Thursday, Nov 12, home vs. St. Louis (18th): 55%. This is a division game, and Utah will be on the second night of a back-to-back.
+- Saturday, Nov 14, home vs. San Jose (29th): 71%.
 
-**What to watch next:** Wednesday at Vegas Golden Knights (Utah 44%); Thursday vs. St. Louis Blues (Utah 55%); Saturday vs. San Jose Sharks (Utah 71%).
-
-*Data note: MoneyPuck data through Nov 7; NHL results through Nov 9. Brief generated automatically from the numbers on this page.*
+*Data note: MoneyPuck data through Nov 7; NHL results through Nov 10.*

@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-10",
+ "fetched": "2026-11-11",
  "failed": [],
  "teams": {
   "ANA": [
@@ -56,12 +56,6 @@
     "name": "Roger McQueen",
     "pos": "C",
     "number": 95
-   },
-   {
-    "playerId": "8484201",
-    "name": "Nico Myatovic",
-    "pos": "L",
-    "number": 48
    },
    {
     "playerId": "8481754",
@@ -2028,12 +2022,6 @@
     "number": 47
    },
    {
-    "playerId": "8475752",
-    "name": "Tyler Pitlick",
-    "pos": "C",
-    "number": 19
-   },
-   {
     "playerId": "8485702",
     "name": "Maxim Shabanov",
     "pos": "R",
@@ -2068,12 +2056,6 @@
     "name": "Jonas Brodin",
     "pos": "D",
     "number": 25
-   },
-   {
-    "playerId": "8480075",
-    "name": "Cameron Crotty",
-    "pos": "D",
-    "number": 34
    },
    {
     "playerId": "8482122",
@@ -2738,6 +2720,12 @@
     "name": "Pavel Dorofeyev",
     "pos": "R",
     "number": 16
+   },
+   {
+    "playerId": "8478446",
+    "name": "Glenn Gawdin",
+    "pos": "C",
+    "number": 15
    },
    {
     "playerId": "8476822",
@@ -4344,16 +4332,16 @@
     "number": 8
    },
    {
+    "playerId": "8480075",
+    "name": "Cameron Crotty",
+    "pos": "D",
+    "number": 51
+   },
+   {
     "playerId": "8479425",
     "name": "Filip Hronek",
     "pos": "D",
     "number": 17
-   },
-   {
-    "playerId": "8483768",
-    "name": "Victor Mancini",
-    "pos": "D",
-    "number": 90
    },
    {
     "playerId": "8476467",
@@ -4658,12 +4646,6 @@
     "name": "Dylan Samberg",
     "pos": "D",
     "number": 54
-   },
-   {
-    "playerId": "8481567",
-    "name": "Henry Thrun",
-    "pos": "D",
-    "number": 8
    },
    {
     "playerId": "8482076",
