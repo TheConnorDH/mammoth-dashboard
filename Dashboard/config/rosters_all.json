@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-11",
+ "fetched": "2026-11-12",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1834,12 +1834,6 @@
     "number": 55
    },
    {
-    "playerId": "8483675",
-    "name": "Kenny Connors",
-    "pos": "C",
-    "number": 34
-   },
-   {
     "playerId": "8477942",
     "name": "Kevin Fiala",
     "pos": "L",
@@ -2300,6 +2294,12 @@
     "name": "Arseny Gritsyuk",
     "pos": "R",
     "number": 81
+   },
+   {
+    "playerId": "8484177",
+    "name": "Lenni Hameenaho",
+    "pos": "R",
+    "number": 29
    },
    {
     "playerId": "8480002",
@@ -3920,6 +3920,12 @@
     "number": 73
    },
    {
+    "playerId": "8482153",
+    "name": "Brendan Brisson",
+    "pos": "C",
+    "number": 90
+   },
+   {
     "playerId": "8484158",
     "name": "Easton Cowan",
     "pos": "R",
@@ -4089,6 +4095,12 @@
    }
   ],
   "UTA": [
+   {
+    "playerId": "8484388",
+    "name": "Daniil But",
+    "pos": "L",
+    "number": 50
+   },
    {
     "playerId": "8479619",
     "name": "Michael Carcone",

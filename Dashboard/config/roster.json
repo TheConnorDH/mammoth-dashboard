@@ -1,6 +1,15 @@
 {
- "source": "NHL API roster, 2026-11-11",
+ "source": "NHL API roster, 2026-11-12",
  "players": [
+  {
+   "name": "Daniil But",
+   "pos": "L",
+   "number": 50,
+   "shoots": "R",
+   "height": "6' 5\"",
+   "weight": 203,
+   "playerId": "8484388"
+  },
   {
    "name": "Michael Carcone",
    "pos": "L",
