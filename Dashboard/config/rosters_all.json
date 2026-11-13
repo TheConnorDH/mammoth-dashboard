@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-12",
+ "fetched": "2026-11-13",
  "failed": [],
  "teams": {
   "ANA": [
@@ -788,22 +788,10 @@
     "number": 92
    },
    {
-    "playerId": "8484180",
-    "name": "Samuel Honzek",
-    "pos": "L",
-    "number": 29
-   },
-   {
     "playerId": "8476456",
     "name": "Jonathan Huberdeau",
     "pos": "L",
     "number": 10
-   },
-   {
-    "playerId": "8480259",
-    "name": "Ben Jones",
-    "pos": "C",
-    "number": 18
    },
    {
     "playerId": "8483609",
@@ -1061,6 +1049,12 @@
    }
   ],
   "COL": [
+   {
+    "playerId": "8484149",
+    "name": "Gavin Brindley",
+    "pos": "C",
+    "number": 54
+   },
    {
     "playerId": "8486171",
     "name": "T.J. Hughes",
@@ -1674,12 +1668,6 @@
     "name": "Sam Bennett",
     "pos": "C",
     "number": 9
-   },
-   {
-    "playerId": "8483433",
-    "name": "Jack Devine",
-    "pos": "R",
-    "number": 38
    },
    {
     "playerId": "8474189",
@@ -4658,6 +4646,12 @@
     "name": "Dylan Samberg",
     "pos": "D",
     "number": 54
+   },
+   {
+    "playerId": "8481567",
+    "name": "Henry Thrun",
+    "pos": "D",
+    "number": 8
    },
    {
     "playerId": "8482076",
