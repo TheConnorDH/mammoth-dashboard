@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-13",
+ "fetched": "2026-11-14",
  "failed": [],
  "teams": {
   "ANA": [
@@ -2372,6 +2372,12 @@
     "name": "Jonas Siegenthaler",
     "pos": "D",
     "number": 71
+   },
+   {
+    "playerId": "8484987",
+    "name": "Anton Silaev",
+    "pos": "D",
+    "number": 52
    },
    {
     "playerId": "8474596",
