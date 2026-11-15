@@ -96,6 +96,12 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 .legend { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:2px 0 10px; }
 .guide details { margin-top:10px; } .guide summary { cursor:pointer; font-weight:800; font-size:15px; color:var(--head); padding:4px 0; }
 .guide p, .guide li { font-size:13.5px; line-height:1.55; margin:6px 0; } .guide ul { padding-left:18px; } .guide dt { font-weight:800; margin-top:8px; } .guide dd { margin:2px 0 0 0; font-size:13.5px; line-height:1.5; }
+/* lines */
+.ln-card { border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:10px; background:var(--card); }
+.ln-card .who { font-weight:800; color:var(--head); } .ln-card .who a { color:inherit; }
+.ln-kv { display:flex; gap:14px; flex-wrap:wrap; margin:6px 0; font-size:12.5px; } .ln-kv b { font-size:15px; color:var(--head); }
+.ln-sk { display:grid; grid-template-columns:120px 1fr 34px; gap:6px; align-items:center; font-size:11.5px; margin:2px 0; color:var(--mute); }
+.ln-sk .bar { height:8px; background:var(--soft); border-radius:4px; overflow:hidden; } .ln-sk .bar div { height:8px; border-radius:4px; }
 /* Games tab */
 .sd-tile { display:flex; align-items:center; gap:10px; border:1px solid var(--line); border-left:5px solid var(--green); background:var(--green-l); border-radius:10px; padding:6px 10px; margin:5px 0; }
 .sd-tile.dn { border-left-color:var(--red); background:var(--red-l); }
@@ -188,6 +194,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <div class="card"><h3 style="display:flex">Matchup calculator <a class="glink" href="#matchup" onclick="showTab('matchup');return false;">Full matchup &rsaquo;</a></h3><div class="ctl"><select id="mc-a"></select><select id="mc-ga" title="Goalie"></select> vs. <select id="mc-b"></select><select id="mc-gb" title="Goalie"></select><select id="mc-v"><option value="n">Neutral ice</option><option value="a">First team at home</option><option value="b">Second team at home</option></select></div><div id="mc-out"></div><p class="small" id="mc-note"></p></div>
       <div class="card"><div class="chart tall"><canvas id="c-power"></canvas></div></div>
     </div></section>
+  <section><h2>Standings</h2><div class="tabs" id="st-tabs"></div><p class="small" id="st-note" style="margin:-4px 0 8px"></p><div class="card" id="st-body"></div></section>
   <section><h2>Conferences and Divisions</h2>
     <div class="ctl">Teams per group <select id="cg-n"><option value="0">All</option><option value="3">Top 3</option><option value="4">Top 4</option><option value="5">Top 5</option><option value="8">Top 8</option></select></div>
     <div class="grid2"><div class="card" id="cg-table"></div><div class="card"><div class="chart"><canvas id="c-groups"></canvas></div></div></div></section>
@@ -195,7 +202,6 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
     <p class="lede"><b>Top</b> = best six forwards + top four defensemen. <b>Depth</b> = the rest of the lineup. Hover a value to see the players.</p>
     <div class="ctl">Show <select id="ln-filter"></select></div>
     <div class="grid2"><div class="card" id="ln-table"></div><div class="card"><h3>Top vs. depth, every team</h3><div class="chart tall"><canvas id="c-lines"></canvas></div><div class="small" id="ln-quad" style="margin-top:8px"></div></div></div></section>
-  <section><h2>Standings</h2><div class="tabs" id="st-tabs"></div><div class="card" id="st-body"></div></section>
 </div>
 
 <!-- ================= PLAYOFFS ================= -->
@@ -282,7 +288,11 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
     <div class="tabs" id="val-tabs"></div><div class="grid2"><div class="card" id="val-table"></div><div class="card"><div class="chart tall"><canvas id="c-value"></canvas></div><div class="small" id="val-quad" style="margin-top:8px"></div></div></div></section>
   </div>
   <section><h2>Game by Game</h2><p class="lede" id="pg-lede"></p><div class="card" id="per-game"></div></section>
-  <section><h2>Deployment</h2><div class="grid2"><div class="card" id="lineup-card"></div><div class="card"><h3>Lines and pairs this season (5v5)</h3><div id="mp-lines"></div></div></div>
+  <section><h2>Lines and Pairs <a class="glink" href="#method" onclick="goGuide('g-lines');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede">Every forward line and defense pair at 5-on-5 this season: results, how they get them, and how they compare with what their players' talent predicts.</p>
+    <div class="ctl"><label class="small" title="Played enough 5v5 minutes together: 2.5 min per team game for lines, 3.5 for pairs"><input type="checkbox" id="rl-qual" checked> Qualified only</label></div>
+    <div class="grid2" id="rl-body"></div></section>
+  <section><h2>Deployment</h2><div class="grid2"><div class="card" id="lineup-card"></div></div>
     <div class="card" style="margin-top:14px"><h3>Goaltending</h3><div id="goalies"></div></div></section>
 </div>
 
@@ -290,6 +300,14 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 <div class="pane" id="p-finder">
   <section><h2>Players <a class="glink" href="#method" onclick="goGuide('g-caliber');return false;">How calibers work &rsaquo;</a></h2>
     <p class="lede">Every NHL player, rated the same way. Filter to rank within any group; click a team to open its roster.</p>
+    <div class="tabs" id="ex-view"><button class="tab on" data-xv="players">Players</button><button class="tab" data-xv="lines">Lines &amp; pairs</button></div>
+    <div id="ex-lines" style="display:none">
+      <div class="ctl"><select id="lx-team"></select><select id="lx-ty"><option value="all">Lines and pairs</option><option value="L">Forward lines</option><option value="P">Defense pairs</option></select>
+        <label class="small" title="Played enough 5v5 minutes together: 2.5 min per team game for lines, 3.5 for pairs"><input type="checkbox" id="lx-qual" checked> Qualified only</label>
+        Sort <select id="lx-sort"><option value="xgf">xG share</option><option value="vs">Vs. talent</option><option value="cre">Chance creation</option><option value="sup">Chance suppression</option><option value="tal">Combined talent</option><option value="toi">Minutes together</option></select>
+        <a class="glink" href="#method" onclick="goGuide('g-lines');return false;">How this works &rsaquo;</a></div>
+      <div class="card" id="lx-table"></div></div>
+    <div id="ex-players">
     <div class="legend"><span class="small"><b>Skaters:</b></span><span class="pill p-star">Superstar</span><span class="small">top 2%</span><span class="pill p-green">Elite</span><span class="small">top 10%</span><span class="pill p-blue">Top of lineup</span><span class="pill p-grey">Middle</span><span class="pill p-amber">Depth</span><span class="pill p-red">Fringe</span><span class="small" style="margin-left:10px"><b>Goalies</b> (vs. the 32 starters):</span><span class="pill p-green">Starter quality</span><span class="pill p-amber">Borderline</span><span class="pill p-red">Below floor</span></div>
     <div class="ctl">
       <select id="ex-team"></select><select id="ex-conf"></select><select id="ex-div"></select>
@@ -305,7 +323,7 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <select id="ex-n"><option value="50">Show 50</option><option value="100">100</option><option value="250">250</option><option value="1000">All</option></select>
     </div>
     <div class="card" id="ex-prof" style="display:none;margin-bottom:14px"></div>
-    <div class="card" id="ex-table"></div></section>
+    <div class="card" id="ex-table"></div></div></section>
 </div>
 
 <!-- ================= HOW IT WORKS ================= -->
@@ -374,6 +392,16 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <p><b>Goalie profiles</b> show shot-stopping by danger level, rebounds and workload, pooled over up to four seasons and pulled hard toward average, since goalie numbers are the noisiest in hockey. "Talent as a starter" is what he'd add over a full starter's workload.</p></details>
     <details id="g-value"><summary>Value vs. contract</summary>
       <p><b>In his role</b> = what he's expected to deliver in the minutes he actually plays (talent x ice time): what the team gets for the money. <b>Raw talent</b> = how good he is at a standard workload. Both are compared with what his cap hit buys on the open market, from a line fitted across every NHL skater's 2026-27 cap hit. <b>ELC</b> = entry-level contract, cheap by rule, so those players look like bargains. A value is colored only when its whole 90% range is on one side of zero. Goalies aren't valued (their talent is too uncertain for a fair price). Cap hits: Spotrac.</p></details>
+    <details id="g-standings"><summary>Standings and projected seeding</summary>
+      <p>The League tab's standings switch between the NHL's <b>2-1-0</b> points (win 2, overtime or shootout loss 1) and <b>3-2-1-0</b> (regulation win 3, overtime or shootout win 2, overtime or shootout loss 1, regulation loss 0). The games don't change, only how they're scored, so the same results produce a different table. Ties are broken by points percentage, then regulation wins.</p>
+      <p><b>Projections</b> come from the 10,000 simulated seasons behind the playoff odds. Each simulated game is scored both ways, so the 3-2-1-0 projections are the same seasons counted under those rules, not a separate guess. <b>Projected seeding</b> applies the playoff format (top three in each division plus two wild cards; the better division winner meets the second wild card) to the average simulated final points, and lists each team's playoff, division and first-in-conference odds. Cup odds stay on the real 2-1-0 rules. <b>Play-in blueprint</b> is a proposed format: the top six by points percentage are locked in and seeds 7-10 play in.</p></details>
+    <details id="g-lines"><summary>Lines and pairs</summary>
+      <p>Every forward line and defense pair at 5-on-5 this season, from MoneyPuck's line data, on the Roster tab (one team) and the Players tab (Lines &amp; pairs, the whole league).</p>
+      <ul><li><b>xG share</b>: the line's share of expected goals while it's on the ice together, with a 90% range. Goals for and against are shown but are mostly luck over a few hundred minutes.</li>
+        <li><b>Percentile bars</b> compare the line with the league's qualified lines (pairs with pairs) on how it plays: chance creation, chance suppression, shot quality, shot volume, slot shots, and finishing (mostly luck). The <b>type</b> follows from creation and suppression: Two-way (both top 40%), Offense first, Shutdown, Getting outplayed, or Balanced.</li>
+        <li><b>Vs. talent</b>: the line's xG share minus what its players' combined talent predicts (a league-wide fit; so far combined talent correlates with xG share at about 0.3 for lines and 0.4 for pairs). A positive number means the combination is doing better than its parts suggest, but over small samples most of that is noise.</li>
+        <li><b>Qualified</b>: at least 2.5 minutes together per team game for a line, 3.5 for a pair (pairs stay together longer). The floor grows through the season. Unqualified combinations can be shown, marked as such.</li>
+        <li>Line results still can't separate a line from its opponents and zone starts; that needs shift data (on the backlog).</li></ul></details>
     <details id="g-games"><summary>Games</summary>
       <p>Every game of the season, browsable by date (the arrows skip days without games; the team filter shows one team's games). Away team on top, home team below.</p>
       <ul><li><b>Finished games</b>: score, deserve-to-win (every shot replayed 20,000 times at its expected-goal value; empty-net shots left out), shots and chances, goalies, every shot on a rink, and <b>Player Impact in this game</b> for both teams: the full Impact model run on that game alone, so a player is compared with his own team in that same game. <b>Where it came from</b> splits each bar into the same parts as the season bars (each measured against the average forward or defenseman): positives stack right of zero, negatives left, and the tick marks the total. Skaters set the scale; a goalie's saves vs. expected can run off the end. One game is mostly noise (about half a goal of uncertainty for a skater), so use it to see who drove a night, not to judge a player.</li>
@@ -750,22 +778,60 @@ function renderLines() {
     plugins: [quadPlugin(mxL, myL, ['Deep, no stars', 'Complete', 'Thin', 'Top-heavy']), { id: 'lab', afterDraw(ch) { const {ctx} = ch; ctx.save(); ctx.fillStyle = css('--ink'); ctx.font = '10px sans-serif'; ch.getDatasetMeta(0).data.forEach((p, i) => ctx.fillText(LN[i].team, p.x + 6, p.y + 3)); ctx.restore(); } }] });
 }
 // standings
-const views = [['central', 'Central'], ['west', 'West wild card'], ['league', 'League'], ['p321', '3-2-1-0 universe'], ['blueprint', 'Blueprint seeding']];
-let stView = 'central';
-const byPct = (a, b) => b.ptsPct - a.ptsPct || b.pts - a.pts || b.rw - a.rw, by321 = (a, b) => b.p321Pct - a.p321Pct || b.p321 - a.p321 || b.rw - a.rw;
-const stHead = `<tr><th>#</th><th>Team</th><th>GP</th><th>W-L-OTL</th><th>RW</th><th>PTS</th><th>P%</th><th>GD</th><th>L10</th><th>STRK</th></tr>`;
-const stRow = (t, i, x = '') => `<tr class="${t.abbr === TM ? 'me' : ''}${x}"><td>${i}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.gp}</td><td>${t.w}-${t.l}-${t.otl}</td><td>${t.rw}</td><td><b>${t.pts}</b></td><td>${t.ptsPct.toFixed(3).replace(/^0/, '')}</td><td>${t.gd > 0 ? '+' : ''}${t.gd}</td><td>${t.l10}</td><td>${t.streak}</td></tr>`;
-function renderStandings() {
+// ---- standings: current table and projections under the NHL's 2-1-0 points or 3-2-1-0 (regulation win 3, OT/shootout
+// win 2, OT/shootout loss 1). Projections come from the same 10,000 simulated seasons, scored both ways.
+const ST = {sys: '210', view: 'wild'};
+const stViews = [['division', 'Division'], ['wild', 'Wild card'], ['league', 'League'], ['proj', 'Projected seeding'], ['blueprint', 'Play-in blueprint']];
+const stP = t => ST.sys === '321' ? t.p321 : t.pts, stPctOf = t => ST.sys === '321' ? t.p321Pct : t.ptsPct;
+const stSort = (a, b) => stPctOf(b) - stPctOf(a) || b.rw - a.rw || stP(b) - stP(a);     // points %, then regulation wins
+const stProj = t => { const r = PW ? PW.rows.find(q => q.team === t.abbr) : null; if (!r) return null;
+  if (ST.sys === '321') return r.alt3 ? {p: r.alt3.proj, lo: r.alt3.lo80, hi: r.alt3.hi80, po: r.alt3.pPlayoff, dv: r.alt3.pDiv, s1: (r.alt3.seed || [])[0]} : null;
+  return r.projPts != null ? {p: r.projPts, lo: r.projLo80, hi: r.projHi80, po: r.pPlayoff, dv: r.pDiv, s1: (r.seed || [])[0]} : null; };
+const stLink = t => `<a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a>`;
+const stHeadF = () => ST.sys === '321'
+  ? `<tr><th>#</th><th>Team</th><th>GP</th><th title="Regulation wins">RW</th><th title="Overtime and shootout wins">OT/SO W</th><th title="Overtime and shootout losses">OTL</th><th>L</th><th>3-2-1-0 PTS</th><th>P%</th><th title="Real NHL points (2-1-0)">NHL PTS</th><th>GD</th><th title="Average simulated final points, 3-2-1-0, with the 80% range">Proj. PTS</th><th>Playoff %</th></tr>`
+  : `<tr><th>#</th><th>Team</th><th>GP</th><th>W-L-OTL</th><th title="Regulation wins (first tiebreaker)">RW</th><th>PTS</th><th>P%</th><th>GD</th><th>L10</th><th>STRK</th><th title="Average simulated final points, with the 80% range">Proj. PTS</th><th>Playoff %</th></tr>`;
+const stRowF = (t, n, cls) => { const pr = stProj(t), pc = pr ? `<td><b>${Math.round(pr.p)}</b> <span class="small">${pr.lo}-${pr.hi}</span></td><td>${pc1(pr.po)}</td>` : '<td>&mdash;</td><td>&mdash;</td>';
+  const c = `class="${t.abbr === TM ? 'me' : ''}${cls ? ' ' + cls : ''}"`, pct = stPctOf(t).toFixed(3).replace(/^0/, '');
+  return ST.sys === '321'
+    ? `<tr ${c}><td>${n}</td><td>${stLink(t)}</td><td>${t.gp}</td><td>${t.rw}</td><td>${t.w - t.rw}</td><td>${t.otl}</td><td>${t.l}</td><td><b>${t.p321}</b></td><td>${pct}</td><td>${t.pts}</td><td>${t.gd > 0 ? '+' : ''}${t.gd}</td>${pc}</tr>`
+    : `<tr ${c}><td>${n}</td><td>${stLink(t)}</td><td>${t.gp}</td><td>${t.w}-${t.l}-${t.otl}</td><td>${t.rw}</td><td><b>${t.pts}</b></td><td>${pct}</td><td>${t.gd > 0 ? '+' : ''}${t.gd}</td><td>${t.l10}</td><td>${t.streak}</td>${pc}</tr>`; };
+const stTable = rows => `<table data-enh="1">${stHeadF()}${rows.join('')}</table>`;
+const stConfs = () => [...new Set(S.map(t => t.conf))].sort().reverse();     // Western first
+function renderStandings() { try { renderStandingsInner(); } catch (e) { console.warn(e); $('st-body').innerHTML = '<div class="lock">Standings view unavailable.</div>'; } }
+function renderStandingsInner() {
   let h = '';
-  if (stView === 'central') h = `<table>${stHead}${S.filter(t => t.div === 'Central').sort(byPct).map((t, i) => stRow(t, i + 1, i === 2 ? ' cut' : '')).join('')}</table>`;
-  else if (stView === 'west') { const pool = S.filter(t => t.conf === 'Western'), divs = [...new Set(pool.map(t => t.div))], top = divs.flatMap(d => pool.filter(t => t.div === d).sort(byPct).slice(0, 3)), rest = pool.filter(t => !top.includes(t)).sort(byPct);
-    h = divs.map(d => `<h3 style="margin-top:8px">${d} top 3</h3><table>${stHead}${top.filter(t => t.div === d).map((t, i) => stRow(t, i + 1)).join('')}</table>`).join('') + `<h3 style="margin-top:12px">Wild card</h3><table>${stHead}${rest.map((t, i) => stRow(t, 'WC' + (i + 1), i === 1 ? ' cut' : '')).join('')}</table>`; }
-  else if (stView === 'league') h = `<table>${stHead}${S.slice().sort(byPct).map((t, i) => stRow(t, i + 1)).join('')}</table>`;
-  else if (stView === 'p321') h = `<table><tr><th>#</th><th>Team</th><th>GP</th><th>RW</th><th>OT/SO W</th><th>OTL</th><th>3-2-1-0 PTS</th><th>P%</th><th>NHL PTS</th></tr>${S.filter(t => t.conf === 'Western').sort(by321).map((t, i) => `<tr class="${t.abbr === TM ? 'me' : ''}${i === 7 ? ' cut' : ''}"><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.gp}</td><td>${t.rw}</td><td>${t.w - t.rw}</td><td>${t.otl}</td><td><b>${t.p321}</b></td><td>${t.p321Pct.toFixed(3).replace(/^0/, '')}</td><td>${t.pts}</td></tr>`).join('')}</table>`;
-  else h = ['Western', 'Eastern'].map(cf => { const pool = S.filter(t => t.conf === cf).sort(by321); return `<h3 style="margin-top:8px">${cf}</h3><table><tr><th>Seed</th><th>Team</th><th>3-2-1-0 P%</th><th>RW</th><th>Status</th></tr>${pool.slice(0, 11).map((t, i) => `<tr class="${t.abbr === TM ? 'me' : ''}${i === 5 || i === 9 ? ' cut' : ''}"><td>${i + 1}</td><td><a class="tm" href="#team" onclick="pickTeam('${t.abbr}');return false;">${t.name}</a></td><td>${t.p321Pct.toFixed(3).replace(/^0/, '')}</td><td>${t.rw}</td><td>${i < 6 ? '<span class="pill p-green">locked seed</span>' : i < 10 ? '<span class="pill p-amber">play-in</span>' : '<span class="pill p-red">out</span>'}</td></tr>`).join('')}</table>`; }).join('');
+  const sysName = ST.sys === '321' ? '3-2-1-0' : '2-1-0 (NHL)';
+  if (ST.view === 'division') h = stConfs().map(cf => [...new Set(S.filter(t => t.conf === cf).map(t => t.div))].sort().map(dv =>
+      `<h3 style="margin-top:10px">${dv}</h3>${stTable(S.filter(t => t.div === dv).sort(stSort).map((t, i) => stRowF(t, i + 1, i === 2 ? 'cut' : '')))}`).join('')).join('');
+  else if (ST.view === 'wild') h = stConfs().map(cf => { const pool = S.filter(t => t.conf === cf), divs = [...new Set(pool.map(t => t.div))].sort();
+      const top = divs.map(d => pool.filter(t => t.div === d).sort(stSort).slice(0, 3)), rest = pool.filter(t => !top.flat().includes(t)).sort(stSort);
+      return `<h2 style="font-size:16px;margin-top:14px">${cf} Conference</h2>` + divs.map((d, k) => `<h3 style="margin-top:8px">${d}</h3>${stTable(top[k].map((t, i) => stRowF(t, d[0] + (i + 1))))}`).join('') +
+        `<h3 style="margin-top:8px">Wild card</h3>${stTable(rest.map((t, i) => stRowF(t, 'WC' + (i + 1), i === 1 ? 'cut' : '')))}`; }).join('');
+  else if (ST.view === 'league') h = stTable(S.slice().sort(stSort).map((t, i) => stRowF(t, i + 1)));
+  else if (ST.view === 'proj') {
+    const okConf = cf => { const pool = S.filter(t => t.conf === cf && stProj(t)), divs = [...new Set(pool.map(t => t.div))]; return divs.length === 2 && divs.every(d => pool.filter(t => t.div === d).length >= 3) && pool.length >= 8; };
+    if (!PW || !stConfs().every(okConf)) h = '<div class="lock">Needs the league simulation (projections for every team under this points system).</div>';
+    else h = stConfs().map(cf => { const pool = S.filter(t => t.conf === cf && stProj(t)), divs = [...new Set(pool.map(t => t.div))].sort();
+      const pp = t => stProj(t).p, bySort = (a, b) => pp(b) - pp(a);
+      const tops = divs.map(d => pool.filter(t => t.div === d).sort(bySort).slice(0, 3)), wc = pool.filter(t => !tops.flat().includes(t)).sort(bySort).slice(0, 2);
+      const [dA, dB] = [0, 1].sort((x, y) => pp(tops[y][0]) - pp(tops[x][0])), A = tops[dA], B = tops[dB];
+      const mu = (x, y, lx, ly) => `<div style="padding:4px 0;border-bottom:1px solid var(--line)"><span class="small" style="display:inline-block;width:46px">${lx}</span><b>${x.abbr}</b> <span class="small">${Math.round(pp(x))} pts, ${pc1(stProj(x).po)}</span> &nbsp;vs&nbsp; <span class="small" style="display:inline-block;width:30px">${ly}</span><b>${y.abbr}</b> <span class="small">${Math.round(pp(y))} pts, ${pc1(stProj(y).po)}</span></div>`;
+      const bracket = mu(A[0], wc[1], divs[dA][0] + '1', 'WC2') + mu(A[1], A[2], divs[dA][0] + '2', divs[dA][0] + '3') + mu(B[0], wc[0], divs[dB][0] + '1', 'WC1') + mu(B[1], B[2], divs[dB][0] + '2', divs[dB][0] + '3');
+      const inSet = new Set([...tops.flat(), ...wc]), all = pool.slice().sort(bySort);
+      const rows = all.map((t, i) => { const pr = stProj(t); return `<tr class="${t.abbr === TM ? 'me' : ''}"><td>${i + 1}</td><td>${stLink(t)}</td><td>${t.div}</td><td><b>${Math.round(pr.p)}</b> <span class="small">${pr.lo}-${pr.hi}</span></td><td>${pc1(pr.po)}</td><td>${pc1(pr.dv)}</td><td>${pc1(pr.s1)}</td><td>${inSet.has(t) ? '<span class="pill p-green">in</span>' : '<span class="pill p-grey">out</span>'}</td></tr>`; }).join('');
+      return `<h2 style="font-size:16px;margin-top:14px">${cf} Conference</h2><div class="grid2"><div><h3>Projected first round</h3>${bracket}<p class="small" style="margin-top:6px">From average simulated final points; the better division winner meets the second wild card.</p></div>
+        <div><h3>Projected final standings</h3><table data-enh="1"><tr><th>#</th><th>Team</th><th>Div</th><th>Proj. PTS (80%)</th><th>Playoff %</th><th>Division %</th><th title="Chance of finishing first in the conference">1st in conf.</th><th>Projected</th></tr>${rows}</table></div></div>`; }).join('');
+  }
+  else h = `<p class="small">A proposed format: the top 6 in each conference by points % are locked into the playoffs; seeds 7-10 play in for the last two spots. Uses the points system selected above.</p>` + stConfs().map(cf => { const pool = S.filter(t => t.conf === cf).sort(stSort);
+      return `<h3 style="margin-top:8px">${cf}</h3><table data-enh="1"><tr><th>Seed</th><th>Team</th><th>PTS</th><th>P%</th><th>RW</th><th>Status</th></tr>${pool.slice(0, 11).map((t, i) => `<tr class="${t.abbr === TM ? 'me' : ''}${i === 5 || i === 9 ? ' cut' : ''}"><td>${i + 1}</td><td>${stLink(t)}</td><td>${stP(t)}</td><td>${stPctOf(t).toFixed(3).replace(/^0/, '')}</td><td>${t.rw}</td><td>${i < 6 ? '<span class="pill p-green">locked seed</span>' : i < 10 ? '<span class="pill p-amber">play-in</span>' : '<span class="pill p-red">out</span>'}</td></tr>`).join('')}</table>`; }).join('');
   $('st-body').innerHTML = h;
-  $('st-tabs').innerHTML = views.map(([k, l]) => `<button class="tab ${k === stView ? 'on' : ''}" data-v="${k}">${l}</button>`).join('');
-  document.querySelectorAll('#st-tabs .tab').forEach(b => b.onclick = () => { stView = b.dataset.v; renderStandings(); });
+  $('st-tabs').innerHTML = `<span class="small" style="margin-right:4px">Points</span>${[['210', '2-1-0 (NHL)'], ['321', '3-2-1-0']].map(([k, l]) => `<button class="tab ${k === ST.sys ? 'on' : ''}" data-sys="${k}" title="${k === '321' ? 'Regulation win 3, overtime or shootout win 2, overtime or shootout loss 1' : 'Win 2, overtime or shootout loss 1'}">${l}</button>`).join('')}
+    <span class="small" style="margin:0 4px 0 12px">View</span>${stViews.map(([k, l]) => `<button class="tab ${k === ST.view ? 'on' : ''}" data-v="${k}">${l}</button>`).join('')}`;
+  document.querySelectorAll('#st-tabs [data-v]').forEach(b => b.onclick = () => { ST.view = b.dataset.v; renderStandings(); });
+  document.querySelectorAll('#st-tabs [data-sys]').forEach(b => b.onclick = () => { ST.sys = b.dataset.sys; renderStandings(); });
+  const cutTxt = (PW && (ST.sys === '321' ? PW.cut3 : PW.cut)) || null;
+  $('st-note').innerHTML = `${ST.sys === '321' ? '3-2-1-0: regulation win 3, overtime or shootout win 2, overtime or shootout loss 1, regulation loss 0. Same games, scored differently; projections re-run the same 10,000 simulated seasons under these points.' : 'NHL points: win 2, overtime or shootout loss 1. Ties broken by points %, then regulation wins.'}${cutTxt ? ` Projected playoff line: about ${Math.round(cutTxt.Western.median)} points in the West, ${Math.round(cutTxt.Eastern.median)} in the East.` : ''} Dashed line = playoff cut (current standings views).`;
 }
 // strengths & weaknesses: verdict shown only when the data supports one
 const sigPill = s => ({'confirmed strength': '<span class="pill p-green">confirmed</span>', 'confirmed weakness': '<span class="pill p-red">confirmed</span>', 'leaning strength': '<span class="pill p-blue">leaning</span>', 'leaning weakness': '<span class="pill p-amber">leaning</span>'}[s] || '');
@@ -793,6 +859,61 @@ function renderShots(x) {
     return `<div class="card"><h3>${title}</h3><svg viewBox="0 0 ${W} ${Hh}" style="width:100%;height:auto">${c}${rink}${m.goals.map(g => `<circle cx="${px(g[0])}" cy="${py(g[1])}" r="4" fill="${ink}" stroke="${css('--card')}"/>`).join('')}</svg><div class="small">${x} ${m.total.toFixed(2)} xG/game vs. league-average team ${L.lgTotal.toFixed(2)}${m.slotShare != null ? ` &bull; slot share ${(m.slotShare * 100).toFixed(0)}% (league ${(L.lgSlotShare * 100).toFixed(0)}%)` : ''}</div></div>`; };
   $('shot-note').innerHTML = `${TS.games} ${x} game${TS.games === 1 ? '' : 's'} in the shot file.${TS.games < 10 ? ' Small sample: maps become meaningful after roughly 10-15 games.' : ''} Green = better than average for ${x}, red = worse. Net on the right.`;
   $('shot-maps').innerHTML = panel('ev_for', `5-on-5: ${x} chances`, true) + panel('ev_against', '5-on-5: chances allowed', false) + panel('pp_for', `Power play: ${x} chances`, true);
+}
+
+// ================= LINES AND PAIRS (5v5, league-wide) =================
+// D.lines: one row per line or pair. Qualified = at least 2.5 (lines) or 3.5 (pairs) 5v5 minutes together per team game.
+// Percentiles compare each line with the league's qualified lines (or pairs) on each part of how it plays.
+const lnQ = l => l.toi >= l.qmin;
+const LN_SK = [['cre', 'Chance creation', 'xf60', 1, 'expected goals for per 60'], ['sup', 'Chance suppression', 'xa60', -1, 'expected goals against per 60 (lower is better)'],
+  ['q', 'Shot quality', 'q', 1, 'expected goals per unblocked shot'], ['vol', 'Shot volume', 'sh60', 1, 'unblocked shot attempts per 60'],
+  ['net', 'Slot shots', 'hd60', 1, 'high-danger shots per 60'], ['fin', 'Finishing (mostly luck)', 'fin60', 1, 'goals minus expected goals per 60']];
+function lnPct(l) {   // cached on the line: percentile vs. the league's qualified lines (or pairs) on each part
+  if (l._p) return l._p;
+  if (!lnPct.c) { lnPct.c = {}; ['L', 'P'].forEach(ty => { const Q = (D.lines || []).filter(x => x.ty === ty && lnQ(x)); lnPct.c[ty] = Object.fromEntries(LN_SK.map(([k, , f]) => [k, Q.map(x => x[f]).filter(v => v != null).sort((a, b) => a - b)])); }); }
+  const lo = (L, v) => { let a = 0, b = L.length; while (a < b) { const m = (a + b) >> 1; if (L[m] < v) a = m + 1; else b = m; } return a; };
+  const hi = (L, v) => { let a = 0, b = L.length; while (a < b) { const m = (a + b) >> 1; if (L[m] <= v) a = m + 1; else b = m; } return a; };
+  const C = lnPct.c[l.ty], o = {};
+  LN_SK.forEach(([k, , f, dir]) => { const v = l[f], L = C[k]; if (v == null || !L.length) { o[k] = null; return; } const b = lo(L, v), e = hi(L, v) - b; let p = 100 * (b + e / 2) / L.length; if (dir < 0) p = 100 - p; o[k] = Math.round(p); });
+  return (l._p = o);
+}
+const lnArch = p => p.cre == null || p.sup == null ? '' : p.cre >= 60 && p.sup >= 60 ? 'Two-way' : p.cre >= 60 && p.sup < 40 ? 'Offense first' : p.sup >= 60 && p.cre < 40 ? 'Shutdown' : p.cre < 40 && p.sup < 40 ? 'Getting outplayed' : 'Balanced';
+const lnArchPill = a => a ? `<span class="pill ${a === 'Two-way' ? 'p-green' : a === 'Getting outplayed' ? 'p-red' : a === 'Balanced' ? 'p-grey' : 'p-blue'}">${a}</span>` : '';
+const lnShort = l => l.nm.length !== l.ids.length ? l.nm.join(' – ') : l.nm.map(n => n.split(' ').slice(-1)[0]).join(' – ');
+const lnVs = l => l.exp != null && l.xgf != null ? l.xgf - l.exp : null;
+const lnBand = l => l.se ? `${Math.max(0, Math.round((l.xgf - 1.645 * l.se) * 100))}-${Math.min(100, Math.round((l.xgf + 1.645 * l.se) * 100))}%` : '';
+function lnCard(l) {
+  const p = lnPct(l), vs = lnVs(l), a = lnArch(p), q = lnQ(l);
+  const who = l.nm.length !== l.ids.length ? l.nm.join(' &ndash; ') : l.nm.map((n, i) => l.ids[i] && PLID[l.ids[i]] ? `<a class="tm" href="#roster" onclick="showProfile.scroll=true;showProfile('${l.ids[i]}','ro-prof');return false;">${n}</a>` : n).join(' &ndash; ');
+  const bar = (k, lab, tip) => { const v = p[k]; if (v == null) return ''; const c = k === 'fin' ? 'var(--mute)' : v >= 67 ? 'var(--green)' : v <= 33 ? 'var(--red)' : 'var(--ice)';
+    return `<div class="ln-sk" title="${tip}"><span>${lab}</span><div class="bar"><div style="width:${v}%;background:${c}"></div></div><span>${ord(Math.max(1, v))}</span></div>`; };
+  return `<div class="ln-card"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="who">${who}</span><span>${lnArchPill(a)} ${q ? '' : `<span class="pill p-grey" title="Qualified at ${Math.round(l.qmin)}+ minutes">not qualified</span>`}</span></div>
+    <div class="ln-kv"><span><b>${l.xgf == null ? '&mdash;' : Math.round(l.xgf * 100) + '%'}</b> xG share${l.se ? ` <span class="small">(90%: ${lnBand(l)})</span>` : ''}</span><span><b>${l.gf}-${l.ga}</b> goals</span><span><b>${Math.round(l.toi)}</b> min, ${l.gp} GP</span>${vs != null ? `<span title="Actual xG share minus what the members' combined talent predicts (${Math.round(l.exp * 100)}%)"><b style="color:var(${vs >= 0.03 ? '--green' : vs <= -0.03 ? '--red' : '--ink'})">${vs >= 0 ? '+' : ''}${Math.round(vs * 100)}</b> pts vs. talent</span>` : ''}</div>
+    ${LN_SK.map(([k, lab, , , tip]) => bar(k, lab, tip)).join('')}</div>`;
+}
+function renderRosterLines(x) {
+  const el = $('rl-body'); if (!el) return;
+  const qOnly = $('rl-qual').checked, L = (D.lines || []).filter(l => l.t === x && (!qOnly || lnQ(l))).sort((a, b) => b.toi - a.toi);
+  const n0 = (D.lines || []).filter(l => l.t === x).length;
+  const col = (ty, title) => { const M = L.filter(l => l.ty === ty); return `<div><h3>${title} <span class="small">${M.length}${qOnly ? ' qualified' : ''}</span></h3>${M.length ? M.map(lnCard).join('') : `<div class="small">${qOnly ? 'None qualified yet. Untick "Qualified only" to see every combination.' : 'No combinations yet.'}</div>`}</div>`; };
+  el.innerHTML = n0 ? col('L', 'Forward lines') + col('P', 'Defense pairs') : '<div class="lock">No line data for this team yet.</div>';
+  $('rl-qual').onchange = () => renderRosterLines(x);
+}
+function initLeagueLines() {
+  const tsel = $('lx-team'); tsel.innerHTML = '<option value="">All teams</option>' + S.slice().sort((a, b) => a.name.localeCompare(b.name)).map(t => `<option value="${t.abbr}">${t.name}</option>`).join('');
+  ['lx-team', 'lx-ty', 'lx-qual', 'lx-sort'].forEach(id => $(id).onchange = renderLeagueLines);
+  document.querySelectorAll('#ex-view [data-xv]').forEach(b => b.onclick = () => { const v = b.dataset.xv;
+    document.querySelectorAll('#ex-view [data-xv]').forEach(c => c.classList.toggle('on', c.dataset.xv === v));
+    $('ex-lines').style.display = v === 'lines' ? '' : 'none'; $('ex-players').style.display = v === 'lines' ? 'none' : ''; if (v === 'lines') renderLeagueLines(); });
+}
+function renderLeagueLines() {
+  const t = $('lx-team').value, ty = $('lx-ty').value, qOnly = $('lx-qual').checked, k = $('lx-sort').value;
+  const key = l => k === 'xgf' ? l.xgf : k === 'vs' ? lnVs(l) : k === 'cre' ? lnPct(l).cre : k === 'sup' ? lnPct(l).sup : k === 'tal' ? l.tal : l.toi;
+  const L = (D.lines || []).filter(l => (!t || l.t === t) && (ty === 'all' || l.ty === ty) && (!qOnly || lnQ(l))).map(l => [key(l), l]).filter(x => x[0] != null).sort((a, b) => b[0] - a[0]).map(x => x[1]);
+  const pc = v => v == null ? '&mdash;' : pctPill(v);
+  $('lx-table').innerHTML = L.length ? `<div class="small" style="margin-bottom:6px">${L.length} ${ty === 'L' ? 'lines' : ty === 'P' ? 'pairs' : 'lines and pairs'}${qOnly ? ' (qualified)' : ''}. Percentiles compare with the league's qualified ${ty === 'P' ? 'pairs' : ty === 'L' ? 'lines' : 'lines (or pairs)'}. All 5-on-5.</div>
+    <table><tr><th>#</th><th>Line / pair</th><th>Team</th><th>Min</th><th>xG share (90%)</th><th>Goals</th><th title="Actual xG share minus what the members' talent predicts">Vs. talent</th><th>Creation</th><th>Suppression</th><th>Shot quality</th><th>Type</th></tr>${L.slice(0, 300).map((l, i) => { const p = lnPct(l), vs = lnVs(l);
+      return `<tr${l.t === TM ? ' class="me"' : ''}><td>${i + 1}</td><td><b>${lnShort(l)}</b><span class="sub">${l.ty === 'L' ? 'Line' : 'Pair'}${lnQ(l) ? '' : ' &bull; not qualified'}</span></td><td><a class="tm" href="#roster" onclick="setTeam('${l.t}','roster');return false;">${l.t}</a></td><td>${Math.round(l.toi)}</td><td><b>${l.xgf == null ? '&mdash;' : Math.round(l.xgf * 100) + '%'}</b> <span class="small">${lnBand(l)}</span></td><td>${l.gf}-${l.ga}</td><td>${vs == null ? '&mdash;' : `<b style="color:var(${vs >= 0.03 ? '--green' : vs <= -0.03 ? '--red' : '--ink'})">${vs >= 0 ? '+' : ''}${Math.round(vs * 100)}</b>`}</td><td>${pc(p.cre)}</td><td>${pc(p.sup)}</td><td>${pc(p.q)}</td><td>${lnArchPill(lnArch(p))}</td></tr>`; }).join('')}</table>` : '<div class="small">No lines match.</div>';
 }
 
 // ================= GAMES (every NHL game, by date; not tied to the selected team) =================
@@ -1124,6 +1245,7 @@ function renderRoster(x) {
   $('ro-note').style.display = nCap ? 'none' : '';
   $('ro-note').innerHTML = `No cap hits matched for this team's skaters yet.`;
   teamExtras(x);
+  try { renderRosterLines(x); } catch (e) { console.warn(e); }
   $('ro-charts').style.display = $('ro-h2h').style.display = L.length ? '' : 'none';
   $('ro-title').innerHTML = `${st.name || x} Roster <span class="tag">${isU ? 'ALL ACTIVE PLAYERS' : L.length + ' PLAYERS THIS SEASON'}</span>`;
   if (!L.length) { ['c-forest', 'c-parts'].forEach(k => { if (charts[k]) { charts[k].destroy(); delete charts[k]; } }); $('h2h').innerHTML = $('parts-tabs').innerHTML = '';
@@ -1958,8 +2080,6 @@ function teamExtras(x) {
   if (isU && LU && LU.staff) { const s = LU.staff; $('lineup-card').innerHTML = `<h3>Current lineup <span class="small">(${LU.as_of})</span></h3><table>${s.forwards.map((ln, i) => `<tr><td class="small">L${i + 1}</td>${ln.map(n => `<td>${n}</td>`).join('')}</tr>`).join('')}${s.defense.map((p, i) => `<tr><td class="small">D${i + 1}</td>${p.map(n => `<td>${n}</td>`).join('')}<td></td></tr>`).join('')}<tr><td class="small">G</td><td colspan="3">${s.goalie}</td></tr><tr><td class="small">Out</td><td colspan="3" class="wrap small">${s.scratches.join(', ')}</td></tr></table><p class="small" style="margin-top:6px">${LU.source}</p>`; }
   else if (LL && (LL.forwards.length || LL.defense.length)) $('lineup-card').innerHTML = `<h3>Last game's lines <span class="small">(${LL.game})</span></h3><table>${LL.forwards.map((ln, i) => `<tr><td class="small">L${i + 1}</td>${ln.map(n => `<td>${n}</td>`).join('')}</tr>`).join('')}${LL.defense.map((p, i) => `<tr><td class="small">D${i + 1}</td>${p.map(n => `<td>${n}</td>`).join('')}<td></td></tr>`).join('')}<tr><td class="small">G</td><td colspan="3">${LL.goalie || '&mdash;'}</td></tr></table><p class="small" style="margin-top:6px">Inferred from 5v5 ice time in that game (most-used combinations, no player twice). Scratches aren't in the data.</p>`;
   else $('lineup-card').innerHTML = '<div class="lock">No game data yet.</div>';
-  const ML = isU ? (D.mpLines || []) : (E.lines || []);
-  $('mp-lines').innerHTML = ML.length ? `<table><tr><th>Combination</th><th>Type</th><th>TOI</th><th>xG share</th><th>GF-GA</th><th>SOG</th></tr>${ML.map(l => `<tr><td><b>${l.name}</b></td><td class="small">${l.type}</td><td>${l.toi}</td><td>${l.xgf == null ? '&mdash;' : (l.xgf * 100).toFixed(0) + '%'}</td><td>${l.gf}-${l.ga}</td><td>${l.sog}</td></tr>`).join('')}</table><p class="small" style="margin-top:6px">${isU ? '' : 'Most-used 8 lines and 5 pairs. '}Line results are mostly noise until a few hundred minutes together.</p>` : '<div class="lock">No combination has enough minutes yet.</div>';
   const GQ = isU ? (D.goalies || []) : (E.goalies || []);
   $('goalies').innerHTML = GQ.length ? `<table><tr><th>Goalie</th><th>GP</th>${isU ? '<th>Starts</th>' : ''}<th>SV%</th><th>Goals saved above expected</th><th>2025-26</th></tr>${GQ.map(q => `<tr><td><b>${q.name}</b></td><td>${q.gp}</td>${isU ? `<td>${q.gs}</td>` : ''}<td>${q.svp == null ? '&mdash;' : q.svp.toFixed(3).replace(/^0/, '')}</td><td>${q.gsax == null ? '&mdash;' : sp(q.gsax, 2)}</td><td class="small">${q.gsax25 != null ? sp(q.gsax25) + ' in ' + q.gp25 + ' GP' : (q.note || '&mdash;')}</td></tr>`).join('')}</table><p class="small" style="margin-top:6px">Goalie results are mostly noise over weeks and even seasons. See each goalie's talent range in the roster table.</p>` : '<div class="lock">No goalie data yet.</div>';
 }
@@ -2014,8 +2134,8 @@ function initExplorer() {
   $('ex-reset').onclick = () => { ['ex-team', 'ex-conf', 'ex-div', 'ex-pos', 'ex-band', 'ex-q', 'ex-type'].forEach(id => $(id).value = ''); $('ex-rank').value = 'tal'; $('ex-win').value = 'season'; $('ex-qual').checked = false; $('ex-amin').value = 17; $('ex-amax').value = 45; run(); };
   run();
 }
-inits.finder = initExplorer;
-renderers.finder = () => { if (window.exRun) window.exRun(); };
+inits.finder = () => { initExplorer(); initLeagueLines(); };
+renderers.finder = () => { if (window.exRun) window.exRun(); if ($('ex-lines') && $('ex-lines').style.display !== 'none') renderLeagueLines(); };
 
 // ================= METHOD =================
 function goGuide(id) {

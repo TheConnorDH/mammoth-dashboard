@@ -20,12 +20,15 @@ def game_probs(diff, wp):
     return p_reg_home, pot, potw
 
 
-def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=10000, seed=11, series=None):
+def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=10000, seed=11, series=None, points3=None):
+    """points3: current points under 3-2-1-0 (regulation win 3, OT/SO win 2, OT/SO loss 1). When given, the same simulated
+    games are also scored that way and playoff, division and seed odds are reported for both systems (out[t]['alt'])."""
     teams = sorted(ratings)
     ix = {t: i for i, t in enumerate(teams)}
     rng = np.random.default_rng(seed)
     true = np.array([ratings[t] for t in teams])[None, :] + rng.normal(size=(sims, len(teams))) * np.array([sds[t] for t in teams])[None, :]
     pts = np.tile(np.array([points.get(t, 0) for t in teams], float), (sims, 1))
+    pts3 = np.tile(np.array([points3.get(t, 0) for t in teams], float), (sims, 1)) if points3 is not None else None
     for g in remaining:
         h, a = g[0], g[1]; shift = g[2] if len(g) > 2 else 0.0     # shift: rest (back-to-back) edge, in rating-difference units
         if h not in ix or a not in ix:
@@ -40,17 +43,20 @@ def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=1000
         reg_away = ~reg_home & ~ot
         pts[:, i] += 2 * reg_home + 2 * ot_home + 1 * (ot & ~ot_home)
         pts[:, j] += 2 * reg_away + 2 * (ot & ~ot_home) + 1 * ot_home
+        if pts3 is not None:
+            pts3[:, i] += 3 * reg_home + 2 * ot_home + 1 * (ot & ~ot_home)
+            pts3[:, j] += 3 * reg_away + 2 * (ot & ~ot_home) + 1 * ot_home
     out = {t: {"mean": float(pts[:, ix[t]].mean()), "lo95": float(np.percentile(pts[:, ix[t]], 2.5)), "hi95": float(np.percentile(pts[:, ix[t]], 97.5)),
                "lo50": float(np.percentile(pts[:, ix[t]], 25)), "hi50": float(np.percentile(pts[:, ix[t]], 75)),
                "lo80": float(np.percentile(pts[:, ix[t]], 10)), "hi80": float(np.percentile(pts[:, ix[t]], 90))} for t in teams}
-    if conf and div:
-        tie = rng.random(pts.shape) * 0.01
-        score = pts + tie
-        made = np.zeros_like(pts, bool); divwin = np.zeros_like(pts, bool); cut = {}
+    def qualify(P_, tie):
+        """playoff spots, division winners, conference cut line and seed slots (NHL format) for a points matrix"""
+        score = P_ + tie
+        made = np.zeros_like(P_, bool); divwin = np.zeros_like(P_, bool); cut = {}; seedc = np.zeros((len(teams), 8))
         for cf in set(conf.values()):
             members = [t for t in teams if conf.get(t) == cf]
             divs = sorted({div[t] for t in members})
-            top3 = np.zeros_like(pts, bool)
+            top3 = np.zeros_like(P_, bool)
             for dv in divs:
                 dm = [ix[t] for t in members if div[t] == dv]
                 order = np.argsort(-score[:, dm], axis=1)
@@ -60,16 +66,34 @@ def simulate(ratings, sds, points, remaining, wp, conf=None, div=None, sims=1000
             cm = np.array([ix[t] for t in members])
             rest = np.where(top3[:, cm], -1e9, score[:, cm])
             order = np.argsort(-rest, axis=1)
-            wc = np.zeros_like(pts, bool)
+            wc = np.zeros_like(P_, bool)
             for k in range(2):
                 wc[np.arange(sims), cm[order[:, k]]] = True
             made |= top3 | wc
-            # this season's playoff line in the conference: points of the last team in (per simulated season)
-            last_in = np.where(made[:, cm], pts[:, cm], np.inf).min(axis=1)
+            last_in = np.where(made[:, cm], P_[:, cm], np.inf).min(axis=1)
             cut[cf] = {"median": float(np.median(last_in)), "mean": float(last_in.mean()),
                        "lo80": float(np.percentile(last_in, 10)), "hi80": float(np.percentile(last_in, 90))}
+            # conference seed 1-8 by points among the 8 playoff teams (for the projected-seeding view)
+            sc_in = np.where(made[:, cm], score[:, cm], -1e9)
+            rk = np.argsort(-sc_in, axis=1)
+            nmade = made[:, cm].sum(axis=1)
+            for k in range(8):
+                ok = nmade > k          # only playoff teams get a seed slot
+                np.add.at(seedc, cm[rk[ok, k]], np.eye(8)[k])
+        return made, divwin, cut, score, seedc / sims
+    if conf and div:
+        tie = rng.random(pts.shape) * 0.01
+        made, divwin, cut, score, seedc = qualify(pts, tie)
         for t in teams:
             out[t]["playoff"] = float(made[:, ix[t]].mean()); out[t]["division"] = float(divwin[:, ix[t]].mean())
+            out[t]["seed"] = [round(float(x), 4) for x in seedc[ix[t]]]
+        if pts3 is not None:
+            made3, divwin3, cut3, _, seedc3 = qualify(pts3, tie)
+            for t in teams:
+                k = ix[t]
+                out[t]["alt"] = {"mean": float(pts3[:, k].mean()), "lo80": float(np.percentile(pts3[:, k], 10)), "hi80": float(np.percentile(pts3[:, k], 90)),
+                                 "playoff": float(made3[:, k].mean()), "division": float(divwin3[:, k].mean()), "seed": [round(float(x), 4) for x in seedc3[k]]}
+            out["_cut3"] = cut3
         out["_cut"] = cut
         if series:
             out["_playoffs"] = _playoffs(teams, ix, conf, div, score, true, ratings, sds, series, rng)

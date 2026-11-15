@@ -23,6 +23,7 @@ import player_profile as profile_mod
 import needs as needs_mod
 import recap as recap_mod
 import games as games_mod
+import lines as lines_mod
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 HOCKEY = os.path.dirname(BASE)
@@ -1046,11 +1047,14 @@ def main():
             b2b_ = lambda t_, d_: prevday_(d_) in played_.get(t_, ())
             rest_edge = lambda h_, a_, d_: int(b2b_(a_, d_)) - int(b2b_(h_, d_))     # +1: away team tired only (helps home)
             rem_ = [(g_["home"], g_["away"], REST_LOGIT / wpp["win"][1] * rest_edge(g_["home"], g_["away"], g_["date"])) for g_ in sched if g_["state"] not in (6, 7)]
-            cur_pts, cur_gp = {}, {}
+            cur_pts, cur_gp, cur_pts3 = {}, {}, {}
             for g_ in done_:
                 hw_ = g_["hs"] > g_["as"]; ot_ = g_["period"] > 3
                 cur_pts[g_["home"]] = cur_pts.get(g_["home"], 0) + (2 if hw_ else (1 if ot_ else 0))
                 cur_pts[g_["away"]] = cur_pts.get(g_["away"], 0) + (0 if hw_ and not ot_ else (1 if hw_ else 2))
+                # 3-2-1-0: regulation win 3, OT/shootout win 2, OT/shootout loss 1
+                cur_pts3[g_["home"]] = cur_pts3.get(g_["home"], 0) + ((2 if ot_ else 3) if hw_ else (1 if ot_ else 0))
+                cur_pts3[g_["away"]] = cur_pts3.get(g_["away"], 0) + ((2 if ot_ else 3) if not hw_ else (1 if ot_ else 0))
                 for t_ in (g_["home"], g_["away"]): cur_gp[t_] = cur_gp.get(t_, 0) + 1
             mean_pred = statistics.mean(r_["pred"] for r_ in prows)
             mults = pwp.get("sim_sd_mult", [1] * len(pwp["checkpoints"])); cgp = [c_["gp"] for c_ in pwp["checkpoints"]]
@@ -1068,7 +1072,7 @@ def main():
                     top_ = sorted([q_ for q_ in sk_ if q_["g"] == "F"], key=lambda q_: -(q_["tpg"] or 0))[:12] + sorted([q_ for q_ in sk_ if q_["g"] == "D"], key=lambda q_: -(q_["tpg"] or 0))[:6]
                     elite_[t_] = sum(1 for q_ in top_ if (q_.get("tpct") or 0) >= ppo["elite_pct"])
             series_ = {**{k_: ppo[k_] for k_ in ("b_power", "b_elite", "alpha")}, "elite_cap": ppo.get("elite_cap", 99), "blend": ppo.get("blend"), "elite": elite_, "tv_end": pwp["true_var"][-1]} if ppo and elite_ else None
-            lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7, series=series_)
+            lsim = seasonsim.simulate(rat, sds, cur_pts, rem_, wpp, conf_, div_, sims=10000, seed=7, series=series_, points3=cur_pts3)
             bw_ = wpp["win"][1]
             # single-game odds for every unplayed game (Games tab): same model as the next-10 tables (ratings + home ice + rest)
             lgw_ = lambda x: 1 / (1 + math.exp(-x))
@@ -1083,7 +1087,11 @@ def main():
                 q_ = lsim.get(r_["team"])
                 if q_:
                     r_.update({"projPts": round(q_["mean"], 1), "projLo": round(q_["lo95"]), "projHi": round(q_["hi95"]), "projLo80": round(q_["lo80"]), "projHi80": round(q_["hi80"]),
-                               "pPlayoff": round(q_["playoff"], 3), "pDiv": round(q_["division"], 3)})
+                               "pPlayoff": round(q_["playoff"], 3), "pDiv": round(q_["division"], 3), "seed": q_.get("seed")})
+                    if q_.get("alt"):   # the same simulated games scored 3-2-1-0
+                        a3_ = q_["alt"]
+                        r_["alt3"] = {"proj": round(a3_["mean"], 1), "lo80": round(a3_["lo80"]), "hi80": round(a3_["hi80"]), "pPlayoff": round(a3_["playoff"], 3),
+                                      "pDiv": round(a3_["division"], 3), "seed": a3_["seed"], "pts": cur_pts3.get(r_["team"], 0)}
                 r_["neutralWin"] = round(1 / (1 + math.exp(-bw_ * rat[r_["team"]])), 3)     # vs. an average team, neutral ice
                 r_["r"] = round(rat[r_["team"]], 4)
             if lsim.get("_playoffs"):
@@ -1104,6 +1112,7 @@ def main():
                 power_out["playoffModel"]["note"] = ppo["_note"]
             power_out["simAll"] = {t_: [{"x": x_, "n": h_[x_] + (h_[x_ + 1] if x_ + 1 < len(h_) else 0)} for x_ in range(0, len(h_), 2) if h_[x_] + (h_[x_ + 1] if x_ + 1 < len(h_) else 0) > 0]
                                    for t_, h_ in lsim["_hist"].items()}
+            power_out["cut"] = lsim.get("_cut"); power_out["cut3"] = lsim.get("_cut3")
             power_out["sched"] = [[g_["date"], g_["home"], g_["away"], g_["state"], g_["hs"], g_["as"], g_["period"]] for g_ in sched]
             power_out.update({"winprob": wpp, "simBacktest": json.load(open(P("params", "sim_backtest.json"))), "schedDone": len(done_),
                               "hia": json.load(open(P("params", "hia_params.json"))) if os.path.exists(P("params", "hia_params.json")) else None})
@@ -1402,8 +1411,12 @@ def main():
         s_make_ = sum(r_["po"]["make"] for r_ in po_rows_); s_cup_ = sum(r_["po"]["cup"] for r_ in po_rows_)
         agree_ = max(abs(r_["po"]["make"] - (r_.get("pPlayoff") or 0)) for r_ in po_rows_)
         mono_ = all(r_["po"]["make"] + 1e-9 >= r_["po"]["r1"] >= r_["po"]["r2"] - 1e-9 >= r_["po"]["final"] - 2e-9 >= r_["po"]["cup"] - 3e-9 for r_ in po_rows_)
-        checks.append({"check": "Playoff simulation adds up", "ok": abs(s_make_ - 16) < 0.01 and abs(s_cup_ - 1) < 0.01 and agree_ < 0.002 and mono_,
-                       "detail": f"{s_make_:.2f} playoff teams and {s_cup_:.3f} Cups per simulated season (16 and 1); playoff odds match the standings simulation within {agree_ * 100:.2f} points; each round's odds no higher than the round before."})
+        a3_rows_ = [r_ for r_ in power_out["rows"] if r_.get("alt3")]
+        s_make3_ = sum(r_["alt3"]["pPlayoff"] for r_ in a3_rows_) if a3_rows_ else 16.0
+        seed_ok_ = all(abs(sum(r_.get("seed") or []) - (r_.get("pPlayoff") or 0)) < 0.002 for r_ in power_out["rows"] if r_.get("seed"))
+        seed_ok_ = seed_ok_ and all(abs(sum(r_["alt3"].get("seed") or []) - r_["alt3"]["pPlayoff"]) < 0.002 for r_ in a3_rows_) and (len(a3_rows_) == len(power_out["rows"]))
+        checks.append({"check": "Playoff simulation adds up", "ok": abs(s_make_ - 16) < 0.01 and abs(s_cup_ - 1) < 0.01 and agree_ < 0.002 and mono_ and abs(s_make3_ - 16) < 0.02 and seed_ok_,
+                       "detail": f"{s_make_:.2f} playoff teams and {s_cup_:.3f} Cups per simulated season (16 and 1); playoff odds match the standings simulation within {agree_ * 100:.2f} points; each round's odds no higher than the round before; 3-2-1-0 scoring also gives {s_make3_:.2f} playoff teams; seed odds add up to playoff odds."})
 
     # ---- executive summary (rule-based; claims carry their confidence)
     conf = "low" if gp < 10 else ("medium" if gp < 25 else "high")
@@ -1682,6 +1695,12 @@ def main():
     for t_, x_ in team_extra.items():
         for e_ in x_.get("perGame", []): _attach(e_, t_)
 
+    # ---- lines and pairs, league-wide (5v5): results, how they get them, and vs. what their players' talent predicts
+    lines_out, lines_fit = [], {}
+    if full_mp and os.path.exists(P("inputs", "moneypuck", "lines.csv")):
+        lines_out, lines_fit = lines_mod.build(readcsv(P("inputs", "moneypuck", "lines.csv")), "2026", ep2.get("5on5", 0.012),
+                                               players_league, {s_["abbr"]: s_.get("gp") or 0 for s_ in standings})
+
     # recap share graphic: both teams' player values for each game (same values as the Games tab)
     recaps_uta = recap_mod.build(P("inputs", "moneypuck", "shots_2026.csv"), P("inputs", "moneypuck_games", "goalies_games.csv"), P("inputs", "nhl", "boxscores"), TEAM)
     dets_by_id_ = {gid_: v_ for d_ in games_days.values() for gid_, v_ in d_.items()}
@@ -1721,8 +1740,8 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "standoutQ": standout_q, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
-        "standings": standings, "central": CENTRAL, "players": players, "mpLines": mp_lines, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "lines": lines_out, "linesFit": lines_fit, "standoutQ": standout_q, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "standings": standings, "central": CENTRAL, "players": players, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,
         "lineups": lineup_mod.league(players_league, PPAR["impact_goal_slope"] * PPAR["points_per_goal"]) if players_league else None, "shots": shotmap.build(P("inputs", "moneypuck", "shots_2026.csv"), TEAM) if os.path.exists(P("inputs", "moneypuck", "shots_2026.csv")) else None,
@@ -1744,6 +1763,8 @@ def main():
     }
     for k_ in ("metrics", "players", "tilt", "tiltAvg", "carryover", "central", "unlock", "priorW", "teamGaa", "season", "history"):
         data.pop(k_, None)
+    for e_ in (data.get("teamExtra") or {}).values():   # season lines now come from D.lines (v1.7.0)
+        e_.pop("lines", None)
     json.dump(data, open(P("output", "data.json"), "w"), indent=1, default=str)
     tpl = open(P("template.html"), encoding="utf-8").read()
     html = tpl.replace("/*__DATA__*/", "window.DATA = " + json.dumps(data, default=str) + ";")

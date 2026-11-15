@@ -305,3 +305,7 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 - v1.6.1: standouts center skaters on their team's mean game Impact that night (`rel`), thresholds = RMS of centered values by position; goalies uncentered; no cap.
 - v1.6.1 also: standout score `z` = centered value / position swing; perGame up/down sorted by z; `gmStand` returns rows, rank, z; Games tab tiles (`.sd-tile`), rank numbers (`.gm-rk`) in the bars and on the recap graphic.
 - v1.6.1 final: standout percentile (`pct`) from `D.standoutQ` (101 quantiles of this season's centered values per position, or a normal fallback); standout = pct >= 90 and positive, rough = pct <= 10 and negative (chosen over 80/85/95 by count per team-game). Games tab: standout tiles + bars sort toggle `GMX.sort` ('impact' default | 'standout'), passed to rcImage as `R.sortBy`.
+
+## Nov 15: v1.7.0
+- Standings: `seasonsim.simulate(..., points3=)` scores simulated games 2-1-0 and 3-2-1-0; `qualify()` returns playoff/division/cut/conference-seed odds for each; rows carry `seed` and `alt3` {proj, lo80, hi80, pPlayoff, pDiv, seed, pts}; `power.cut`/`cut3`. Page: `ST` {sys, view}, `renderStandings` (division / wild / league / proj / blueprint), `st-note`.
+- Lines: `engine/lines.py` builds `D.lines` from MoneyPuck lines.csv (5v5), `D.linesFit` (xG share ~ combined talent, by lines/pairs). Page: `lnPct`, `lnArch`, `lnCard`, `renderRosterLines` (Roster, `rl-*`), `renderLeagueLines` (Players tab view toggle `ex-view`, `lx-*`). Qualified floors in `lines.QUAL`.

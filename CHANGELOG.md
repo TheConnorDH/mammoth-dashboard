@@ -2,6 +2,16 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.7.0 (2026-11-15)
+
+**New**
+- **Standings rebuilt, with a 3-2-1-0 toggle.** The League tab's standings (now right below the power rankings) switch between the NHL's 2-1-0 points and 3-2-1-0 (regulation win 3, overtime or shootout win 2, overtime or shootout loss 1). Views: division, wild card (by conference, cut lines marked), league, **projected seeding** (projected first-round matchups plus each team's projected points, playoff, division and first-in-conference odds) and the play-in blueprint. Every table shows projected final points and playoff odds under the selected system.
+  - The season simulation now scores every simulated game both ways, so 3-2-1-0 projections use the same 10,000 seasons. The playoff-simulation check also confirms 16 playoff teams per season under 3-2-1-0 and that seed odds add up.
+- **Lines and pairs.** Every 5-on-5 forward line and defense pair in the league, with xG share (90% range), goals, minutes, percentile bars against the league's qualified lines (chance creation, suppression, shot quality, volume, slot shots, finishing), a type (Two-way, Offense first, Shutdown, Getting outplayed, Balanced) and how the line does vs. what its players' combined talent predicts. On the Roster tab for the selected team (with links to each player's profile) and on the Players tab under **Lines & pairs** for the whole league, sortable and filterable. A **Qualified** toggle (2.5 minutes together per team game for lines, 3.5 for pairs) hides small samples.
+
+**Changed**
+- The old "Lines and pairs this season" table on the Roster tab is replaced by the new section.
+
 ## 1.6.1 (2026-10-26)
 
 **Changed**
