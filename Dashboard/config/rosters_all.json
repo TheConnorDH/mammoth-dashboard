@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-14",
+ "fetched": "2026-11-15",
  "failed": [],
  "teams": {
   "ANA": [
@@ -574,12 +574,6 @@
     "number": 21
    },
    {
-    "playerId": "8476422",
-    "name": "Mike Reilly",
-    "pos": "D",
-    "number": 6
-   },
-   {
     "playerId": "8476958",
     "name": "Jaccob Slavin",
     "pos": "D",
@@ -1143,7 +1137,7 @@
     "playerId": "8482942",
     "name": "Alex Gagne",
     "pos": "D",
-    "number": 45
+    "number": 28
    },
    {
     "playerId": "8478454",
@@ -1292,6 +1286,12 @@
     "number": 6
    },
    {
+    "playerId": "8477335",
+    "name": "Kyle Burroughs",
+    "pos": "D",
+    "number": 28
+   },
+   {
     "playerId": "8478476",
     "name": "Kyle Capobianco",
     "pos": "D",
@@ -1328,6 +1328,12 @@
     "number": 57
    },
    {
+    "playerId": "8485468",
+    "name": "Trey Taylor",
+    "pos": "D",
+    "number": 27
+   },
+   {
     "playerId": "8479193",
     "name": "Casey DeSmith",
     "pos": "G",
@@ -1338,12 +1344,6 @@
     "name": "Jake Oettinger",
     "pos": "G",
     "number": 29
-   },
-   {
-    "playerId": "8482465",
-    "name": "Rémi Poirier",
-    "pos": "G",
-    "number": 31
    }
   ],
   "DET": [
@@ -2540,6 +2540,12 @@
   ],
   "NYI": [
    {
+    "playerId": "8478445",
+    "name": "Mathew Barzal",
+    "pos": "C",
+    "number": 13
+   },
+   {
     "playerId": "8482070",
     "name": "Mitchell Chaffee",
     "pos": "R",
@@ -2586,12 +2592,6 @@
     "name": "Matias Maccelli",
     "pos": "L",
     "number": 63
-   },
-   {
-    "playerId": "8481237",
-    "name": "Kyle MacLean",
-    "pos": "C",
-    "number": 32
    },
    {
     "playerId": "8476419",
@@ -3274,12 +3274,6 @@
     "number": 58
    },
    {
-    "playerId": "8482470",
-    "name": "Ilya Solovyov",
-    "pos": "D",
-    "number": 7
-   },
-   {
     "playerId": "8481056",
     "name": "Spencer Stastney",
     "pos": "D",
@@ -3370,12 +3364,6 @@
     "name": "Ben Meyers",
     "pos": "C",
     "number": 59
-   },
-   {
-    "playerId": "8483012",
-    "name": "Logan Morrison",
-    "pos": "C",
-    "number": 96
    },
    {
     "playerId": "8483497",
