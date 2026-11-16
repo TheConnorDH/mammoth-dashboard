@@ -2,6 +2,16 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.9.0 (2026-11-16)
+
+**New**
+- **Injury burden (League tab).** For every team: talent missing from its next game (every listed player weighted by the chance he misses it, valued like any lineup change, including long absences the ratings already reflect), the part that still moves the next game's odds, expected games lost over the next 10, and who is out. Descriptive; not a ranking input.
+
+**Changed**
+- **Previews skip injured players.** "Top players" and "Likely goalie" on the Games tab, and "Who to watch", "Most likely to score" and the game-plan text on the Matchup tab, skip anyone expected to miss the game (50%+) and bring in the next player. Finished games show the lineup as it was.
+- **Matchup odds include injuries**, so the full matchup preview agrees with the Games tab. Skater absences are a new step in "why the odds lean"; the goalie picker defaults to the healthy goalie and marks injured ones.
+- **Injury labels** (IR, LTIR, Out, DTD) next to listed players on the Roster and Players tables and the Matchup key players; line cards flag a member expected out.
+
 ## 1.8.0 (2026-11-16)
 
 **New**

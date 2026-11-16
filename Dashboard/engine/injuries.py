@@ -142,6 +142,13 @@ def build(inj, prev, players, standings, sched, last_played, params, today, line
             if ld:
                 rate, mpg, inl = ld[2], ld[3], True
                 cost = (b_lineup.get(t) or 0.0) * (rate - replacement(t, p["g"], out_ids)) * mpg / 60
+        # full value of the absence, for the League tab's injury burden (descriptive): players already out of the recent lineup
+        # are valued at their season workload (goalies at a typical starter's 60% of games). Not used in the odds: the ratings
+        # already play without them.
+        full = cost
+        if p and not inl:
+            m_ = (p.get("tpg") or 0.0) * (0.6 if p["g"] == "G" else 1.0)
+            full = (b_lineup.get(t) or 0.0) * (rate_of(p) - replacement(t, p["g"], out_ids)) * m_ / 60
         for g, q in zip(U, pout):
             if q and cost:
                 d = shifts.setdefault(str(g["id"]), {"h": 0.0, "a": 0.0})
@@ -150,7 +157,7 @@ def build(inj, prev, players, standings, sched, last_played, params, today, line
                      "status": status, "ltir": bool(e.get("ltir")), "injury": e.get("injury"), "returnDate": rd, "note": e.get("note"), "detail": e.get("detail"),
                      "updated": e.get("updated"), "missed": k, "expMissed": exp_missed, "pNext": pout[0] if pout else None, "backBy": rd or back_at, "backLo": None if rd else back_lo, "backHi": None if rd else back_hi,
                      "pg": [[g["date"], q] for g, q in zip(U, pout) if q >= 0.05], "horizon": U[-1]["date"] if U else None,
-                     "cost": round(cost, 4), "winCost": round(cost * wp_slope * 0.25, 4), "inLineup": inl, "mpg": round(mpg, 1) if mpg else None,
+                     "cost": round(cost, 4), "winCost": round(cost * wp_slope * 0.25, 4), "winFull": round(max(full, 0.0) * wp_slope * 0.25, 4), "inLineup": inl, "mpg": round(mpg, 1) if mpg else None,
                      "tal": (p or {}).get("tal"), "tpct": (p or {}).get("tpct")})
     for b in back:      # back from the list: he returns for the next game, in place of his team's replacement-level player
         t, p = b["t"], b["p"]
@@ -163,7 +170,7 @@ def build(inj, prev, players, standings, sched, last_played, params, today, line
             d["h" if g["home"] == t else "a"] += -gain       # shifts are costs; a return is a negative cost
         page.append({"t": t, "n": p["n"], "id": p["id"], "pos": p.get("pos"), "g": p["g"], "status": "Activated", "ltir": False, "injury": b["e"].get("injury"),
                      "returnDate": None, "note": "Off the injury list since yesterday; expected back in the lineup.", "detail": None, "updated": None,
-                     "missed": None, "expMissed": 0.0, "pNext": 0.0, "backBy": today, "backLo": None, "backHi": None, "pg": [], "horizon": None, "cost": round(-gain, 4), "winCost": round(-gain * wp_slope * 0.25, 4),
+                     "missed": None, "expMissed": 0.0, "pNext": 0.0, "backBy": today, "backLo": None, "backHi": None, "pg": [], "horizon": None, "cost": round(-gain, 4), "winCost": round(-gain * wp_slope * 0.25, 4), "winFull": 0.0,
                      "inLineup": False, "mpg": round(mpg, 1), "tal": p.get("tal"), "tpct": p.get("tpct")})
     status = {"ok": bool(inj.get("ok", True)), "fetched": inj.get("fetched"), "error": inj.get("error"), "n": len(inj["players"]),
               "matched": sum(1 for r in rows if r["p"]), "unmatched": [r["e"]["name"] for r in rows if not r["p"]][:20], "activated": len(back)}

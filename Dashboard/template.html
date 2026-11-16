@@ -198,6 +198,9 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
   <section><h2>Conferences and Divisions</h2>
     <div class="ctl">Teams per group <select id="cg-n"><option value="0">All</option><option value="3">Top 3</option><option value="4">Top 4</option><option value="5">Top 5</option><option value="8">Top 8</option></select></div>
     <div class="grid2"><div class="card" id="cg-table"></div><div class="card"><div class="chart"><canvas id="c-groups"></canvas></div></div></div></section>
+  <section><h2>Injury Burden <a class="glink" href="#method" onclick="goGuide('g-injuries');return false;">How this works &rsaquo;</a></h2>
+    <p class="lede">How much talent each team is missing right now, and how many games its injured players are expected to miss over its next 10.</p>
+    <div class="card" id="ib-body"></div></section>
   <section><h2>Lineup Strength: Top vs. Depth <a class="glink" href="#method" onclick="goGuide('g-lineups');return false;">How this works &rsaquo;</a></h2>
     <p class="lede"><b>Top</b> = best six forwards + top four defensemen. <b>Depth</b> = the rest of the lineup. Hover a value to see the players.</p>
     <div class="ctl">Show <select id="ln-filter"></select></div>
@@ -413,7 +416,9 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <ul><li><b>Expected back</b>: the team's reported return date when there is one. Otherwise it comes from how absences have actually run: 16,448 absences over eight seasons (a regular missing games), where the median absence was 2 games, a third were back after one game, and the longer a player has been out, the longer he tends to stay out. The date shown is the first game he is more likely back than not, with a 25% to 75% window. Long-term IR counts at least 10 games from his first missed game. Day-to-day players who played the latest game are treated as playing.</li>
         <li><b>Win chance per game</b>: how much his absence lowers his team's chance of winning each game he misses. It is the same lineup weight the power ratings already use (his talent per 60 minus his likely replacement's, times his minutes), applied only to the games he's expected to miss, weighted by the chance he misses each one. Players already out of the last five games' lineup show "in ratings": the ratings already play without him. A player who drops off the list and wasn't in the recent lineup is added back.</li>
         <li><b>Tested on past seasons</b> (8,790 games, using the actual absences known before each game): odds that account for who is out predicted results better overall (log loss 0.2% better), 0.7% better when a team was missing at least 0.1 goals per game of talent, and 2.2% better when missing 0.2 or more. A fitted weight for lost talent (1.11 ± 0.41) matched the general lineup weight (0.98 ± 0.12), so lost talent is weighted the same as any other lineup change.</li>
-        <li><b>Where it's used</b>: single-game win odds (Games tab, next 10 games) and the season simulation, game by game. Power rankings are not adjusted: in the same test, adjusting season-long ratings for current injuries did not predict the rest of the season any better (players come back).</li>
+        <li><b>Where it's used</b>: single-game win odds (Games tab, next 10 games, Matchup tab) and the season simulation, game by game. Players expected out (50%+) are skipped in "top players", "who to watch", "most likely to score" and the likely goalie; the Matchup tab defaults to the healthy goalie and shows skater injuries as their own step in why the odds lean (an injured goalie counts through the goalie you pick there; the Games tab, which has no goalie pick, prices him in directly, so the two can differ slightly). Rosters, the Players table and line cards mark listed players.</li>
+        <li><b>Injury burden</b> (League tab): for each team, the talent missing from its next game (every listed player weighted by the chance he misses it, including long absences the ratings already reflect, at his usual minutes; goalies at a starter's share), the part that still moves tonight's odds, and expected games lost over the next 10. Descriptive, not a ranking input.</li>
+        <li><b>Not adjusted</b>: power rankings (in the same test, adjusting season-long ratings for current injuries did not predict the rest of the season any better: players come back), talent (an injury doesn't change it), lineup strength (a full-strength view), playoff strength (few injuries last to April) and Impact (built from games played).</li>
         <li><b>Limits</b>: the feed is unofficial, teams are vague about injuries, and the historical absences include healthy scratches, so short absences are a little more common in the data than for injuries alone. If the feed fails, the last good list is used and the check says so.</li></ul></details>
     <details id="g-games"><summary>Games</summary>
       <p>Every game of the season, browsable by date (the arrows skip days without games; the team filter shows one team's games). Away team on top, home team below.</p>
@@ -658,8 +663,10 @@ const groups = [['', 'All teams'], ...[...new Set(S.map(s => s.conf))].sort().ma
 const groupName = g => !g ? '' : g.split(':')[1] + (g[0] === 'c' ? ' Conference' : ' Division');
 const shortGroup = g => !g ? '' : g.split(':')[1];
 function inGroup(t, g) { if (!g) return true; const [k, v] = g.split(':'); return k === 'c' ? confOf[t] === v : divOf[t] === v; }
-const goalieLine = r => { const G = r.goalies || []; if (!G.length) return ''; const s = G[0], b = G[1];
-  return `<span class="sub">G: <b>${s.name.split(' ').slice(-1)[0]}</b> ${s.tal != null ? sp(s.tal) : ''} <span title="starts in the last ${r.glast} games">(${s.starts}/${r.glast})</span>${b ? ` &middot; ${b.name.split(' ').slice(-1)[0]} ${b.tal != null ? sp(b.tal) : ''} (${b.starts}/${r.glast})` : ''}</span>`; };
+const goalieLine = (r, d) => { let G = r.goalies || []; if (!G.length) return '';
+  if (d !== undefined) { const hg = healthyGoalie(r, d); G = [hg, ...G.filter(g => g !== hg)]; }      // injury-aware: the healthy goalie first
+  const s = G[0], b = G[1], ob = q => d !== undefined && injLikelyOut(r.team, q.id, q.name, d) ? ' <span class="pill p-red" style="font-size:10px;padding:0 5px">out</span>' : '';
+  return `<span class="sub">G: <b>${s.name.split(' ').slice(-1)[0]}</b> ${s.tal != null ? sp(s.tal) : ''} <span title="starts in the last ${r.glast} games">(${s.starts}/${r.glast})</span>${b ? ` &middot; ${b.name.split(' ').slice(-1)[0]} ${b.tal != null ? sp(b.tal) : ''} (${b.starts}/${r.glast})${ob(b)}` : ''}</span>`; };
 function renderPower() {
   if (!PW) { $('pw-table').innerHTML = '<div class="lock">Needs MoneyPuck game-by-game files.</div>'; return; }
   const g = $('pw-filter').value, rows = PW.rows.filter(r => inGroup(r.team, g)).sort((a, b) => a.rank - b.rank);
@@ -714,7 +721,7 @@ function initLeague() {
   renderStandings();
 }
 inits.league = initLeague;
-renderers.league = () => { renderPower(); renderGroups(); renderLines(); renderStandings(); };
+renderers.league = () => { renderPower(); renderGroups(); renderLines(); renderStandings(); renderBurden(); };
 function initTeam() { teamOptions('tm-sel'); }
 inits.team = initTeam;
 renderers.team = renderTeam;
@@ -898,7 +905,7 @@ const lnVs = l => l.exp != null && l.xgf != null ? l.xgf - l.exp : null;
 const lnBand = l => l.se ? `${Math.max(0, Math.round((l.xgf - 1.645 * l.se) * 100))}-${Math.min(100, Math.round((l.xgf + 1.645 * l.se) * 100))}%` : '';
 function lnCard(l) {
   const p = lnPct(l), vs = lnVs(l), a = lnArch(p), q = lnQ(l);
-  const who = l.nm.length !== l.ids.length ? l.nm.join(' &ndash; ') : l.nm.map((n, i) => l.ids[i] && PLID[l.ids[i]] ? `<a class="tm" href="#roster" onclick="showProfile.scroll=true;showProfile('${l.ids[i]}','ro-prof');return false;">${n}</a>` : n).join(' &ndash; ');
+  const who = l.nm.length !== l.ids.length ? l.nm.join(' &ndash; ') : l.nm.map((n, i) => l.ids[i] && PLID[l.ids[i]] ? `<a class="tm" href="#roster" onclick="showProfile.scroll=true;showProfile('${l.ids[i]}','ro-prof');return false;">${n}</a>` : n).join(' &ndash; ') + l.ids.map((id, i) => id && injLikelyOut(l.t, id, null, null) ? ` <span class="pill p-red" style="font-size:10px;padding:0 5px" title="Expected to miss the next game">${(l.nm[i] || '').split(' ').slice(-1)[0]} out</span>` : '').join('');
   const bar = (k, lab, tip) => { const v = p[k]; if (v == null) return ''; const c = k === 'fin' ? 'var(--mute)' : v >= 67 ? 'var(--green)' : v <= 33 ? 'var(--red)' : 'var(--ice)';
     return `<div class="ln-sk" title="${tip}"><span>${lab}</span><div class="bar"><div style="width:${v}%;background:${c}"></div></div><span>${ord(Math.max(1, v))}</span></div>`; };
   return `<div class="ln-card"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="who">${who}</span><span>${lnArchPill(a)} ${q ? '' : `<span class="pill p-grey" title="Qualified at ${Math.round(l.qmin)}+ minutes">not qualified</span>`}</span></div>
@@ -959,11 +966,52 @@ function injFeed() {
   if (!st.n) return '<div class="lock">No injury list available today, so odds are not injury-adjusted.</div>';
   return `<p class="small" style="margin-top:8px">ESPN injury list, fetched ${injDate(st.fetched)}${st.ok ? '' : ' (today\'s fetch failed; this is the last good list)'}. Expected-back dates without a reported date come from how past absences ran; ranges are the 25% to 75% likely window.</p>`;
 }
+function injPOut(r, d) {   // chance listed player r misses a game on date d (null: his team's next game)
+  if (!r || r.status === 'Activated') return 0;
+  if (r.returnDate) return d ? (d < r.returnDate ? 1 : 0) : (r.pNext || 0);
+  if (!d) return r.pNext || 0;
+  const x = (r.pg || []).find(y => y[0] === d); return x ? x[1] : (r.horizon && d > r.horizon && r.pg && r.pg.length && r.pg[r.pg.length - 1][1] >= 0.5 ? r.pg[r.pg.length - 1][1] : 0);
+}
+const injRowOf = (t, id, n) => INJ.find(r => r.t === t && r.status !== 'Activated' && ((id && r.id && String(r.id) === String(id)) || (n && (!id || !r.id) && r.n === n)));
+const injLikelyOut = (t, id, n, d) => injPOut(injRowOf(t, id, n), d) >= 0.5;
+function healthyTop(r, d, k) {   // a team's top players in their role, skipping anyone expected out on date d
+  if (!r) return [];
+  const C = r.topC && r.topC.length ? r.topC : (r.top || []).map((n, i) => [null, n, (r.topV || [])[i], (r.topPos || [])[i]]);
+  return C.filter(([id, n]) => !injLikelyOut(r.team, id, n, d)).slice(0, k || 3);     // [id, name, value in his role, position]
+}
+function healthyGoalie(r, d) {   // the likely starter, or the next goalie if he is expected out
+  const G = (r && r.goalies) || []; return G.find(g => !injLikelyOut(r.team, g.id, g.name, d)) || G[0] || null;
+}
+function injTeamCost(t, d) {   // skaters expected out (and recent returns) on date d, in rating units; goalies are handled by the goalie pick
+  return INJ.filter(r => r.t === t && r.g !== 'G' && (r.status === 'Activated' ? true : r.inLineup)).reduce((s, r) => s + (r.status === 'Activated' ? r.cost : injPOut(r, d) * r.cost), 0);
+}
+function injBadge(t, id, n) {   // small status label next to a player's name
+  const r = injRowOf(t, id, n); if (!r) return '';
+  const q = injPOut(r, null), dtd = /^day/i.test(r.status);
+  return ` <span class="pill ${dtd && q < 0.5 ? 'p-amber' : 'p-red'}" style="font-size:10px;padding:0 5px" title="${(r.status || '') + (r.injury ? ': ' + r.injury : '')}${r.backBy ? ' • expected back ' + injDate(r.backBy) : ''}">${r.ltir ? 'LTIR' : dtd ? 'DTD' : /reserve/i.test(r.status) ? 'IR' : 'Out'}</span>`;
+}
 const injSortCost = (a, b) => (b.winCost || 0) - (a.winCost || 0) || (b.tal || -99) - (a.tal || -99);
 function injTeamHTML(x) {
   const L = INJ.filter(r => r.t === x).sort(injSortCost);
   if (!L.length) return `<div class="small">No one on ${x}'s injury list.</div>${injFeed()}`;
   return `<table>${injHead(false)}${L.map(r => injRow(r, false)).join('')}</table>${injFeed()}`;
+}
+function renderBurden() {   // descriptive: talent missing for each team's next game, and expected games lost over its next 10
+  const el = $('ib-body'); if (!el) return;
+  if (!INJ.length) { el.innerHTML = injFeed(); return; }
+  const rows = S.map(s => { const t = s.abbr, nx = teamGames(t).next.slice(0, 10).map(g => g[0]);
+    const L = INJ.filter(r => r.t === t && r.id && r.status !== 'Activated');
+    const out = L.map(r => [injPOut(r, nx[0] || null), r]).filter(x => x[0] >= 0.5).sort((a, b) => (b[1].winFull || 0) - (a[1].winFull || 0));
+    const full = L.reduce((z, r) => z + injPOut(r, nx[0] || null) * (r.winFull || 0), 0), odds = L.reduce((z, r) => z + (r.inLineup ? injPOut(r, nx[0] || null) * (r.winCost || 0) : 0), 0)
+      + INJ.filter(r => r.t === t && r.status === 'Activated').reduce((z, r) => z + (r.winCost || 0), 0);     // returns (negative cost) count too
+    const lost = L.reduce((z, r) => z + nx.reduce((y, d) => y + injPOut(r, d), 0), 0);
+    return {t, full, odds, lost, out}; }).sort((a, b) => b.full - a.full || b.lost - a.lost);
+  const mx = Math.max(0.01, ...rows.map(r => r.full));
+  el.innerHTML = `<table><tr><th>#</th><th>Team</th><th title="Approximate drop in win chance from everyone expected out of the next game, vs. their replacements">Talent missing (win chance / game)</th><th title="The part not yet in the power ratings (players who were in the last 5 games' lineup), net of players just back from the list">In next-game odds</th><th>Games lost, next 10</th><th>Expected out next game</th></tr>${rows.map((r, i) => `<tr><td>${i + 1}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${r.t}');return false;">${r.t}</a></b></td>
+    <td><div style="display:flex;align-items:center;gap:6px"><div style="flex:0 0 110px;height:8px;background:var(--line);border-radius:4px"><div style="width:${Math.round(r.full / mx * 100)}%;height:8px;background:var(--red);border-radius:4px"></div></div><span>${r.full >= 0.0005 ? '&minus;' + (r.full * 100).toFixed(1) + '%' : '0%'}</span></div></td>
+    <td>${Math.abs(r.odds) >= 0.0005 ? (r.odds > 0 ? '&minus;' : '+') + Math.abs(r.odds * 100).toFixed(1) + '%' : '&mdash;'}</td><td>${r.lost >= 0.05 ? r.lost.toFixed(1) : '0'}</td>
+    <td class="small wrap">${r.out.length ? r.out.slice(0, 4).map(([q, x]) => x.n.split(' ').slice(-1)[0]).join(', ') + (r.out.length > 4 ? ` +${r.out.length - 4}` : '') : '&mdash;'}</td></tr>`).join('')}</table>
+    <p class="small" style="margin-top:6px">Talent missing counts every matched player on the list, weighted by the chance he misses the next game and valued like any lineup change: his talent minus his replacement's, times his usual minutes (goalies at a typical starter's share). Players already out for a while are in the power ratings already, so only the second column moves the next game's odds. Approximate: win-chance changes are at even odds.</p>${injFeed()}`;
 }
 function renderLeagueInj() {
   const t = $('ix-team').value, k = $('ix-sort').value;
@@ -978,7 +1026,7 @@ function injOddsNote(x) {   // which absences the next-games odds include
   return ` Odds include expected absences${L.length ? `: ${L.slice(0, 5).map(r => r.n.split(' ').slice(-1)[0]).join(', ')}${L.length > 5 ? ` and ${L.length - 5} more` : ''}` : ''}${A.length ? `${L.length ? '; ' : ': '}back: ${A.map(r => r.n.split(' ').slice(-1)[0]).join(', ')}` : ''}.`;
 }
 function injGameHTML(g) {   // the Games tab preview: who is likely out for this game
-  const side = t => { const L = INJ.filter(r => r.t === t && r.status !== 'Activated').map(r => { const q = r.returnDate ? (g.d < r.returnDate ? 1 : 0) : ((r.pg || []).find(x => x[0] === g.d) || [null, 0])[1]; return [q, r]; }).filter(x => x[0] >= 0.25).sort((a, b) => injSortCost(a[1], b[1]));
+  const side = t => { const L = INJ.filter(r => r.t === t && r.status !== 'Activated').map(r => { const q = injPOut(r, g.d); return [q, r]; }).filter(x => x[0] >= 0.25).sort((a, b) => injSortCost(a[1], b[1]));
     return L.length ? L.map(([q, r]) => `<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid var(--line)"><span><b>${r.n}</b> <span class="small">${r.pos || ''} &bull; ${r.injury || r.status}</span></span><span class="small">${q >= 0.95 ? 'out' : Math.round(q * 100) + '% out'}${r.inLineup && Math.abs(r.winCost || 0) >= 0.0005 ? ` &bull; ${(r.winCost > 0 ? '&minus;' : '+') + Math.abs(r.winCost * 100).toFixed(1)}%` : ''}</span></div>`).join('') : '<div class="small">No one expected out.</div>'; };
   if (!INJ.length) return '';
   return `<div class="card" style="margin-top:14px"><h3>Expected out <a class="glink" href="#method" onclick="goGuide('g-injuries');return false;">How this works &rsaquo;</a></h3><div class="grid2"><div><div class="small" style="margin-bottom:4px"><b>${g.a}</b></div>${side(g.a)}</div><div><div class="small" style="margin-bottom:4px"><b>${g.h}</b></div>${side(g.h)}</div></div><p class="small" style="margin-top:6px">Chance each listed player misses this game, and what it costs his team's win chance; the odds above include it.</p></div>`;
@@ -1120,7 +1168,7 @@ function gmPreview(g) {
   const sa = S.find(s => s.abbr === g.a) || {}, shh = S.find(s => s.abbr === g.h) || {};
   const past = g.d < gmToday();
   const last5 = t => { const L = gmAll().filter(x => x.f && (x.h === t || x.a === t) && x.d < g.d).slice(-5); return L.length ? L.map(x => `<span class="res ${gmRes(x, t)}" style="width:auto;padding:0 4px;margin-right:2px">${gmRes(x, t)}</span>`).join('') : '&mdash;'; };
-  const gl = r => { const q = r && (r.goalies || [])[0]; return q ? `${q.name.split(' ').slice(-1)[0]} <span class="small">(${q.starts}/${r.glast} starts)</span>` : '&mdash;'; };
+  const gl = r => { const q = past ? (r && (r.goalies || [])[0]) : healthyGoalie(r, g.d), q0 = r && (r.goalies || [])[0]; return q ? `${q.name.split(' ').slice(-1)[0]} <span class="small">(${q.starts}/${r.glast} starts${q0 && q0 !== q ? `; ${q0.name.split(' ').slice(-1)[0]} expected out` : ''})</span>` : '&mdash;'; };
   // [label, away value, home value, number for comparison (higher is better) or null]
   const rows = [
     ['Record', sa.w != null ? `${sa.w}-${sa.l}-${sa.otl}` : '&mdash;', shh.w != null ? `${shh.w}-${shh.l}-${shh.otl}` : '&mdash;', [sa.ptsPct, shh.ptsPct]],
@@ -1132,7 +1180,7 @@ function gmPreview(g) {
     ['Elite skaters', ra && ra.po ? ra.po.elite : '&mdash;', rh && rh.po ? rh.po.elite : '&mdash;', ra && rh && ra.po && rh.po ? [ra.po.elite, rh.po.elite] : null],
     ['Last 5', last5(g.a), last5(g.h), null],
     ['Likely goalie', gl(ra), gl(rh), null],
-    ['Top players (in their role)', ra ? (ra.top || []).map(n => n.split(' ').slice(-1)[0]).join(', ') : '&mdash;', rh ? (rh.top || []).map(n => n.split(' ').slice(-1)[0]).join(', ') : '&mdash;', null]];
+    ['Top players (in their role)', ra ? (past ? (ra.top || []) : healthyTop(ra, g.d).map(x => x[1])).map(n => n.split(' ').slice(-1)[0]).join(', ') : '&mdash;', rh ? (past ? (rh.top || []) : healthyTop(rh, g.d).map(x => x[1])).map(n => n.split(' ').slice(-1)[0]).join(', ') : '&mdash;', null]];
   const cmp = `<table class="gm-cmp" data-enh="1"><tr><td>${g.a}</td><td class="lab"></td><td>${g.h}</td></tr>${rows.map(([l, va, vh, c]) => { const b = c && c[0] != null && c[1] != null && c[0] !== c[1] ? (c[0] > c[1] ? 'a' : 'h') : null;
     return `<tr><td class="${b === 'a' ? 'better' : b ? 'worse' : ''}">${va}</td><td class="lab">${l}</td><td class="${b === 'h' ? 'better' : b ? 'worse' : ''}">${vh}</td></tr>`; }).join('')}</table>`;
   const b2b = (g.b2b || []).length ? ` &bull; second night of a back-to-back: <b>${g.b2b.join(', ')}</b>` : '';
@@ -1330,7 +1378,7 @@ function renderRoster(x) {
     $('roster-table').innerHTML = `<div class="lock">${st.name || x} hasn't played a game yet, so no players have appeared for them this season.</div>`; return; }
   $('roster-table').innerHTML = `<table><tr><th title="Team rank by talent &middot; rank at his position on the team (F1 = best forward) &middot; tier">Team rank / tier</th><th>Player</th><th>Pos</th><th>Age</th><th>GP</th><th>Impact this season (pts)</th><th title="Season Impact per 60 minutes on ice; percentile among qualified NHL players at his position (qualified = at least half a regular's minutes over the team's games)">Per 60 min (pts)</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Style</th><th>Role</th><th>In his role (pts / 84 GP, his minutes)</th>${hasCap ? '<th>Cap hit</th>' : ''}</tr>${L.map(r => `<tr>
     <td><b>${r.rk}</b> <span class="small">${r.grp}${r.prk}</span> <span class="pill" style="background:${tierCol(r.tier)};color:${tierInk(r.tier)}">T${r.tier}</span></td>
-    <td><a class="tm" href="#roster" onclick="showProfile.scroll=true;showProfile('${r.id}','ro-prof');return false;"><b>${r.name}</b></a>${PLID[r.id] && PLID[r.id].arch ? `<span class="sub">${PLID[r.id].arch}</span>` : ''}${r.num != null ? ` <span class="small">#${r.num}</span>` : ''}${r.status ? ` <span class="pill p-amber">${r.status}</span>` : ''}</td><td>${r.pos}</td><td>${r.age != null ? Math.floor(r.age) : '&mdash;'}</td><td>${r.gp}</td>
+    <td><a class="tm" href="#roster" onclick="showProfile.scroll=true;showProfile('${r.id}','ro-prof');return false;"><b>${r.name}</b></a>${r.status ? '' : injBadge(x, r.id, r.name)}${PLID[r.id] && PLID[r.id].arch ? `<span class="sub">${PLID[r.id].arch}</span>` : ''}${r.num != null ? ` <span class="small">#${r.num}</span>` : ''}${r.status ? ` <span class="pill p-amber">${r.status}</span>` : ''}</td><td>${r.pos}</td><td>${r.age != null ? Math.floor(r.age) : '&mdash;'}</td><td>${r.gp}</td>
     <td${r.ng ? '' : goalsTitle(r.imp)}>${r.ng ? '<span class="small">no games yet</span>' : `<b>${sp(pt(r.imp), 2)}</b> ${pctPill(r.ipct)} ${verdictPill(r.vd)}<span class="sub">90%: ${sp(pt(r.imp - 1.645 * r.ise), 2)} to ${sp(pt(r.imp + 1.645 * r.ise), 2)}</span>`}</td><td>${PLID[r.id] ? per60Cell(PLID[r.id], 'season') : '&mdash;'}</td>
     <td${goalsTitle(r.tal)}><b>${sp(pt(r.tal))}</b> ${rbar(pt(r.tal), pt(r.tsd), -6, 6, tierCol(r.tier))}</td>
     <td>${bandPill(bandOf(r.tpct, r.grp, r.tal, r.tsd))} ${r.grp === 'G' ? gPill(r.tal) : pctPill(r.tpct)}${r.trank ? `<span class="sub">${ord(r.trank)} of ${r.tn} NHL ${({F: 'forwards', D: 'defensemen', G: 'goalies'}[r.grp] || 'players')}</span>` : ''}</td>
@@ -1467,11 +1515,16 @@ renderers.matchup = x => { if (MU.for === x) return; muFollow(x); $('mu-a').valu
 function renderMatchup(resetG) {
   const a = MU.a, b = MU.b, ra = PW.rows.find(r => r.team === a), rb = PW.rows.find(r => r.team === b);
   if (!ra || !rb || a === b) { $('mu-head').innerHTML = '<div class="lock">Pick two different teams.</div>'; return; }
-  const gsel = (r, el) => { el.innerHTML = (r.goalies || []).map((g, i) => `<option value="${g.id}">${g.name.split(' ').slice(-1)[0]} in net${i === 0 ? ' (likely)' : ''}</option>`).join('') + `<option value="">Usual goalie mix</option>`; };
+  // injuries apply to the teams' next meeting when one is scheduled, else to each team's next game
+  const nxt_ = ((PW && PW.sched) || []).find(g => g[3] !== 6 && g[3] !== 7 && g[0] >= gmToday() && ((g[1] === a && g[2] === b) || (g[1] === b && g[2] === a)));
+  MU.injDate = nxt_ ? nxt_[0] : null;
+  const gsel = (r, el) => { const hg = healthyGoalie(r, MU.injDate);
+    el.innerHTML = (r.goalies || []).map(g => `<option value="${g.id}" ${g === hg ? 'selected' : ''}>${g.name.split(' ').slice(-1)[0]} in net${g === hg ? ' (likely)' : injLikelyOut(r.team, g.id, g.name, MU.injDate) ? ' (injured)' : ''}</option>`).join('') + `<option value="">Usual goalie mix${(r.goalies || []).some(g => injLikelyOut(r.team, g.id, g.name, MU.injDate)) ? ' (includes an injured goalie)' : ''}</option>`; };
   if (resetG) { gsel(ra, $('mu-ga')); gsel(rb, $('mu-gb')); }
   const gA = (ra.goalies || []).find(g => g.id === $('mu-ga').value), gB = (rb.goalies || []).find(g => g.id === $('mu-gb').value);
   const wp = PW.winprob, home = MU.v; const sa = S.find(s => s.abbr === a) || {}, sb = S.find(s => s.abbr === b) || {};
-  const dA = (ra.r + (gA ? gA.dr || 0 : 0)) - (rb.r + (gB ? gB.dr || 0 : 0));
+  MU.inj = injTeamCost(b, MU.injDate) - injTeamCost(a, MU.injDate);     // rating units, a's side (engine/injuries.py costs)
+  const dA = (ra.r + (gA ? gA.dr || 0 : 0)) - (rb.r + (gB ? gB.dr || 0 : 0)) + MU.inj;
   MU.rest = muRest(a, b, home); const rL = MU.rest.logit;     // back-to-back edge for a (validated, params/rest_validation.json)
   const pA = home === 'n' ? _lg(wp.win[1] * dA + rL) : home === 'a' ? _lg(wp.win[0] + wp.win[1] * dA + rL) : 1 - _lg(wp.win[0] - wp.win[1] * dA - rL);
   const pOT = _lg(wp.ot[0] + wp.ot[1] * Math.abs(dA));
@@ -1500,7 +1553,7 @@ function renderMatchup(resetG) {
     `;
   MU.E = muEngine(a, b, home, gA, gB, MU.rest); muRenderInsight(MU.E, a, b);
   // ---- key players
-  const pl = (r, t) => `<div style="margin-bottom:8px"><b>${t}</b><div class="small">${(r.top || []).map((nmx, i) => { const P_ = (D.playersLeague || []).find(p => p.n === nmx && p.t === t); return `${P_ ? `<a class="tm" href="#" onclick="setTeam('${t}','roster');showProfile.scroll=true;showProfile('${P_.id}','ro-prof');return false;">${nmx}</a>` : nmx} <b>${r.topV ? sp(r.topV[i]) : ''}</b>${P_ && P_.arch ? ` <span style="color:var(--mute)">(${P_.arch})</span>` : ''}`; }).join('<br>')}</div>${goalieLine(r)}</div>`;
+  const pl = (r, t) => `<div style="margin-bottom:8px"><b>${t}</b><div class="small">${healthyTop(r, MU.injDate).map(([pid, nmx, val]) => { const P_ = (D.playersLeague || []).find(p => (pid ? String(p.id) === String(pid) : p.n === nmx) && p.t === t); return `${P_ ? `<a class="tm" href="#" onclick="setTeam('${t}','roster');showProfile.scroll=true;showProfile('${P_.id}','ro-prof');return false;">${nmx}</a>` : nmx} <b>${val != null ? sp(val) : ''}</b>${P_ && P_.arch ? ` <span style="color:var(--mute)">(${P_.arch})</span>` : ''}`; }).join('<br>')}</div>${goalieLine(r, MU.injDate)}</div>`;
   const scl = t => { const L = MU.E && MU.E.scorers ? MU.E.scorers[t] : []; return L.length ? `<div class="small" style="margin:-4px 0 8px"><b>Most likely to score (${t}):</b> ${L.map(s => `${s.n.split(' ').slice(-1)[0]} ${Math.round(s.p * 100)}%`).join(', ')}</div>` : ''; };
   $('mu-players').innerHTML = `<h3>Who to watch <span class="small">top skaters by impact in their role; goalies rated as if starting</span></h3>${pl(ra, a)}${scl(a)}${pl(rb, b)}${scl(b)}
     `;
@@ -1577,7 +1630,7 @@ function muScorers(t, op, n) { const TR = D.teamRates || {}, L = Object.values(T
   let names = null; if (t === 'UTA' && D.lineup && D.lineup.staff) names = [...D.lineup.staff.forwards.flat(), ...D.lineup.staff.defense.flat()];
   else { const E = ((D.teamExtra || {})[t] || {}).lastLines; if (E) names = [...E.forwards.flat(), ...E.defense.flat()]; }
   const ks = names ? names.map(key) : null;
-  return (D.playersLeague || []).filter(p => p.t === t && p.g !== 'G' && p.gx60 && !p.ng && (!ks || ks.some(k => key(p.n).endsWith(k))))
+  return (D.playersLeague || []).filter(p => p.t === t && p.g !== 'G' && p.gx60 && !p.ng && (!ks || ks.some(k => key(p.n).endsWith(k))) && !injLikelyOut(t, p.id, p.n, MU.injDate))
     .map(p => ({n: p.n, p: 1 - Math.exp(-p.gx60 * (p.tpg || 0) / 60 * of)})).sort((x, y) => y.p - x.p).slice(0, n || 3); }
 function muEngine(a, b, home, gA, gB, rest) {
   const ra = PW.rows.find(r => r.team === a), rb = PW.rows.find(r => r.team === b), wp = PW.winprob;
@@ -1593,7 +1646,7 @@ function muEngine(a, b, home, gA, gB, rest) {
   const pk_ = [['Roster talent (current lineups)', 'lineup'], ['Last season', 'lastseason'], ['Chances this season (xG)', 'shots'], ['Results this season (goals)', 'results']]
     .map(([l, k]) => [l, wp.win[1] * (PR(ra, k) - PR(rb, k))]);
   const tgt_ = wp.win[1] * (ra.r - rb.r), res_ = tgt_ - pk_.reduce((s, x) => s + x[1], 0);   // rounding residual (tiny) joins the smallest-steps row
-  const steps = [...(home === 'n' ? [] : [['Home ice', hcoef]]), ...(rest && rest.logit ? [['Rest (back-to-back)', rest.logit]] : []), ...pk_, ['Tonight\'s goalies', wp.win[1] * gdr]];
+  const steps = [...(home === 'n' ? [] : [['Home ice', hcoef]]), ...(rest && rest.logit ? [['Rest (back-to-back)', rest.logit]] : []), ...pk_, ['Tonight\'s goalies', wp.win[1] * gdr], ['Injuries (expected absences)', wp.win[1] * (MU.inj || 0)]];
   let lg_ = 0, small = 0; const water0 = steps.map(([l, x]) => { const p0 = _lg(lg_); lg_ += x; return {l, dp: _lg(lg_) - p0}; });
   lg_ += res_; const water = water0.filter(s => { if (Math.abs(s.dp) >= 0.005) return true; small += s.dp; return false; });
   const fin_ = _lg(lg_) - 0.5 - water.reduce((s, w) => s + w.dp, 0); if (Math.abs(fin_) >= 0.0005) water.push({l: 'Other (small pieces)', dp: fin_});
@@ -1648,7 +1701,7 @@ function muEngine(a, b, home, gA, gB, rest) {
       body: `${last(gm.name)} (${PO(gm.tpct)} percentile goalie talent) vs ${go && go.name ? last(go.name) + ' (' + PO(go.tpct) + ')' : 'the other side'}, worth about ${gn.toFixed(2)} goals a game on average. Single games swing far more than that.`, watch: `Saves on slot shots (high danger).`});
     if (Lm.rk_depF != null && Lo.rk_depF != null && Lo.rk_depF - Lm.rk_depF >= 10) out.push({k: 'depth', s: 0.06, rel: 0.5, head: `Win the depth minutes`,
       body: `${me}'s bottom-six forwards rank ${ord(Lm.rk_depF)} by talent, ${op}'s ${ord(Lo.rk_depF)}. Those lines play about a third of 5v5 time.`, watch: `Shot share when the third and fourth lines are out.`});
-    if (Lm.rk_topF != null && Lo.rk_topD != null && Lm.rk_topF <= 12 && Lo.rk_topD - Lm.rk_topF >= 8) { const tops = (R_[me].top || []).filter((n, i) => ((R_[me].topPos || [])[i] || '') !== 'D').slice(0, 2).map(last).join(' and ') || 'its top forwards';
+    if (Lm.rk_topF != null && Lo.rk_topD != null && Lm.rk_topF <= 12 && Lo.rk_topD - Lm.rk_topF >= 8) { const tops = healthyTop(R_[me], MU.injDate, 10).filter(x => (x[3] || '') !== 'D' && !/defense/i.test(x[3] || '')).slice(0, 2).map(x => last(x[1])).join(' and ') || 'its top forwards';
       out.push({k: 'star', s: 0.07, rel: 0.5, head: `Win the top-line matchup`, body: `${me}'s top six (${tops}) rank ${ord(Lm.rk_topF)} by talent; ${op}'s top-four defense ranks ${ord(Lo.rk_topD)}.`, watch: `Who ${op} puts out against ${tops.split(' and ')[0]}, and shots on those shifts.`}); }
     if (Lm.rk_topF != null && Lo.rk_topF != null && Lm.rk_topF <= 12 && Lo.rk_topF - Lm.rk_topF >= 10 && !out.some(x => x.k === 'star')) out.push({k: 'top', s: 0.06, rel: 0.5, head: `Top line carries it`,
       body: `${me}'s top-six forwards rank ${ord(Lm.rk_topF)} by talent, ${op}'s ${ord(Lo.rk_topF)}.`, watch: `Top-line shifts against ${op}'s second and third pairs.`});
@@ -1721,7 +1774,7 @@ function muShare(M) {
   const fav = pOf(aw) >= pOf(hm) ? aw : hm, pf = Math.max(pOf(aw), pOf(hm));
   const verdict = pf >= 0.6 ? `${nm(fav)} favored` : pf >= 0.53 ? `Slight edge: ${nm(fav)}` : 'Close to a coin flip';
   const PL = (t, n) => (D.playersLeague || []).find(p => p.t === t && p.n === n);
-  const star = t => { const n = (R[t].top || [])[0]; const p = n && PL(t, n); return p ? {n: last(n), arch: (p.arch || '').replace(/^(Top-line|Middle-six|Bottom-six|Top-pair|Second-pair|Third-pair) /, ''), pct: p.tpct} : null; };
+  const star = t => { const n = (healthyTop(R[t], MU.injDate, 1)[0] || [])[1]; const p = n && PL(t, n); return p ? {n: last(n), arch: (p.arch || '').replace(/^(Top-line|Middle-six|Bottom-six|Top-pair|Second-pair|Third-pair) /, ''), pct: p.tpct} : null; };
   const G = {[a]: E.C.gA, [b]: E.C.gB}, xg = M.xg || {};
   const divRk = t => { const s = st(t); if (!s.div) return ''; const L = S.filter(q => q.div === s.div).sort((x, y) => (y.pts - x.pts) || ((y.ptsPct || 0) - (x.ptsPct || 0))); return `${ord(L.findIndex(q => q.abbr === t) + 1)} in ${s.div}`; };
   const lastG = t => { const g = ((PW && PW.sched) || []).filter(x => (x[3] === 6 || x[3] === 7) && (x[1] === t || x[2] === t)).sort().pop(); if (!g) return '—';
@@ -2026,7 +2079,7 @@ function muDetail(a, b, ra, rb) {
   } else $('mu-lines').innerHTML = '<div class="lock">Lines not available yet for one of these teams.</div>';
   // ---- rosters side by side (by impact in role)
   const rost = (L, t) => { const sk = L.filter(p => p.g !== 'G').sort((x, y) => (y.role || 0) - (x.role || 0)).slice(0, 18), gs = L.filter(p => p.g === 'G').sort((x, y) => (y.tal || 0) - (x.tal || 0));
-    return `<h3>${nm2(t)}</h3><table><tr><th>Player</th><th>Type</th><th>Impact in role</th><th>Talent</th></tr>${sk.map(p => `<tr><td><a class="tm" href="#" onclick="setTeam('${t}','roster');showProfile.scroll=true;showProfile('${p.id}','ro-prof');return false;"><b>${p.n}</b></a><span class="sub">${p.pos}${p.cap ? ' &bull; ' + money(p.cap) : ''}</span></td><td class="small wrap">${p.arch || '&mdash;'}</td><td>${sp(pt(p.role))}</td><td>${sp(pt(p.tal))} ${pctPill(p.tpct)}</td></tr>`).join('')}${gs.map(p => `<tr><td><b>${p.n}</b><span class="sub">G</span></td><td class="small wrap">${p.arch || '&mdash;'}</td><td class="small">as starter:</td><td>${sp(pt(p.tal))} ${gPill(p.tal)}</td></tr>`).join('')}</table>`; };
+    return `<h3>${nm2(t)}</h3><table><tr><th>Player</th><th>Type</th><th>Impact in role</th><th>Talent</th></tr>${sk.map(p => `<tr><td><a class="tm" href="#" onclick="setTeam('${t}','roster');showProfile.scroll=true;showProfile('${p.id}','ro-prof');return false;"><b>${p.n}</b></a>${injBadge(t, p.id, p.n)}<span class="sub">${p.pos}${p.cap ? ' &bull; ' + money(p.cap) : ''}</span></td><td class="small wrap">${p.arch || '&mdash;'}</td><td>${sp(pt(p.role))}</td><td>${sp(pt(p.tal))} ${pctPill(p.tpct)}</td></tr>`).join('')}${gs.map(p => `<tr><td><b>${p.n}</b><span class="sub">G</span></td><td class="small wrap">${p.arch || '&mdash;'}</td><td class="small">as starter:</td><td>${sp(pt(p.tal))} ${gPill(p.tal)}</td></tr>`).join('')}</table>`; };
   const nm2 = t => (S.find(s => s.abbr === t) || {}).name || t;
   $('mu-ra').innerHTML = rost(A, a); $('mu-rb').innerHTML = rost(B, b);
   // ---- player vs player (profiles side by side)
@@ -2198,7 +2251,7 @@ function initExplorer() {
       return `<b style="color:${lo90 > 0 ? 'var(--green)' : hi90 < 0 ? 'var(--red)' : 'var(--ink)'}">${sp(pt(v))}</b><span class="sub">90%: ${sp(pt(lo90))} to ${sp(pt(hi90))}</span>`; };
     $('ex-table').innerHTML = `<div class="small" style="margin-bottom:6px">${total} players match${total > n ? `, showing the top ${n} by ${rkName}` : ''}. ${peerDesc}${bd || q || ty ? ' (caliber, player type and search filters hide rows but keep these ranks)' : ''}. Clicking a column header re-sorts but ranks stay with the player.<br><b>${WIN_L[w]}</b>: Impact = his total over ${w === 'season' ? 'the season' : `his team's last ${w} games`}; per 60 = that total per 60 minutes on ice. <b>Qualified</b> = at least half a regular's minutes over the team's games in the window (forwards ${QMIN.F}, defensemen ${QMIN.D}, goalies ${QMIN.G} min per team game)${qOnly ? '; unqualified players hidden' : ''}. ${winRel(w).filter(r => r.rel != null).map(r => `${({F: 'Forwards', D: 'Defensemen', G: 'Goalies'})[r.g]}: about ${Math.round(r.rel * 100)}% of the per-60 spread is real at the median qualified sample (${Math.round(r.m)} min)`).join('; ')}.${t ? ` <a href="#roster" onclick="setTeam('${t}','roster');return false;">Open the ${t} roster page &rarr;</a>` : ''}</div>
     <table><tr><th>#</th><th>Player</th><th>Team</th><th>Age</th><th>Talent (pts / 84 GP, standard minutes)</th><th>NHL caliber</th><th>Impact: ${WIN_L[w].toLowerCase()} (pts)</th><th title="Impact per 60 minutes on ice in the window; percentile among qualified players at his position">Per 60 min (pts)</th><th>In his role (pts / 84 GP, his minutes)</th><th>Cap hit</th><th title="In his role (talent x his actual minutes) minus what his cap hit buys on the open market">Value vs. contract: in his role</th><th title="Raw talent at a standard workload minus what his cap hit buys on the open market">Value vs. contract: raw talent</th><th>Style</th></tr>${rows.map((p, i) => `<tr${p.t === TM ? ' class="me"' : ''}>
-      <td>${p._rk}</td><td><a class="tm" href="#finder" onclick="showProfile('${p.id}','ex-prof');return false;"><b>${p.n}</b></a><span class="sub">${p.pos}${p.arch ? ' &bull; ' + p.arch : (p.sRole ? ' &bull; ' + p.sRole : '')}</span></td><td><a class="tm" href="#roster" title="Open ${p.t} roster" onclick="setTeam('${p.t}','roster');return false;">${p.t}</a></td><td>${p.age != null ? Math.floor(p.age) : '&mdash;'}<span class="sub">${p.gp} GP</span></td>
+      <td>${p._rk}</td><td><a class="tm" href="#finder" onclick="showProfile('${p.id}','ex-prof');return false;"><b>${p.n}</b></a>${injBadge(p.t, p.id, p.n)}<span class="sub">${p.pos}${p.arch ? ' &bull; ' + p.arch : (p.sRole ? ' &bull; ' + p.sRole : '')}</span></td><td><a class="tm" href="#roster" title="Open ${p.t} roster" onclick="setTeam('${p.t}','roster');return false;">${p.t}</a></td><td>${p.age != null ? Math.floor(p.age) : '&mdash;'}<span class="sub">${p.gp} GP</span></td>
       <td><b>${sp(pt(p.tal))}</b> ${rbar(pt(p.tal), pt(p.tsd), -6, 6, p.t === TM ? '#6CACE3' : '#7A8590')}</td>
       <td>${bandPill(p.band)} ${p.g === 'G' ? gPill(p.tal) : pctPill(p.tpct)}<span class="sub">${p.trank ? ord(p.trank) + ' of ' + p.tn + ' NHL ' + ({F: 'forwards', D: 'defensemen', G: 'goalies'}[p.g] || 'players') + (p.r10 ? ' (likely ' + p.r10 + '-' + p.r90 + ')' : '') : ''}</span></td>
       <td>${w === 'season' ? (p.ng ? '<span class="small">no games yet</span>' : sp(pt(p.imp), 2) + ' ' + pctPill(p.ipct)) : (p._w.imp == null ? '<span class="small">no games in window</span>' : `${sp(pt(p._w.imp), 2)}<span class="sub">${p._w.gp} of ${p._w.tn} GP</span>`)}</td><td>${per60Cell(p, w)}</td><td>${sp(pt(p.role))}</td>

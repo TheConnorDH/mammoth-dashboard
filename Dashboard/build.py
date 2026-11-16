@@ -1006,6 +1006,7 @@ def main():
                 q_["tal"] = round(to_pts(lq_["tstd"]), 1) if lq_ and lq_.get("tstd") is not None else None
                 q_["tpct"] = (lg_trank.get(q_["id"]) or {}).get("pct")
             r_["top"] = [q_["name"] for q_ in sk_[:3]]
+            r_["topC"] = [[q_["id"], q_["name"], round(to_pts(q_["talent84"]), 1), q_.get("posFull") or q_["grp"]] for q_ in sk_[:10]]     # candidates, so pages can skip players expected out
             r_["topV"] = [round(to_pts(q_["talent84"]), 1) for q_ in sk_[:3]]
             r_["topPos"] = [q_.get("posFull") or q_["grp"] for q_ in sk_[:3]]
             r_["glast"] = r_.get("lineupGames", 0)

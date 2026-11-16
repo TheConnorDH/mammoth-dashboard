@@ -316,3 +316,8 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 - build.py: shift (home-positive, rating units) added to `rem_` (simulation), `game_odds_`, Utah next10 (`inj` field) and `power.sched[i][7]` (client gameOdds). D.injuries = {rows, status}.
 - Backtests: calibration/experiments/injury_backtest.py, injury_powerrank.py, injury_params_build.py.
 - Caveat: historical absence spells include healthy scratches.
+
+### 2026-11-16 — v1.9.0 Injury-aware previews + burden
+- template.html helpers: injPOut(row, date), injLikelyOut, healthyTop (uses power row `topC` = top-10 [id, name, value, pos]), healthyGoalie, injTeamCost (skaters only; goalies via the Matchup goalie pick), injBadge, renderBurden (League tab, id ib-body).
+- engine/injuries.py adds `winFull` (absence valued at season workload even when already out of the last-5 lineup; descriptive only).
+- Matchup: MU.injDate = next meeting date (else each team's next game); MU.inj added to the rating gap and as a waterfall step.
