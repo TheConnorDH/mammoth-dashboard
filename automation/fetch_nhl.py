@@ -105,6 +105,52 @@ def rosters_all(teams):
     return out
 
 
+ESPN_INJ = "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries"
+
+
+def injuries():
+    """League injury list -> config/injuries.json. Source: ESPN's public (undocumented) injuries feed: status (Day-To-Day,
+    Out, Injured Reserve; long-term IR in details.fantasyStatus), body part, a short note and sometimes an estimated return
+    date. Yesterday's list is kept as injuries_prev.json (players who drop off it were activated). The NHL publishes no
+    injury report of its own. A failed or malformed fetch keeps yesterday's list and is flagged; the build then uses it."""
+    path = P("config", "injuries.json")
+    old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else None
+    try:
+        j = get_json(ESPN_INJ)
+        out = []
+        for team in j.get("injuries", []):
+            for e in team.get("injuries", []):
+                a = e.get("athlete") or {}; det = e.get("details") or {}; ty = e.get("type") or {}
+                name = a.get("displayName") or ""
+                if not name:
+                    continue
+                out.append({"team": (a.get("team") or {}).get("abbreviation") or "", "teamName": team.get("displayName") or (a.get("team") or {}).get("displayName") or "",
+                            "name": name, "pos": (a.get("position") or {}).get("abbreviation") or "",
+                            "status": e.get("status") or ty.get("description") or "", "ltir": ((det.get("fantasyStatus") or {}).get("abbreviation") == "IR-LT"),
+                            "injury": det.get("type") or "", "returnDate": (det.get("returnDate") or "")[:10] or None,
+                            "updated": (e.get("date") or "")[:10] or None, "note": (e.get("shortComment") or "")[:300],
+                            "detail": (e.get("longComment") or "")[:600]})
+        if len(out) < 20:
+            raise RuntimeError(f"only {len(out)} injuries listed")
+        today = dt.date.today().isoformat()
+        # recently activated: dropped off the list in the last 14 days (the build adds them back until they play)
+        key = lambda e: (e.get("teamName") or e.get("team"), e.get("name"))
+        now_keys = {key(e) for e in out}
+        act = [a for a in (old or {}).get("activated", []) if a.get("since", "") >= (dt.date.today() - dt.timedelta(days=14)).isoformat() and key(a) not in now_keys]
+        seen = {key(a) for a in act}
+        for e in (old or {}).get("players", []):
+            if key(e) not in now_keys and key(e) not in seen and not (e.get("status") or "").lower().startswith("day"):
+                act.append({k: e.get(k) for k in ("team", "teamName", "name", "pos", "injury")} | {"since": today})
+        if old and old.get("players"):
+            write_json(P("config", "injuries_prev.json"), old)
+        write_json(path, {"fetched": today, "source": "ESPN injuries feed", "ok": True, "players": out, "activated": act})
+        log(f"injuries: {len(out)} players listed")
+    except Exception as e:      # the feed is unofficial: keep yesterday's list rather than stop the update
+        if old:
+            old["ok"] = False; old["error"] = str(e)[:200]; write_json(path, old)
+        log(f"injuries: fetch failed ({e}); kept previous list" if old else f"injuries: fetch failed ({e}); none available")
+
+
 def _names_by_id(players):
     # MoneyPuck's spelling first (the build joins box scores to MoneyPuck rows by name), then the NHL roster
     out = {}

@@ -232,6 +232,8 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
       <div class="card"><h3>Points so far vs. projection pace</h3><div class="chart"><canvas id="c-points"></canvas></div></div>
     </div>
     <div class="grid2" style="margin-top:14px"><div class="card"><h3>Next 10 games</h3><div id="tm-next"></div></div><div class="card"><h3>Results</h3><div id="gamelog"></div></div></div>
+    <h2 style="margin-top:26px">Injuries <a class="glink" href="#method" onclick="goGuide('g-injuries');return false;">How this works &rsaquo;</a></h2>
+    <div class="card" id="tm-inj"></div>
     <h2 style="margin-top:26px">Strengths &amp; Weaknesses <span class="small" id="sw-tag" style="font-weight:400"></span><a class="glink" href="#method" onclick="goGuide('g-sw');return false;">How this works &rsaquo;</a></h2>
     <div class="grid2"><div class="card"><h3>Top-half metrics</h3><div id="sw-str"></div></div><div class="card"><h3>Bottom-half metrics</h3><div id="sw-weak"></div></div></div>
     <details class="card" style="margin-top:14px"><summary><b>All metrics</b></summary><div id="sw-all" style="margin-top:8px"></div></details>
@@ -300,7 +302,11 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
 <div class="pane" id="p-finder">
   <section><h2>Players <a class="glink" href="#method" onclick="goGuide('g-caliber');return false;">How calibers work &rsaquo;</a></h2>
     <p class="lede">Every NHL player, rated the same way. Filter to rank within any group; click a team to open its roster.</p>
-    <div class="tabs" id="ex-view"><button class="tab on" data-xv="players">Players</button><button class="tab" data-xv="lines">Lines &amp; pairs</button></div>
+    <div class="tabs" id="ex-view"><button class="tab on" data-xv="players">Players</button><button class="tab" data-xv="lines">Lines &amp; pairs</button><button class="tab" data-xv="inj">Injuries</button></div>
+    <div id="ex-inj" style="display:none">
+      <div class="ctl"><select id="ix-team"></select>Sort <select id="ix-sort"><option value="cost">Cost per game</option><option value="back">Expected back</option><option value="team">Team</option><option value="tal">Talent</option></select>
+        <a class="glink" href="#method" onclick="goGuide('g-injuries');return false;">How this works &rsaquo;</a></div>
+      <div class="card" id="ix-table"></div></div>
     <div id="ex-lines" style="display:none">
       <div class="ctl"><select id="lx-team"></select><select id="lx-ty"><option value="all">Lines and pairs</option><option value="L">Forward lines</option><option value="P">Defense pairs</option></select>
         <label class="small" title="Played enough 5v5 minutes together: 2.5 min per team game for lines, 3.5 for pairs"><input type="checkbox" id="lx-qual" checked> Qualified only</label>
@@ -402,6 +408,13 @@ td a.tm { color:inherit; text-decoration:underline dotted; text-underline-offset
         <li><b>Vs. talent</b>: the line's xG share minus what its players' combined talent predicts (a league-wide fit; so far combined talent correlates with xG share at about 0.3 for lines and 0.4 for pairs). A positive number means the combination is doing better than its parts suggest, but over small samples most of that is noise.</li>
         <li><b>Qualified</b>: at least 2.5 minutes together per team game for a line, 3.5 for a pair (pairs stay together longer). The floor grows through the season. Unqualified combinations can be shown, marked as such.</li>
         <li>Line results still can't separate a line from its opponents and zone starts; that needs shift data (on the backlog).</li></ul></details>
+    <details id="g-injuries"><summary>Injuries</summary>
+      <p>The league injury list comes from ESPN's injury feed each morning (the NHL publishes none). Each listed player is matched to his team and to the player table; the Team tab shows that team's list and the Players tab (Injuries) shows the whole league.</p>
+      <ul><li><b>Expected back</b>: the team's reported return date when there is one. Otherwise it comes from how absences have actually run: 16,448 absences over eight seasons (a regular missing games), where the median absence was 2 games, a third were back after one game, and the longer a player has been out, the longer he tends to stay out. The date shown is the first game he is more likely back than not, with a 25% to 75% window. Long-term IR counts at least 10 games from his first missed game. Day-to-day players who played the latest game are treated as playing.</li>
+        <li><b>Win chance per game</b>: how much his absence lowers his team's chance of winning each game he misses. It is the same lineup weight the power ratings already use (his talent per 60 minus his likely replacement's, times his minutes), applied only to the games he's expected to miss, weighted by the chance he misses each one. Players already out of the last five games' lineup show "in ratings": the ratings already play without him. A player who drops off the list and wasn't in the recent lineup is added back.</li>
+        <li><b>Tested on past seasons</b> (8,790 games, using the actual absences known before each game): odds that account for who is out predicted results better overall (log loss 0.2% better), 0.7% better when a team was missing at least 0.1 goals per game of talent, and 2.2% better when missing 0.2 or more. A fitted weight for lost talent (1.11 ± 0.41) matched the general lineup weight (0.98 ± 0.12), so lost talent is weighted the same as any other lineup change.</li>
+        <li><b>Where it's used</b>: single-game win odds (Games tab, next 10 games) and the season simulation, game by game. Power rankings are not adjusted: in the same test, adjusting season-long ratings for current injuries did not predict the rest of the season any better (players come back).</li>
+        <li><b>Limits</b>: the feed is unofficial, teams are vague about injuries, and the historical absences include healthy scratches, so short absences are a little more common in the data than for injuries alone. If the feed fails, the last good list is used and the check says so.</li></ul></details>
     <details id="g-games"><summary>Games</summary>
       <p>Every game of the season, browsable by date (the arrows skip days without games; the team filter shows one team's games). Away team on top, home team below.</p>
       <ul><li><b>Finished games</b>: score, deserve-to-win (every shot replayed 20,000 times at its expected-goal value; empty-net shots left out), shots and chances, goalies, every shot on a rink, and <b>Player Impact in this game</b> for both teams: the full Impact model run on that game alone, so a player is compared with his own team in that same game. <b>Where it came from</b> splits each bar into the same parts as the season bars (each measured against the average forward or defenseman): positives stack right of zero, negatives left, and the tick marks the total. Skaters set the scale; a goalie's saves vs. expected can run off the end. One game is mostly noise (about half a goal of uncertainty for a skater), so use it to see who drove a night, not to judge a player.</li>
@@ -563,8 +576,10 @@ function gameOdds(x, g) {   // g = [date, home, away, ...]: win odds and expecte
   const wp = PW && PW.winprob, lg = v => 1 / (1 + Math.exp(-v)), rr = t2 => { const q = PW ? PW.rows.find(r => r.team === t2) : null; return q ? q.r : null; };
   const home = g[1] === x, opp = home ? g[2] : g[1], a = rr(x), b = rr(opp);
   if (!wp || a == null || b == null) return {home, opp, p: null, e: null};
-  const d = a - b, p = home ? lg(wp.win[0] + wp.win[1] * d) : 1 - lg(wp.win[0] - wp.win[1] * d), pot = lg(wp.ot[0] + wp.ot[1] * Math.abs(d)), pw = home ? lg(wp.otwin[0] + wp.otwin[1] * d) : 1 - lg(wp.otwin[0] - wp.otwin[1] * d);
-  return {home, opp, p, e: 2 * p + pot * (1 - pw)};
+  // g[7]: injury shift (rating units, home side; engine/injuries.py) for games a listed player is expected to miss
+  const inj = g[7] || 0, dh = (home ? a - b : b - a) + inj, ph = lg(wp.win[0] + wp.win[1] * dh), pwh = lg(wp.otwin[0] + wp.otwin[1] * dh);
+  const p = home ? ph : 1 - ph, pot = lg(wp.ot[0] + wp.ot[1] * Math.abs(dh)), pw = home ? pwh : 1 - pwh;
+  return {home, opp, p, e: 2 * p + pot * (1 - pw), inj: home ? inj : -inj};
 }
 function renderHero(x) {
   const isU = x === 'UTA', pr = PW ? PW.rows.find(r => r.team === x) : null, st = (D.standings || []).find(s => s.abbr === x) || {}, po = pr && pr.po;
@@ -624,7 +639,7 @@ function renderOverview(x) {
   rows.forEach(g => xp += g.e || 0);
   $('next10').innerHTML = rows.length ? `<table><tr><th>Date</th><th></th><th>Opp</th><th>Opp power rank</th><th>${x} win odds</th><th>Exp. pts</th></tr>${rows.map(g => { const p = g.p, c = p == null ? '' : p >= 0.55 ? 'p-green' : p <= 0.45 ? 'p-red' : 'p-blue';
     return `<tr><td>${new Date(g.date + 'T12:00').toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'})}</td><td>${g.ha}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${g.opp}');return false;">${g.opp}</a></b></td><td>${g.rank ?? '&mdash;'}</td><td>${p == null ? '&mdash;' : `<span class="pill ${c}">${Math.round(p * 100)}%</span>`}</td><td>${g.e ?? '&mdash;'}</td></tr>`; }).join('')}</table>
-    ${rows.some(g => g.e != null) ? `<p class="small" style="margin-top:6px">Expected: <b>${xp.toFixed(1)}</b> of ${2 * rows.length} possible points.</p>` : ''}` : '<div class="small">No games scheduled.</div>';
+    ${rows.some(g => g.e != null) ? `<p class="small" style="margin-top:6px">Expected: <b>${xp.toFixed(1)}</b> of ${2 * rows.length} possible points.${injOddsNote(x)}</p>` : ''}` : '<div class="small">No games scheduled.</div>';
   // last game: best and worst
   const PG = isU ? (D.perGame || []) : (((D.teamExtra || {})[x] || {}).perGame || []);
   const PGd = PG.filter(g => !g.pending), PGw = PG.filter(g => g.pending);
@@ -748,12 +763,11 @@ function renderTeam() {
     options: { responsive: true, maintainAspectRatio: false, scales: { x: { title: { display: true, text: 'Games played' }, ticks: { maxTicksLimit: 12 } }, y: { title: { display: true, text: 'Points' } } }, plugins: { legend: { labels: { boxWidth: 10 } } } } });
   $('gamelog').innerHTML = log.length ? `<table><tr><th>#</th><th>Date</th><th></th><th>Opp</th><th>Result</th><th>Season pts</th></tr>${log.slice().reverse().map(g => `<tr><td>${g.n}</td><td>${g.date.slice(5)}</td><td>${g.ha}</td><td><a class="tm" href="#team" onclick="pickTeam('${g.opp}');return false;">${g.opp}</a></td><td><span class="res ${g.res}">${g.res}</span> ${g.us}-${g.them}</td><td>${g.cum}</td></tr>`).join('')}</table>` : '<div class="small">No games yet.</div>';
   // next 10 with odds
-  const wp = PW && PW.winprob, lg = v => 1 / (1 + Math.exp(-v)), rr = t2 => { const q = PW ? PW.rows.find(r => r.team === t2) : null; return q ? q.r : null; };
   let xp = 0;
-  $('tm-next').innerHTML = next.length ? `<table><tr><th>Date</th><th></th><th>Opp</th><th>Opp power rank</th><th>Win odds</th><th>Exp. pts</th></tr>${next.map(g => { const home = g[1] === x, opp = home ? g[2] : g[1], a = rr(x), b = rr(opp);
-      let p = null, e = null; if (wp && a != null && b != null) { const d = a - b; p = home ? lg(wp.win[0] + wp.win[1] * d) : 1 - lg(wp.win[0] - wp.win[1] * d); const pot = lg(wp.ot[0] + wp.ot[1] * Math.abs(d)), pw = home ? lg(wp.otwin[0] + wp.otwin[1] * d) : 1 - lg(wp.otwin[0] - wp.otwin[1] * d); e = 2 * p + pot * (1 - pw); xp += e; }
+  $('tm-next').innerHTML = next.length ? `<table><tr><th>Date</th><th></th><th>Opp</th><th>Opp power rank</th><th>Win odds</th><th>Exp. pts</th></tr>${next.map(g => { const o = gameOdds(x, g), p = o.p, e = o.e, opp = o.opp; if (e != null) xp += e;
       const c = p == null ? '' : p >= 0.55 ? 'p-green' : p <= 0.45 ? 'p-red' : 'p-blue', orank = PW ? (PW.rows.find(r => r.team === opp) || {}).rank : null;
-      return `<tr><td>${new Date(g[0] + 'T12:00').toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'})}</td><td>${home ? 'vs' : '@'}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${opp}');return false;">${opp}</a></b></td><td>${orank ?? '&mdash;'}</td><td>${p == null ? '&mdash;' : `<span class="pill ${c}">${Math.round(p * 100)}%</span>`}</td><td>${e == null ? '&mdash;' : e.toFixed(2)}</td></tr>`; }).join('')}</table><p class="small" style="margin-top:6px">Expected: <b>${xp.toFixed(1)}</b> of ${2 * next.length} possible points.</p>` : '<div class="small">No games scheduled.</div>';
+      return `<tr><td>${new Date(g[0] + 'T12:00').toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'})}</td><td>${o.home ? 'vs' : '@'}</td><td><b><a class="tm" href="#team" onclick="pickTeam('${opp}');return false;">${opp}</a></b></td><td>${orank ?? '&mdash;'}</td><td>${p == null ? '&mdash;' : `<span class="pill ${c}">${Math.round(p * 100)}%</span>`}</td><td>${e == null ? '&mdash;' : e.toFixed(2)}</td></tr>`; }).join('')}</table><p class="small" style="margin-top:6px">Expected: <b>${xp.toFixed(1)}</b> of ${2 * next.length} possible points.${injOddsNote(x)}</p>` : '<div class="small">No games scheduled.</div>';
+  $('tm-inj').innerHTML = injTeamHTML(x);
   renderSW(x); renderShots(x); renderNeeds(x);
 }
 function renderLines() {
@@ -904,7 +918,70 @@ function initLeagueLines() {
   ['lx-team', 'lx-ty', 'lx-qual', 'lx-sort'].forEach(id => $(id).onchange = renderLeagueLines);
   document.querySelectorAll('#ex-view [data-xv]').forEach(b => b.onclick = () => { const v = b.dataset.xv;
     document.querySelectorAll('#ex-view [data-xv]').forEach(c => c.classList.toggle('on', c.dataset.xv === v));
-    $('ex-lines').style.display = v === 'lines' ? '' : 'none'; $('ex-players').style.display = v === 'lines' ? 'none' : ''; if (v === 'lines') renderLeagueLines(); });
+    $('ex-lines').style.display = v === 'lines' ? '' : 'none'; $('ex-inj').style.display = v === 'inj' ? '' : 'none'; $('ex-players').style.display = v === 'players' ? '' : 'none';
+    if (v === 'lines') renderLeagueLines(); if (v === 'inj') renderLeagueInj(); });
+  const isel = $('ix-team'); isel.innerHTML = '<option value="">All teams</option>' + S.slice().sort((a, b) => a.name.localeCompare(b.name)).map(t => `<option value="${t.abbr}">${t.name}</option>`).join('');
+  ['ix-team', 'ix-sort'].forEach(id => $(id).onchange = renderLeagueInj);
+}
+// ================= INJURIES (engine/injuries.py) =================
+const INJ = (D.injuries && D.injuries.rows) || [];
+const injDate = d => d ? new Date(d + 'T12:00').toLocaleDateString([], {month: 'short', day: 'numeric'}) : '';
+const injOut = r => r.status !== 'Activated' && (r.pNext || 0) > 0;
+function injStatus(r) {
+  const c = r.status === 'Activated' ? 'p-green' : /^day/i.test(r.status) ? 'p-amber' : 'p-red';
+  return `<span class="pill ${c}">${r.ltir ? 'Long-term IR' : r.status || 'Listed'}</span>`;
+}
+function injBack(r) {      // estimated return: the team's date when given, else the most likely game and a likely range
+  if (r.status === 'Activated') return 'Back';
+  if (r.returnDate) return `${injDate(r.returnDate)} <span class="small">(reported)</span>`;
+  if (!r.pNext) return /^day/i.test(r.status) && !r.missed ? '<span class="small">Day to day: played the latest game</span>' : '<span class="small">&mdash;</span>';
+  if (!r.backBy) return `<span class="small">Not before ${injDate(r.horizon)} (30+ games)</span>`;
+  const lo = r.backLo && r.backLo !== r.backBy ? injDate(r.backLo) : null, hi = r.backHi ? (r.backHi !== r.backBy ? injDate(r.backHi) : null) : 'later';
+  return `${injDate(r.backBy)}${lo || hi ? ` <span class="small">(${lo || injDate(r.backBy)} to ${hi || injDate(r.backBy)})</span>` : ''}`;
+}
+function injCost(r) {      // change in the team's win chance per game he misses (or gains, if just activated)
+  const sg = v => (v > 0 ? '&minus;' : '+') + Math.abs(v).toFixed(1) + '%';      // winCost > 0 lowers the win chance
+  if (r.status === 'Activated') return Math.abs(r.winCost || 0) >= 0.0005 ? `<span class="pill ${r.winCost < 0 ? 'p-green' : 'p-grey'}">${sg(r.winCost * 100)}</span>` : '&mdash;';
+  if (!r.id) return '<span class="small" title="Not matched to an NHL player with games this season">&mdash;</span>';
+  if (!r.inLineup) return '<span class="small" title="Not in the last 5 games\' lineup: the ratings already play without him">in ratings</span>';
+  const v = r.winCost * 100; if (!injOut(r)) return `<span class="small">${Math.abs(v) < 0.05 ? '~0%' : sg(v)} if he sits</span>`;
+  return Math.abs(v) < 0.05 ? '<span class="small">~0%</span>' : `<span class="pill ${v >= 1 ? 'p-red' : v > 0 ? 'p-amber' : 'p-grey'}">${sg(v)}</span>`;
+}
+function injRow(r, team) {
+  const nm = r.id ? `<a href="#roster" onclick="setTeam('${r.t}','roster');return false;">${r.n}</a>` : r.n;
+  return `<tr>${team ? `<td><a class="tm" href="#team" onclick="pickTeam('${r.t}');return false;">${r.t}</a></td>` : ''}<td><b>${nm}</b> <span class="small">${r.pos || ''}</span>${r.tpct != null ? ` <span class="small">${ord(Math.round(r.tpct))} pct</span>` : ''}</td>
+    <td>${injStatus(r)}</td><td>${r.injury || '&mdash;'}</td><td>${r.missed ?? '&mdash;'}</td><td>${injBack(r)}</td><td>${injCost(r)}</td></tr>
+    ${r.note ? `<tr><td colspan="${team ? 7 : 6}" class="small" style="padding-top:0;border-top:0">${r.note}${r.updated ? ` <span style="opacity:.7">(${injDate(r.updated)})</span>` : ''}</td></tr>` : ''}`;
+}
+function injHead(team) { return `<tr>${team ? '<th>Team</th>' : ''}<th>Player</th><th>Status</th><th>Injury</th><th>Games missed</th><th>Expected back</th><th title="Approximate change in the team's win chance in each game he misses (at even odds; a little less in lopsided games)">Win chance / game</th></tr>`; }
+function injFeed() {
+  const st = (D.injuries || {}).status || {};
+  if (!st.n) return '<div class="lock">No injury list available today, so odds are not injury-adjusted.</div>';
+  return `<p class="small" style="margin-top:8px">ESPN injury list, fetched ${injDate(st.fetched)}${st.ok ? '' : ' (today\'s fetch failed; this is the last good list)'}. Expected-back dates without a reported date come from how past absences ran; ranges are the 25% to 75% likely window.</p>`;
+}
+const injSortCost = (a, b) => (b.winCost || 0) - (a.winCost || 0) || (b.tal || -99) - (a.tal || -99);
+function injTeamHTML(x) {
+  const L = INJ.filter(r => r.t === x).sort(injSortCost);
+  if (!L.length) return `<div class="small">No one on ${x}'s injury list.</div>${injFeed()}`;
+  return `<table>${injHead(false)}${L.map(r => injRow(r, false)).join('')}</table>${injFeed()}`;
+}
+function renderLeagueInj() {
+  const t = $('ix-team').value, k = $('ix-sort').value;
+  const back = r => r.status === 'Activated' ? '0' : r.returnDate || r.backBy || '9999';
+  const L = INJ.filter(r => !t || r.t === t).sort(k === 'back' ? (a, b) => back(a).localeCompare(back(b)) : k === 'team' ? (a, b) => a.t.localeCompare(b.t) || injSortCost(a, b) : k === 'tal' ? (a, b) => (b.tal ?? -99) - (a.tal ?? -99) : injSortCost);
+  $('ix-table').innerHTML = L.length ? `<div class="small" style="margin-bottom:6px">${L.length} listed${t ? '' : `, ${new Set(L.map(r => r.t)).size} teams`}.</div><table>${injHead(true)}${L.map(r => injRow(r, true)).join('')}</table>${injFeed()}` : `<div class="small">No one listed.</div>${injFeed()}`;
+}
+function injOddsNote(x) {   // which absences the next-games odds include
+  const L = INJ.filter(r => r.t === x && r.inLineup && injOut(r) && Math.abs(r.winCost || 0) >= 0.001).sort(injSortCost);
+  const A = INJ.filter(r => r.t === x && r.status === 'Activated' && r.winCost);
+  if (!L.length && !A.length) return '';
+  return ` Odds include expected absences${L.length ? `: ${L.slice(0, 5).map(r => r.n.split(' ').slice(-1)[0]).join(', ')}${L.length > 5 ? ` and ${L.length - 5} more` : ''}` : ''}${A.length ? `${L.length ? '; ' : ': '}back: ${A.map(r => r.n.split(' ').slice(-1)[0]).join(', ')}` : ''}.`;
+}
+function injGameHTML(g) {   // the Games tab preview: who is likely out for this game
+  const side = t => { const L = INJ.filter(r => r.t === t && r.status !== 'Activated').map(r => { const q = r.returnDate ? (g.d < r.returnDate ? 1 : 0) : ((r.pg || []).find(x => x[0] === g.d) || [null, 0])[1]; return [q, r]; }).filter(x => x[0] >= 0.25).sort((a, b) => injSortCost(a[1], b[1]));
+    return L.length ? L.map(([q, r]) => `<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid var(--line)"><span><b>${r.n}</b> <span class="small">${r.pos || ''} &bull; ${r.injury || r.status}</span></span><span class="small">${q >= 0.95 ? 'out' : Math.round(q * 100) + '% out'}${r.inLineup && Math.abs(r.winCost || 0) >= 0.0005 ? ` &bull; ${(r.winCost > 0 ? '&minus;' : '+') + Math.abs(r.winCost * 100).toFixed(1)}%` : ''}</span></div>`).join('') : '<div class="small">No one expected out.</div>'; };
+  if (!INJ.length) return '';
+  return `<div class="card" style="margin-top:14px"><h3>Expected out <a class="glink" href="#method" onclick="goGuide('g-injuries');return false;">How this works &rsaquo;</a></h3><div class="grid2"><div><div class="small" style="margin-bottom:4px"><b>${g.a}</b></div>${side(g.a)}</div><div><div class="small" style="margin-bottom:4px"><b>${g.h}</b></div>${side(g.h)}</div></div><p class="small" style="margin-top:6px">Chance each listed player misses this game, and what it costs his team's win chance; the odds above include it.</p></div>`;
 }
 function renderLeagueLines() {
   const t = $('lx-team').value, ty = $('lx-ty').value, qOnly = $('lx-qual').checked, k = $('lx-sort').value;
@@ -1059,12 +1136,13 @@ function gmPreview(g) {
   const cmp = `<table class="gm-cmp" data-enh="1"><tr><td>${g.a}</td><td class="lab"></td><td>${g.h}</td></tr>${rows.map(([l, va, vh, c]) => { const b = c && c[0] != null && c[1] != null && c[0] !== c[1] ? (c[0] > c[1] ? 'a' : 'h') : null;
     return `<tr><td class="${b === 'a' ? 'better' : b ? 'worse' : ''}">${va}</td><td class="lab">${l}</td><td class="${b === 'h' ? 'better' : b ? 'worse' : ''}">${vh}</td></tr>`; }).join('')}</table>`;
   const b2b = (g.b2b || []).length ? ` &bull; second night of a back-to-back: <b>${g.b2b.join(', ')}</b>` : '';
-  const odds = g.ppd ? '<div class="lock" style="margin-top:12px">Postponed. The NHL will set a new date.</div>' : g.pH != null ? `<h3 style="margin-top:14px">Win odds</h3>${gmOddsBar(g, 1 - g.pH, g.pH, true)}<div class="small" style="margin-top:6px">Goes to overtime ${Math.round(g.pOT * 100)}% of the time${b2b}. From the power ratings, home ice and rest, as of this morning.</div>`
+  const odds = g.ppd ? '<div class="lock" style="margin-top:12px">Postponed. The NHL will set a new date.</div>' : g.pH != null ? `<h3 style="margin-top:14px">Win odds</h3>${gmOddsBar(g, 1 - g.pH, g.pH, true)}<div class="small" style="margin-top:6px">Goes to overtime ${Math.round(g.pOT * 100)}% of the time${b2b}. From the power ratings, home ice, rest and expected injury absences, as of this morning.</div>`
     : (past ? '<div class="lock" style="margin-top:12px">Played or postponed; the result arrives with the next morning update.</div>' : '');
+  const inj = g.f || g.ppd ? '' : injGameHTML(g);
   return `<div class="card">${gmHeader(g)}${odds}
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn" id="gm-mu">Full matchup preview &rarr;</button><a class="tab" href="#team" onclick="pickTeam('${g.a}');return false;">${g.a} team page</a><a class="tab" href="#team" onclick="pickTeam('${g.h}');return false;">${g.h} team page</a></div></div>
     <div class="grid2" style="margin-top:14px"><div class="card"><h3>How they compare</h3>${cmp}<p class="small" style="margin-top:6px">Bold = the better side. Ratings are as of this morning.</p></div>
-      <div class="card"><h3>Season series</h3>${gmSeries(g)}</div></div>`;
+      <div class="card"><h3>Season series</h3>${gmSeries(g)}</div></div>${inj}`;
 }
 function gmPending(g) {
   const pre = g.pre != null ? `<div class="small" style="margin-top:10px"><b>Before the game</b> the model gave ${g.a} ${Math.round((1 - g.pre) * 100)}%, ${g.h} ${Math.round(g.pre * 100)}%.</div>` : '';

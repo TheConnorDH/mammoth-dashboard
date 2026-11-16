@@ -24,6 +24,7 @@ import needs as needs_mod
 import recap as recap_mod
 import games as games_mod
 import lines as lines_mod
+import injuries as injuries_mod
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 HOCKEY = os.path.dirname(BASE)
@@ -976,6 +977,8 @@ def main():
     goalie_band = lambda tal_: None if starter_pct(tal_) is None else ("below the starter floor" if starter_pct(tal_) < 20 else ("a borderline starter" if starter_pct(tal_) < 40 else "starter quality"))
     # ---- power rankings (needs MoneyPuck game-by-game files)
     power_out = None
+    lineup_detail_, b_lineup_ = {}, {}     # per team: the power model's last-5 lineup [pid, grp, rate60, mpg] and its lineup weight
+    INJ = {"rows": [], "status": {"ok": False, "n": 0, "matched": 0}}
     game_odds_ = {}     # game id -> model odds for unplayed games (filled by the league simulation below)
     if "skaters" in games_files and "goalies" in games_files:
         pwp = json.load(open(P("params", "power_params.json")))
@@ -1007,6 +1010,7 @@ def main():
             r_["topPos"] = [q_.get("posFull") or q_["grp"] for q_ in sk_[:3]]
             r_["glast"] = r_.get("lineupGames", 0)
             r_.pop("lineupIds", None)
+            lineup_detail_[r_["team"]] = r_.pop("lineupDetail", []); b_lineup_[r_["team"]] = r_["weights"][1]
             s_ = st_by.get(r_["team"], {})
             r_["rec"] = f'{s_.get("w", 0)}-{s_.get("l", 0)}-{s_.get("otl", 0)}' if s_ else ""; r_["ptsPct"] = s_.get("ptsPct")
             r_["stRank"] = None; r_["move"] = (prev_rank[r_["team"]] - r_["rank"]) if prev_rank and r_["team"] in prev_rank else None
@@ -1046,7 +1050,34 @@ def main():
             prevday_ = lambda d_: (datetime.date.fromisoformat(d_) - datetime.timedelta(days=1)).isoformat()
             b2b_ = lambda t_, d_: prevday_(d_) in played_.get(t_, ())
             rest_edge = lambda h_, a_, d_: int(b2b_(a_, d_)) - int(b2b_(h_, d_))     # +1: away team tired only (helps home)
-            rem_ = [(g_["home"], g_["away"], REST_LOGIT / wpp["win"][1] * rest_edge(g_["home"], g_["away"], g_["date"])) for g_ in sched if g_["state"] not in (6, 7)]
+            # injuries (engine/injuries.py, validated in calibration/experiments/injury_backtest.py): expected cost of each
+            # listed player's absence, game by game while he is expected out, in rating units (home-positive shift = away cost - home cost)
+            inj_shift_ = {}
+            if players_league and lineup_detail_:
+                lp_, thru_ = {}, {}
+                for kind_ in ("skaters", "goalies"):
+                    if kind_ not in games_files: continue
+                    for r in readcsv(games_files[kind_]):
+                        if r["season"] == "2026" and r["situation"] == "all" and num(r["icetime"]) > 0:
+                            d_ = f'{r["gameDate"][:4]}-{r["gameDate"][4:6]}-{r["gameDate"][6:8]}'
+                            if d_ > lp_.get(r["playerId"], ""): lp_[r["playerId"]] = d_
+                            if d_ > thru_.get(r["playerTeam"], ""): thru_[r["playerTeam"]] = d_
+                ijf_ = lambda n_: json.load(open(P("config", n_))) if os.path.exists(P("config", n_)) else None
+                try:
+                    from zoneinfo import ZoneInfo
+                    mt_ = datetime.datetime.now(ZoneInfo("America/Denver")).date().isoformat()
+                except Exception:
+                    mt_ = datetime.date.today().isoformat()
+                try:
+                    rows_i_, sh_i_, st_i_ = injuries_mod.build(ijf_("injuries.json"), ijf_("injuries_prev.json"), players_league, standings, sched, lp_,
+                                                               json.load(open(P("params", "injury_params.json"))), mt_, lineup_detail_, b_lineup_, newc,
+                                                               TPAR["standard"], wpp["win"][1], data_through=thru_)
+                    INJ = {"rows": rows_i_, "status": st_i_}
+                    inj_shift_ = {k_: v_["a"] - v_["h"] for k_, v_ in sh_i_.items()}
+                except Exception as e_:      # a malformed feed must not stop the update: no injury adjustment today
+                    INJ = {"rows": [], "status": {"ok": False, "n": 0, "matched": 0, "error": f"injury step failed: {e_}"[:200]}}
+            ishift_ = lambda g_: inj_shift_.get(str(g_["id"]), 0.0)
+            rem_ = [(g_["home"], g_["away"], REST_LOGIT / wpp["win"][1] * rest_edge(g_["home"], g_["away"], g_["date"]) + ishift_(g_)) for g_ in sched if g_["state"] not in (6, 7)]
             cur_pts, cur_gp, cur_pts3 = {}, {}, {}
             for g_ in done_:
                 hw_ = g_["hs"] > g_["as"]; ot_ = g_["period"] > 3
@@ -1079,7 +1110,7 @@ def main():
             for g_ in sched:
                 if g_["state"] in (6, 7) or g_["home"] not in rat or g_["away"] not in rat:
                     continue
-                d_ = rat[g_["home"]] - rat[g_["away"]]
+                d_ = rat[g_["home"]] - rat[g_["away"]] + ishift_(g_)
                 game_odds_[str(g_["id"])] = {"pH": round(lgw_(wpp["win"][0] + wpp["win"][1] * d_ + REST_LOGIT * rest_edge(g_["home"], g_["away"], g_["date"])), 3),
                                              "pOT": round(lgw_(wpp["ot"][0] + wpp["ot"][1] * abs(d_)), 3),
                                              "b2b": [t_ for t_ in (g_["home"], g_["away"]) if b2b_(t_, g_["date"])]}
@@ -1113,7 +1144,7 @@ def main():
             power_out["simAll"] = {t_: [{"x": x_, "n": h_[x_] + (h_[x_ + 1] if x_ + 1 < len(h_) else 0)} for x_ in range(0, len(h_), 2) if h_[x_] + (h_[x_ + 1] if x_ + 1 < len(h_) else 0) > 0]
                                    for t_, h_ in lsim["_hist"].items()}
             power_out["cut"] = lsim.get("_cut"); power_out["cut3"] = lsim.get("_cut3")
-            power_out["sched"] = [[g_["date"], g_["home"], g_["away"], g_["state"], g_["hs"], g_["as"], g_["period"]] for g_ in sched]
+            power_out["sched"] = [[g_["date"], g_["home"], g_["away"], g_["state"], g_["hs"], g_["as"], g_["period"], round(ishift_(g_), 4)] for g_ in sched]
             power_out.update({"winprob": wpp, "simBacktest": json.load(open(P("params", "sim_backtest.json"))), "schedDone": len(done_),
                               "hia": json.load(open(P("params", "hia_params.json"))) if os.path.exists(P("params", "hia_params.json")) else None})
             # Utah: next games with win odds, and the hero projection from the same league simulation
@@ -1127,12 +1158,15 @@ def main():
                     hm_ = g_["ha"] in ("H", "vs")
                     re_ = rest_edge(TEAM, g_["opp"], g_["date"]) if hm_ else -rest_edge(g_["opp"], TEAM, g_["date"])   # Utah's rest edge
                     g_["rest"] = re_; g_["b2b"] = [t_ for t_ in (TEAM, g_["opp"]) if b2b_(t_, g_["date"])]
-                    if hm_: pw_ = lg_(a_ + b_ * (ru_ - ro_) + REST_LOGIT * re_)
-                    else: pw_ = 1 - lg_(a_ + b_ * (ro_ - ru_) - REST_LOGIT * re_)
-                    pot_ = lg_(c_ + d_ * abs(ru_ - ro_))
+                    gm_ = next((x_ for x_ in sched if x_["date"] == g_["date"] and {x_["home"], x_["away"]} == {TEAM, g_["opp"]}), None)
+                    iu_ = (ishift_(gm_) if hm_ else -ishift_(gm_)) if gm_ else 0.0      # injuries, Utah's side (rating units)
+                    g_["inj"] = round(iu_, 4)
+                    if hm_: pw_ = lg_(a_ + b_ * (ru_ - ro_ + iu_) + REST_LOGIT * re_)
+                    else: pw_ = 1 - lg_(a_ + b_ * (ro_ - ru_ - iu_) - REST_LOGIT * re_)
+                    pot_ = lg_(c_ + d_ * abs(ru_ - ro_ + iu_))
                     g_["pWin"] = round(pw_, 3); g_["pOT"] = round(pot_, 3)
                     e_, f_ = wpp["otwin"]
-                    p_otwin_ = lg_(e_ + f_ * (ru_ - ro_)) if g_["ha"] in ("H", "vs") else 1 - lg_(e_ + f_ * (ro_ - ru_))
+                    p_otwin_ = lg_(e_ + f_ * (ru_ - ro_ + iu_)) if g_["ha"] in ("H", "vs") else 1 - lg_(e_ + f_ * (ro_ - ru_ - iu_))
                     g_["xPts"] = round(2 * pw_ + pot_ * (1 - p_otwin_), 2)          # win = 2, overtime/shootout loss = 1
                     g_["oppRank"] = next((r_["rank"] for r_ in prows if r_["team"] == g_["opp"]), None)
                 h_ = lsim["_hist"].get(TEAM)
@@ -1388,6 +1422,13 @@ def main():
         checks.append({"check": "Team views agree", "ok": not miss_ and not recbad_ and rr_ >= 0.8,
                        "detail": f"{len(ts_)} of {len(tS_)} teams in power, roster and lineup views{' (missing: ' + ', '.join(miss_) + ')' if miss_ else ''}; records match standings{' except ' + ', '.join(recbad_) if recbad_ else ''}; power-ranking lineup piece vs. roster talent rank correlation {rr_:.2f}. (Power goal differential excludes empty-net goals, as in the backtest.)"})
     v_ = ip["validation"]
+    ist_ = INJ["status"]
+    if ist_.get("n"):
+        mr_ = ist_["matched"] / ist_["n"]
+        checks.append({"check": "Injury list matched to players", "ok": bool(ist_.get("ok")) and mr_ >= 0.75,
+                       "detail": f'{ist_["matched"]} of {ist_["n"]} listed players matched (fetched {ist_.get("fetched")}; unmatched are mostly minor-leaguers with no NHL games)' + ("" if ist_.get("ok") else f'; feed failed, using the last good list: {ist_.get("error")}')})
+    else:
+        checks.append({"check": "Injury list matched to players", "ok": False, "detail": (ist_.get("error") or "no injury list (config/injuries.json missing or empty)") + ": odds are not injury-adjusted"})
     checks.append({"check": "Impact model at least matches the alternatives out of sample", "ok": v_["impact"]["all"] >= max(v_["old_gaa"]["all"], v_["points60"]["all"]) - 0.01,
                    "detail": f"predicting a player's on-ice goal differential relative to his team in other seasons ({v_['n']:,} player-seasons, 2008-09 to 2025-26, weights refitted without the tested season and the two on either side): Impact r = {v_['impact']['all']} (F {v_['impact']['F']}, D {v_['impact']['D']}), points per 60 r = {v_['points60']['all']} (F {v_['points60']['F']}, D {v_['points60']['D']}), previous model r = {v_['old_gaa']['all']}"})
     if power_out:
@@ -1740,7 +1781,7 @@ def main():
                  "shareMean": round(post_mean, 4), "shareSd": round(post_sd, 4), "priorShare": round(prior_mean, 4), "priorSd": round(prior_sd, 4), "simHist": sim["hist"], "simSource": sim.get("source", "utah")},
         "last": last, "next10": next10, "cum": cum, "seasonGames": SEASON_GAMES,
         "gamelog": [{"n": i + 1, "date": g["date"], "ha": g["ha"], "opp": g["opp"], "res": g["res"], "us": g["us"], "them": g["them"], "cum": cum[i]["pts"]} for i, g in enumerate(played)][::-1],
-        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "lines": lines_out, "linesFit": lines_fit, "standoutQ": standout_q, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
+        "exec": exec_summary, "execAll": exec_all, "goalieStarters": goalie_starters, "recapsAll": recaps_all, "games": games_index, "winTeamN": win_team_n, "lines": lines_out, "linesFit": lines_fit, "injuries": INJ, "standoutQ": standout_q, **({"gameDays": games_days} if os.environ.get("EMBED_GAMES") else {}), "version": VERSION, "metrics": metrics, "sw": sw_list, "strengths": strengths, "weaknesses": weaknesses, "carryover": carryover,
         "standings": standings, "central": CENTRAL, "players": players, "teamExtra": team_extra, "rank": rank, "perGame": per_game[::-1], "rankFit": fit, "rankFitRaw": fit_raw, "profRel": prof_rel, "teamNeeds": team_needs, "teamRates": team_rates, "recaps": recaps_uta,
         "snaps": [{"gp": h_["gp"], "date": h_["date"], "pPlayoff": h_["p_playoff"], "proj": h_["proj"], "rank": (h_.get("power") or {}).get(TEAM)} for h_ in hist], "scorerVal": scp_ if players_league else None, "restVal": json.load(open(P("params", "rest_validation.json"))) if os.path.exists(P("params", "rest_validation.json")) else None, "muVal": json.load(open(P("params", "matchup_validation.json"))) if os.path.exists(P("params", "matchup_validation.json")) else None, "games25": games25, "consensusTest": json.load(open(P("params", "consensus_test.json"))) if os.path.exists(P("params", "consensus_test.json")) else None,
         "league": league_out, "power": power_out, "pairwise": pairwise, "playersLeague": players_league,

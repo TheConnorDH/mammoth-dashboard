@@ -309,3 +309,10 @@ Rule: renumber only when a filter defines a real peer group; otherwise the full-
 ## Nov 15: v1.7.0
 - Standings: `seasonsim.simulate(..., points3=)` scores simulated games 2-1-0 and 3-2-1-0; `qualify()` returns playoff/division/cut/conference-seed odds for each; rows carry `seed` and `alt3` {proj, lo80, hi80, pPlayoff, pDiv, seed, pts}; `power.cut`/`cut3`. Page: `ST` {sys, view}, `renderStandings` (division / wild / league / proj / blueprint), `st-note`.
 - Lines: `engine/lines.py` builds `D.lines` from MoneyPuck lines.csv (5v5), `D.linesFit` (xG share ~ combined talent, by lines/pairs). Page: `lnPct`, `lnArch`, `lnCard`, `renderRosterLines` (Roster, `rl-*`), `renderLeagueLines` (Players tab view toggle `ex-view`, `lx-*`). Qualified floors in `lines.QUAL`.
+
+### 2026-11-16 — v1.8.0 Injuries
+- automation/fetch_nhl.py `injuries()` pulls ESPN's unofficial feed (site.api.espn.com/apis/site/v2/sports/hockey/nhl/injuries) into config/injuries.json (yesterday's copy kept as injuries_prev.json; a failed fetch keeps the last list with ok=false).
+- engine/injuries.py: matches entries to players (team name, then normalized name, then same last name + initial); games missed = team games after his last MoneyPuck game (only up to the file's last date); chance out per upcoming game from params/injury_params.json `surv` (or the reported return date; LTIR >= 10 games; day-to-day who played = 0). Cost = power lineup weight b[1] x (rate60 - replacement rate60) x mpg/60, from the power model's `lineupDetail` (last-5 lineup). Replacement: average of the 2 most talented extras at the position (goalies: the team's other goalie).
+- build.py: shift (home-positive, rating units) added to `rem_` (simulation), `game_odds_`, Utah next10 (`inj` field) and `power.sched[i][7]` (client gameOdds). D.injuries = {rows, status}.
+- Backtests: calibration/experiments/injury_backtest.py, injury_powerrank.py, injury_params_build.py.
+- Caveat: historical absence spells include healthy scratches.

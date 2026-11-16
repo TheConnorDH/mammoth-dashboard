@@ -61,6 +61,7 @@ def main():
         stj = fetch_nhl.standings(); fetch_nhl.utah_schedule(); sched = fetch_nhl.league_schedule()
         players = fetch_nhl.roster()
         fetch_nhl.rosters_all([t["teamAbbrev"]["default"] for t in stj["standings"]])
+        fetch_nhl.injuries()
         fetch_moneypuck.current()
         added, waiting = fetch_nhl.boxscores(sched, players)
         fetch_nhl.bios()

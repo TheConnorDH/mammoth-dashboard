@@ -67,7 +67,7 @@ def compute(sk_games, gl_games, prev_by_id, prev_team_gd, ip, newcomer60, pp, pt
         for x in last:
             if x[4]:
                 st = max(x[4], key=x[4].get); gstarts[st] = gstarts.get(st, 0) + 1
-        roster, contrib, gl_ = 0.0, [], []
+        roster, contrib, gl_, det = 0.0, [], [], []
         for pid, secs in toi.items():
             pvs = prev_by_id.get(pid)
             pvs = pvs if isinstance(pvs, list) else [pvs]
@@ -79,6 +79,7 @@ def compute(sk_games, gl_games, prev_by_id, prev_team_gd, ip, newcomer60, pp, pt
             mpg = secs / 60 / max(1, len(last))
             roster += rate * mpg / 60
             contrib.append((rate * mpg / 60, pv["name"] if pv else names.get(pid, pid)))
+            det.append([pid, g, round(rate, 5), round(mpg, 2)])
             if g == "G":
                 gl_.append({"id": pid, "name": gname.get(pid, pv["name"] if pv else pid), "rate60": round(rate, 4), "mpg": round(mpg, 2), "starts": gstarts.get(pid, 0)})
         gd_ = float(np.mean([x[2] for x in G])) if G else 0.0; xgd_ = float(np.mean([x[3] for x in G])) if G else 0.0; src_ = "games"
@@ -89,7 +90,7 @@ def compute(sk_games, gl_games, prev_by_id, prev_team_gd, ip, newcomer60, pp, pt
             gp, gd_, xgd_, src_ = st_[0], st_[1], st_[2], "season"
         rows.append({"team": t, "gp": gp, "gd": gd_, "xgd": xgd_, "resultsFrom": src_, "lineupGames": len(last),
                      "roster": roster if toi else None, "prevgd": prev_team_gd.get(t, 0.0), "lineupN": len(toi),
-                     "top": [n for _, n in sorted(contrib, reverse=True)[:3]], "lineupIds": list(toi.keys()),
+                     "top": [n for _, n in sorted(contrib, reverse=True)[:3]], "lineupIds": list(toi.keys()), "lineupDetail": det,
                      "goalies": sorted(gl_, key=lambda q: (-q["starts"], -q["mpg"]))})
     known = [r["roster"] for r in rows if r["roster"] is not None]
     for r in rows:   # a team with no games yet: lineup unknown, use the league-average lineup

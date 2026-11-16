@@ -2,6 +2,15 @@
 
 The version shown on the page comes from the `VERSION` file. Numbering: MAJOR.MINOR.PATCH. MINOR adds features or model changes (each validated on past seasons before shipping); PATCH fixes bugs without changing the model.
 
+## 1.8.0 (2026-11-16)
+
+**New**
+- **Injuries.** The league injury list (ESPN's injury feed, pulled each morning; the NHL publishes none) is matched to every team's players. The Team tab has an Injuries section and the Players tab an **Injuries** view for the whole league: status, injury, games missed so far, **expected back** (the team's reported date, or the most likely game with a 25-75% window, from how 16,448 past absences actually ran) and what each absence costs his team's win chance per game. The Games tab preview lists who is expected out for each game.
+- **Injury-adjusted odds.** Single-game win odds (Games tab, next 10 games) and the season simulation now account for players expected to miss each game, before the absence shows up in the recent lineup. The cost is the lineup weight the power ratings already use (his talent per 60 minus his replacement's, times his minutes), applied game by game and weighted by the chance he misses that game. Players dropping off the list who weren't in the recent lineup are added back.
+  - Tested on 8 past seasons (8,790 games): log loss 0.2% better overall, 0.7% better when a team was missing 0.1+ goals/game of talent, 2.2% better at 0.2+. The fitted weight for lost talent (1.11 ± 0.41) matched the general lineup weight (0.98 ± 0.12), so no separate weight.
+  - Power rankings are unchanged: adjusting season-long ratings for current injuries did not predict the rest of the season better in the same test.
+- New check: injury list fetched and matched to players.
+
 ## 1.7.0 (2026-11-15)
 
 **New**
