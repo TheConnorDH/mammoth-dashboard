@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-15",
+ "fetched": "2026-11-16",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1170,6 +1170,12 @@
     "number": 42
    },
    {
+    "playerId": "8476422",
+    "name": "Mike Reilly",
+    "pos": "D",
+    "number": 5
+   },
+   {
     "playerId": "8478038",
     "name": "Devon Toews",
     "pos": "D",
@@ -2108,6 +2114,12 @@
     "number": 62
    },
    {
+    "playerId": "8482132",
+    "name": "Brett Berard",
+    "pos": "L",
+    "number": 37
+   },
+   {
     "playerId": "8482737",
     "name": "Zachary Bolduc",
     "pos": "R",
@@ -2220,6 +2232,12 @@
     "name": "Mike Matheson",
     "pos": "D",
     "number": 8
+   },
+   {
+    "playerId": "8484220",
+    "name": "David Reinbacher",
+    "pos": "D",
+    "number": 64
    },
    {
     "playerId": "8482964",
