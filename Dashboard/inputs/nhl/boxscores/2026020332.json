@@ -5,7 +5,7 @@
  "away": "VAN",
  "uta_score": 2,
  "opp_score": 3,
- "uta_sog": 36,
+ "uta_sog": 37,
  "opp_sog": 24,
  "last_period": "REG",
  "skaters": [
@@ -254,7 +254,7 @@
    "pos": "D",
    "g": 0,
    "a": 0,
-   "sog": 1,
+   "sog": 2,
    "hits": 1,
    "toi": "16:07",
    "fo": 0.0,
