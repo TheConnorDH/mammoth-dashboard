@@ -1,5 +1,5 @@
 {
- "source": "NHL API roster, 2026-11-16",
+ "source": "NHL API roster, 2026-11-17",
  "players": [
   {
    "name": "Daniil But",
@@ -83,6 +83,15 @@
    "playerId": "8480855"
   },
   {
+   "name": "Ben McCartney",
+   "pos": "L",
+   "number": 62,
+   "shoots": "L",
+   "height": "6' 0\"",
+   "weight": 182,
+   "playerId": "8481827"
+  },
+  {
    "name": "Liam O'Brien",
    "pos": "C",
    "number": 38,
@@ -128,15 +137,6 @@
    "playerId": "8479977"
   },
   {
-   "name": "Gregor Biber",
-   "pos": "D",
-   "number": 94,
-   "shoots": "L",
-   "height": "6' 3\"",
-   "weight": 187,
-   "playerId": "8485010"
-  },
-  {
    "name": "Nick DeSimone",
    "pos": "D",
    "number": 57,
@@ -144,6 +144,24 @@
    "height": "6' 2\"",
    "weight": 194,
    "playerId": "8480084"
+  },
+  {
+   "name": "Artem Duda",
+   "pos": "D",
+   "number": 84,
+   "shoots": "L",
+   "height": "6' 1\"",
+   "weight": 187,
+   "playerId": "8483436"
+  },
+  {
+   "name": "Zac Jones",
+   "pos": "D",
+   "number": 15,
+   "shoots": "L",
+   "height": "5' 11\"",
+   "weight": 190,
+   "playerId": "8481708"
   },
   {
    "name": "Maveric Lamoureux",

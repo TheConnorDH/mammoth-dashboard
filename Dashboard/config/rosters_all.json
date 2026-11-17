@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-16",
+ "fetched": "2026-11-17",
  "failed": [],
  "teams": {
   "ANA": [
@@ -816,12 +816,6 @@
     "name": "Ryan Strome",
     "pos": "C",
     "number": 22
-   },
-   {
-    "playerId": "8482766",
-    "name": "William Stromgren",
-    "pos": "L",
-    "number": 65
    },
    {
     "playerId": "8484234",
@@ -3512,6 +3506,12 @@
     "number": 51
    },
    {
+    "playerId": "8481517",
+    "name": "Brett Leason",
+    "pos": "R",
+    "number": 17
+   },
+   {
     "playerId": "8478975",
     "name": "Mason Marchment",
     "pos": "L",
@@ -3698,6 +3698,12 @@
     "name": "Alexey Toropchenko",
     "pos": "R",
     "number": 13
+   },
+   {
+    "playerId": "8477573",
+    "name": "Nathan Walker",
+    "pos": "L",
+    "number": 26
    },
    {
     "playerId": "8482111",
@@ -4144,6 +4150,12 @@
     "number": 22
    },
    {
+    "playerId": "8481827",
+    "name": "Ben McCartney",
+    "pos": "L",
+    "number": 62
+   },
+   {
     "playerId": "8477070",
     "name": "Liam O'Brien",
     "pos": "C",
@@ -4174,16 +4186,22 @@
     "number": 56
    },
    {
-    "playerId": "8485010",
-    "name": "Gregor Biber",
-    "pos": "D",
-    "number": 94
-   },
-   {
     "playerId": "8480084",
     "name": "Nick DeSimone",
     "pos": "D",
     "number": 57
+   },
+   {
+    "playerId": "8483436",
+    "name": "Artem Duda",
+    "pos": "D",
+    "number": 84
+   },
+   {
+    "playerId": "8481708",
+    "name": "Zac Jones",
+    "pos": "D",
+    "number": 15
    },
    {
     "playerId": "8483472",
@@ -4616,6 +4634,12 @@
     "name": "Brayden Yager",
     "pos": "C",
     "number": 29
+   },
+   {
+    "playerId": "8483526",
+    "name": "Danil Zhilkin",
+    "pos": "C",
+    "number": 53
    },
    {
     "playerId": "8482459",

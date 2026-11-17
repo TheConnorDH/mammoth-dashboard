@@ -203,39 +203,39 @@
    "teamName": "Columbus Blue Jackets",
    "name": "Sean Monahan",
    "pos": "C",
-   "status": "Day-To-Day",
+   "status": "Out",
    "ltir": false,
    "injury": "Upper Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-16",
+   "note": "out",
+   "detail": "out"
   },
   {
    "team": "DAL",
    "teamName": "Dallas Stars",
    "name": "Tyler Myers",
    "pos": "D",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Upper Body",
    "returnDate": "2026-11-17",
    "updated": "2026-11-16",
-   "note": "Myers (upper body) will be evaluated Monday, Robert Tiffin of NHL.com reports.",
-   "detail": "Head coach Glenn Gulutzan said after Sunday's 2-1 overtime win over the Panthers that the team is hoping for better news rather than worse with respect to Myers' upper-body injury. The right-shot defenseman logged one block and two PIM in 7:51 of ice time prior to his departure from Sunday's contest. Myers should be considered day-to-day for now."
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "DAL",
    "teamName": "Dallas Stars",
    "name": "Miro Heiskanen",
    "pos": "D",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Upper Body",
    "returnDate": "2026-11-17",
-   "updated": "2026-11-14",
-   "note": "Heiskanen (upper body) is doubtful for Sunday's matchup against Florida, per Mike Heika of the Stars' official site.",
-   "detail": "Heiskanen rotated into drills during Saturday's practice, but he will likely miss his fifth straight game against the Panthers on Sunday. He has already been ruled out for Saturday's matchup against Buffalo. Heiskanen has three goals, 11 points, 26 shots on net, 17 blocked shots and four hits in 15 appearances this season."
+   "updated": "2026-11-16",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "DAL",
@@ -333,13 +333,13 @@
    "teamName": "Edmonton Oilers",
    "name": "Ryan Nugent-Hopkins",
    "pos": "C",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Undisclosed",
    "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "out",
-   "detail": "out"
+   "updated": "2026-11-16",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "EDM",
@@ -487,6 +487,19 @@
   {
    "team": "MIN",
    "teamName": "Minnesota Wild",
+   "name": "Olli Maatta",
+   "pos": "D",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-16",
+   "note": "out",
+   "detail": "out"
+  },
+  {
+   "team": "MIN",
+   "teamName": "Minnesota Wild",
    "name": "Filip Gustavsson",
    "pos": "G",
    "status": "Injured Reserve",
@@ -593,13 +606,13 @@
    "teamName": "Nashville Predators",
    "name": "Jonathan Marchessault",
    "pos": "RW",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Lower Body",
    "returnDate": "2026-11-17",
    "updated": "2026-11-16",
-   "note": "out",
-   "detail": "out"
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "NJ",
@@ -669,6 +682,19 @@
   {
    "team": "NYI",
    "teamName": "New York Islanders",
+   "name": "Logan Stanley",
+   "pos": "D",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Lower Body",
+   "returnDate": "2026-11-17",
+   "updated": "2026-11-16",
+   "note": "Stanley (lower body) is considered day-to-day ahead of Tuesday's clash with the Blue Jackets, Andrew Gross of Newsday reports.",
+   "detail": "Stanley was injured versus the Ducks on Saturday, logging just 9:25 of ice time before being forced out of the game. The 28-year-old blueliner has yet to find the back of the net this season and is currently mired in a nine-game pointless streak. If Stanley can't play against Columbus, Scott Mayfield would be the most likely candidate to step into the lineup, though Matt Kessel could also be in contention."
+  },
+  {
+   "team": "NYI",
+   "teamName": "New York Islanders",
    "name": "Jean-Gabriel Pageau",
    "pos": "C",
    "status": "Day-To-Day",
@@ -678,32 +704,6 @@
    "updated": "2026-11-15",
    "note": "day-to-day",
    "detail": "day-to-day"
-  },
-  {
-   "team": "NYI",
-   "teamName": "New York Islanders",
-   "name": "Bo Horvat",
-   "pos": "C",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Undisclosed",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
-   "team": "NYI",
-   "teamName": "New York Islanders",
-   "name": "Logan Stanley",
-   "pos": "D",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "Stanley (lower body) won't return to Saturday's game versus the Ducks.",
-   "detail": "Stanley was initially injured late in the first period, but he wasn't officially ruled out until the third. The defenseman can be considered day-to-day until another update is provided. If he can't play Tuesday versus the Blue Jackets, Matt Kessel or Scott Mayfield would draw into the lineup."
   },
   {
    "team": "NYI",
@@ -814,13 +814,26 @@
    "teamName": "Ottawa Senators",
    "name": "Hayden Hodgson",
    "pos": "RW",
-   "status": "Day-To-Day",
+   "status": "Out",
    "ltir": false,
    "injury": "Groin",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "Hodgson sustained a groin injury versus the Penguins on Saturday, Bruce Garrioch of Postmedia reports.",
-   "detail": "Head coach Travis Green didn't have an estimate on how much time the injury will cost Hodgson. Until a firmer timeline is established, consider the depth forward day-to-day. The Senators are thin on wing depth and will likely need to make a roster move to replace Hodgson."
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-16",
+   "note": "Hodgson (groin) isn't expected to play against Winnipeg on Tuesday, per TSN 1200 Ottawa.",
+   "detail": "Hodgson will miss at least one game after suffering a groin injury in Saturday's 4-1 win over Pittsburgh, but it's unclear when he will be ready to return. He has contributed one goal, three shots on net, 20 hits and 24 PIM in 10 appearances this season. In Hodgson's absence, Tyler Boucher will make his NHL debut against the Jets on Tuesday."
+  },
+  {
+   "team": "OTT",
+   "teamName": "Ottawa Senators",
+   "name": "Warren Foegele",
+   "pos": "LW",
+   "status": "Injured Reserve",
+   "ltir": false,
+   "injury": "Knee",
+   "returnDate": "2026-12-03",
+   "updated": "2026-11-16",
+   "note": "Head coach Travis Green said Monday that Foegele (knee) hasn't yet resumed skating, Bruce Garrioch of Postmedia reports.",
+   "detail": "Foegele has been sidelined since late October, and he initially carried a return timetable of 3-4 weeks. While he hasn't yet entered that window, the fact that he hasn't yet resumed skating suggests that he isn't particularly close to returning to game action. A better idea of the 30-year-old's timetable to return will likely come into focus once he's cleared to return to the ice."
   },
   {
    "team": "OTT",
@@ -851,19 +864,6 @@
   {
    "team": "OTT",
    "teamName": "Ottawa Senators",
-   "name": "Warren Foegele",
-   "pos": "LW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Knee",
-   "returnDate": "2026-11-25",
-   "updated": "2026-10-31",
-   "note": "Foegele (knee) will miss 3-4 weeks, Jackson Starr of the Senators' official site reports Saturday.",
-   "detail": "The Senators moved Foegele to the injured reserve list Friday. He will miss his second straight game against San Jose on Saturday. Foegele has earned one goal, four points, 14 shots on net, five blocked shots and 18 hits in 13 appearances this season."
-  },
-  {
-   "team": "OTT",
-   "teamName": "Ottawa Senators",
    "name": "William Eklund",
    "pos": "LW",
    "status": "Injured Reserve",
@@ -879,13 +879,13 @@
    "teamName": "Philadelphia Flyers",
    "name": "Denver Barkey",
    "pos": "C",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Illness",
    "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "Barkey (illness) won't play against Edmonton on Sunday, per Adam Kimelman of NHL.com.",
-   "detail": "Barkey will miss at least one game, but it's unclear if he will be ready to play against Buffalo on Tuesday. He has earned four goals, 10 points, 19 shots on net and 19 hits in 19 appearances this season. Cole Knuble will replace Barkey in Sunday's lineup against the Oilers."
+   "updated": "2026-11-16",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "PHI",
@@ -942,6 +942,19 @@
   {
    "team": "SJ",
    "teamName": "San Jose Sharks",
+   "name": "Alexander Wennberg",
+   "pos": "C",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-11-17",
+   "updated": "2026-11-16",
+   "note": "day-to-day",
+   "detail": "day-to-day"
+  },
+  {
+   "team": "SJ",
+   "teamName": "San Jose Sharks",
    "name": "Kiefer Sherwood",
    "pos": "LW",
    "status": "Day-To-Day",
@@ -977,19 +990,6 @@
    "updated": "2026-11-15",
    "note": "Head coach Ryan Warsofsky said Sunday that Musty (upper body) isn't close to returning, Curtis Pashelka of The San Jose Mercury News reports.",
    "detail": "Musty suffered an upper-body injury ahead of training camp and was expected to have a long-term absence. He's been on non-roster injured reserve to begin the regular season, and it's not yet clear when he'll be deemed healthy. Once the 21-year-old is cleared to return to game action, he'll presumably be sent to AHL San Jose."
-  },
-  {
-   "team": "SJ",
-   "teamName": "San Jose Sharks",
-   "name": "Alexander Wennberg",
-   "pos": "C",
-   "status": "Out",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "out",
-   "detail": "out"
   },
   {
    "team": "SJ",
