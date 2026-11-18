@@ -1,8 +1,21 @@
 {
- "fetched": "2026-11-17",
+ "fetched": "2026-11-18",
  "source": "ESPN injuries feed",
  "ok": true,
  "players": [
+  {
+   "team": "ANA",
+   "teamName": "Anaheim Ducks",
+   "name": "Beckett Sennecke",
+   "pos": "RW",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Illness",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
+  },
   {
    "team": "ANA",
    "teamName": "Anaheim Ducks",
@@ -123,6 +136,19 @@
   {
    "team": "CHI",
    "teamName": "Chicago Blackhawks",
+   "name": "Connor Bedard",
+   "pos": "C",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Shoulder",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "Bedard is being evaluated for a shoulder injury, Emily Kaplan of ESPN reports Wednesday.",
+   "detail": "Bedard suffered the injury during Tuesday's game against Toronto. He has seven goals and 18 points in 15 outings in 2026-27. Bedard missed the first six games of the season while recovering from shoulder surgery, but it's not clear if his current issue is related."
+  },
+  {
+   "team": "CHI",
+   "teamName": "Chicago Blackhawks",
    "name": "Bowen Byram",
    "pos": "D",
    "status": "Injured Reserve",
@@ -132,6 +158,19 @@
    "updated": "2026-11-17",
    "note": "Byram (upper body) will not play in the Blackhawks' next two games, per CHGO Blackhawks.",
    "detail": "Per head coach Jeff Blashill, Byram wont play in either Tuesday's home clash against the Maple Leafs or Thursday's home contest against the Blue Jackets. The 25-year-old defenseman was able to shed his non-contact jersey for the first time Tuesday, which indicates that he might have a chance to play at the start of Chicago's upcoming road trip out west. Once he's activated from injured reserve, he's expected to resume skating on the team's top pairing and first power-play unit, which will make him a worthwhile add in deep fantasy leagues."
+  },
+  {
+   "team": "COL",
+   "teamName": "Colorado Avalanche",
+   "name": "Scott Wedgewood",
+   "pos": "G",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Illness",
+   "returnDate": "2026-11-18",
+   "updated": "2026-11-17",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "COL",
@@ -206,21 +245,8 @@
    "status": "Day-To-Day",
    "ltir": false,
    "injury": "Upper Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
-   "team": "DAL",
-   "teamName": "Dallas Stars",
-   "name": "Miro Heiskanen",
-   "pos": "D",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
    "note": "day-to-day",
    "detail": "day-to-day"
   },
@@ -258,7 +284,7 @@
    "status": "Injured Reserve",
    "ltir": true,
    "injury": "Finger",
-   "returnDate": "2026-11-17",
+   "returnDate": "2026-11-22",
    "updated": "2026-10-24",
    "note": "Back was placed on long-term injured reserve on Saturday.",
    "detail": "Back's shift to long-term injured reserve was done in tandem with Esa Lindell's retroactive placement on IR. The 26-year-old Back sustained his finger injury during the Stars' clash with the Avalanche on Oct. 14. Prior to going down, the center had posted an assist, two PIM, four shots on net, five hits and nine blocked shots over seven outings. In his absence, Colin Blackwell should continue to see a consistent role."
@@ -279,15 +305,28 @@
   {
    "team": "DET",
    "teamName": "Detroit Red Wings",
+   "name": "William Wallinder",
+   "pos": "D",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-11-21",
+   "updated": "2026-11-18",
+   "note": "Wallinder (upper body) will not be in the lineup versus Boston on Wednesday, Ansar Khan of MLive.com reports.",
+   "detail": "Contrary to a previous report, Wallinder will have to wait until Saturday's clash with the Islanders to suit up for the Red Wings. In 16 outings this year, the rookie blueliner has notched two goals, four assists and 16 shots while averaging 16:50 of ice time. With Albert Johansson (undisclosed) also out of action, Jacob Bernard-Docker will make his NHL season debut."
+  },
+  {
+   "team": "DET",
+   "teamName": "Detroit Red Wings",
    "name": "Albert Johansson",
    "pos": "D",
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Undisclosed",
-   "returnDate": "2026-11-18",
-   "updated": "2026-11-06",
-   "note": "Johansson (undisclosed) will be with the Red Wings for their upcoming four-game road trip, Ansar Khan of MLive.com reports Friday.",
-   "detail": "Johansson may not be available at the start of the trip, but the fact that he will be with the team is a good indication that he'll return soon. The 25-year-old blueliner has already missed six games due to his undisclosed injury. In 11 outings prior to getting hurt, Johansson failed to find the back of the net while recording one assist, 14 shots and 12 blocks."
+   "returnDate": "2026-11-21",
+   "updated": "2026-11-18",
+   "note": "Johansson (undisclosed) has been ruled out for Wednesday's game against the Bruins, Ansar Khan of MLive.com reports.",
+   "detail": "The Red Wings indicated earlier in the week that Johansson would likely be able to return to the lineup Wednesday against Boston or Saturday against the Islanders. He'll be unavailable for at least one additional matchup, but it wouldn't be surprising to see him in the mix to suit up Saturday. Across 11 appearances prior to sustaining his injury, Johansson recorded an assist, 12 blocked shots, three hits and two PIM while averaging 15:41 of ice time."
   },
   {
    "team": "DET",
@@ -320,13 +359,13 @@
    "teamName": "Edmonton Oilers",
    "name": "Ryan Nugent-Hopkins",
    "pos": "C",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Undisclosed",
    "returnDate": "2026-11-19",
-   "updated": "2026-11-17",
-   "note": "Nugent-Hopkins (undisclosed) isn't expected to play against Florida on Tuesday, per Oilers play-by-play announcer Jack Michaels.",
-   "detail": "Nugent-Hopkins wasn't on the ice for Tuesday's morning skate and will miss his second straight game with an undisclosed issue.  It's unclear when he will be available to return. Nugent-Hopkins has registered four goals, 11 points, 20 shots on net and six blocked shots in 12 appearances this season."
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "EDM",
@@ -424,24 +463,11 @@
    "teamName": "Los Angeles Kings",
    "name": "Artemi Panarin",
    "pos": "LW",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Personal",
    "returnDate": "2026-11-19",
-   "updated": "2026-11-16",
-   "note": "out",
-   "detail": "out"
-  },
-  {
-   "team": "PHI",
-   "teamName": "Los Angeles Kings",
-   "name": "Erik Gustafsson",
-   "pos": "D",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Undisclosed",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
+   "updated": "2026-11-18",
    "note": "day-to-day",
    "detail": "day-to-day"
   },
@@ -461,6 +487,19 @@
   {
    "team": "MIN",
    "teamName": "Minnesota Wild",
+   "name": "Filip Gustavsson",
+   "pos": "G",
+   "status": "Injured Reserve",
+   "ltir": true,
+   "injury": "Hip",
+   "returnDate": "2026-11-23",
+   "updated": "2026-11-18",
+   "note": "Gustavsson (hip) could rejoin the Wild on Monday ahead of their game versus the Sharks, Michael Russo of The Athletic reports.",
+   "detail": "Gustavsson will be with the Wild as their road trip begins Thursday in Calgary. He'll then head to San Diego, where AHL Iowa plays twice over the weekend, with Gustavsson expected to start Saturday's contest for the minor-league team. The goalie will then rejoin the Wild in San Jose ahead of Monday's game, which could be his NHL season debut if he gets over the last few hurdles in his recovery without a setback. The Wild will have no need to overwork Gustavsson once he's active, as Jesper Wallstedt has been one of the best goalies in the league this year."
+  },
+  {
+   "team": "MIN",
+   "teamName": "Minnesota Wild",
    "name": "Olli Maatta",
    "pos": "D",
    "status": "Injured Reserve",
@@ -472,17 +511,17 @@
    "detail": "ir"
   },
   {
-   "team": "MIN",
-   "teamName": "Minnesota Wild",
-   "name": "Filip Gustavsson",
-   "pos": "G",
-   "status": "Injured Reserve",
-   "ltir": true,
-   "injury": "Hip",
-   "returnDate": "2026-11-19",
-   "updated": "2026-11-05",
-   "note": "Gustavsson (hip) will travel with the Wild during the team's upcoming three-game road trip, per Joe Smith of The Athletic.",
-   "detail": "Gustavsson has been sidelined since the start of the campaign due to the hip procedure he underwent in the offseason. His inclusion for the team's upcoming road trip is a sign that he hasn't had any major setbacks since being ruled out for at least another month in mid-October. His status will be monitored closely, and once he's able to return, he'll likely see somewhat frequent appearances in net, but he'll be behind Jesper Wallstedt on the depth chart."
+   "team": "MTL",
+   "teamName": "Montreal Canadiens",
+   "name": "Alexandre Texier",
+   "pos": "LW",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Illness",
+   "returnDate": "2026-11-18",
+   "updated": "2026-11-17",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "MTL",
@@ -576,30 +615,43 @@
    "detail": "ir-nr"
   },
   {
-   "team": "NSH",
-   "teamName": "Nashville Predators",
-   "name": "Jonathan Marchessault",
-   "pos": "RW",
+   "team": "NJ",
+   "teamName": "New Jersey Devils",
+   "name": "Jonas Siegenthaler",
+   "pos": "D",
    "status": "Day-To-Day",
    "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
+   "injury": "Illness",
+   "returnDate": "2026-11-18",
+   "updated": "2026-11-18",
    "note": "day-to-day",
    "detail": "day-to-day"
   },
   {
    "team": "NJ",
    "teamName": "New Jersey Devils",
-   "name": "Vladislav Kolyachonok",
+   "name": "Anthony Mantha",
+   "pos": "RW",
+   "status": "Injured Reserve",
+   "ltir": true,
+   "injury": "Neck",
+   "returnDate": "2026-12-17",
+   "updated": "2026-11-17",
+   "note": "Mantha (neck) is expected to miss about one month after undergoing surgery, per Kristy Flannery of The Hockey News.",
+   "detail": "After being placed on long-term injured reserve on Wednesday, Mantha underwent surgery Monday to repair a throat fracture. Prior to sustaining the injury, the 32-year-old winger posted five goals, 10 points, 21 shots on net and 11 hits over 17 appearances this season. In his absence, Amadeus Lombardi and Lenni Hameenaho will likely continue to serve as depth options in New Jersey's forward room."
+  },
+  {
+   "team": "NJ",
+   "teamName": "New Jersey Devils",
+   "name": "Johnathan Kovacevic",
    "pos": "D",
-   "status": "Day-To-Day",
+   "status": "Injured Reserve",
    "ltir": false,
-   "injury": "",
-   "returnDate": null,
-   "updated": "2026-11-15",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "injury": "Ankle",
+   "returnDate": "2026-12-12",
+   "updated": "2026-11-17",
+   "note": "Kovacevic (ankle) is expected to be sidelined for 4-6 weeks, per Kristy Flannery of The Hockey News.",
+   "detail": "Kovacevic's ankle issue has been revealed to be a high-ankle sprain, which commonly requires four weeks or more to come back from. Prior to sustaining the injury on Nov. 10 against the Jets, the 29-year-old blueliner posted two points, a plus-2 rating, 10 shots on net, 13 hits and eight blocked shots over 13 appearances. In his absence, Vladislav Kolyachonok, Declan Chisholm and Anton Silaev will be the depth options to fill Kovacevic's role in the lineup."
   },
   {
    "team": "NJ",
@@ -615,32 +667,6 @@
    "detail": "Casey began the season on non-roster injured reserve due to knee surgery. This move to LTIR doesn't change his timeline -- he's already missed enough time to be eligible to return. He was slated to miss 6-8 weeks, so don't expect him to be ready until late November at the earliest."
   },
   {
-   "team": "NJ",
-   "teamName": "New Jersey Devils",
-   "name": "Johnathan Kovacevic",
-   "pos": "D",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Ankle",
-   "returnDate": "2026-11-18",
-   "updated": "2026-11-13",
-   "note": "The Devils placed Kovacevic (ankle) on injured reserve Friday, retroactive to Nov. 10.",
-   "detail": "Kovacevic sustained an injury Tuesday against Winnipeg, and while the extent of the issue wasn't initially known, it's now been revealed that he's dealing with an ankle injury that will force him to miss time. It's not yet clear when he'll be able to return to action, but Vladislav Kolyachonok could see increased playing time in Kovacevic's absence, while Anton Silaev was also called up from AHL Utica on Friday."
-  },
-  {
-   "team": "NJ",
-   "teamName": "New Jersey Devils",
-   "name": "Anthony Mantha",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": true,
-   "injury": "Neck",
-   "returnDate": "2026-12-05",
-   "updated": "2026-11-11",
-   "note": "Mantha (throat) was placed on long-term injured reserve by the Devils on Wednesday, retroactive to Nov. 7.",
-   "detail": "Mantha took a high stick to the throat during Saturday's overtime win over the Islanders, and he's facing a multi-week absence after landing on long-term injured reserve. Lenni Hameenaho and Stefan Noesen were recalled from AHL Utica on Wednesday to provide additional depth for the Devils while Mantha is sidelined."
-  },
-  {
    "team": "NYI",
    "teamName": "New York Islanders",
    "name": "Jean-Gabriel Pageau",
@@ -648,10 +674,10 @@
    "status": "Day-To-Day",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-17",
-   "note": "Pageau (lower body) will be a game-time decision ahead of Tuesday's matchup with Columbus, Stefen Rosner of NHL.com reports.",
-   "detail": "Pageau has already missed two games due to his lower-body problem but looks close to getting back into the lineup. The veteran forward is currently mired in a 12-game goalless streak, though he has chipped in five helpers over that stretch. If Pageau does suit up, it will likely be in a bottom-six role, with Mitchell Chaffee in danger of being scratched."
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "NYI",
@@ -661,10 +687,10 @@
    "status": "Day-To-Day",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
-   "note": "Stanley (lower body) is considered day-to-day ahead of Tuesday's clash with the Blue Jackets, Andrew Gross of Newsday reports.",
-   "detail": "Stanley was injured versus the Ducks on Saturday, logging just 9:25 of ice time before being forced out of the game. The 28-year-old blueliner has yet to find the back of the net this season and is currently mired in a nine-game pointless streak. If Stanley can't play against Columbus, Scott Mayfield would be the most likely candidate to step into the lineup, though Matt Kessel could also be in contention."
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "NYI",
@@ -786,15 +812,41 @@
   {
    "team": "OTT",
    "teamName": "Ottawa Senators",
+   "name": "Nick Cousins",
+   "pos": "C",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
+  },
+  {
+   "team": "OTT",
+   "teamName": "Ottawa Senators",
    "name": "Hayden Hodgson",
    "pos": "RW",
-   "status": "Out",
+   "status": "Day-To-Day",
    "ltir": false,
    "injury": "Groin",
    "returnDate": "2026-11-19",
-   "updated": "2026-11-16",
-   "note": "Hodgson (groin) isn't expected to play against Winnipeg on Tuesday, per TSN 1200 Ottawa.",
-   "detail": "Hodgson will miss at least one game after suffering a groin injury in Saturday's 4-1 win over Pittsburgh, but it's unclear when he will be ready to return. He has contributed one goal, three shots on net, 20 hits and 24 PIM in 10 appearances this season. In Hodgson's absence, Tyler Boucher will make his NHL debut against the Jets on Tuesday."
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
+  },
+  {
+   "team": "OTT",
+   "teamName": "Ottawa Senators",
+   "name": "Thomas Chabot",
+   "pos": "D",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "OTT",
@@ -808,19 +860,6 @@
    "updated": "2026-11-16",
    "note": "Head coach Travis Green said Monday that Foegele (knee) hasn't yet resumed skating, Bruce Garrioch of Postmedia reports.",
    "detail": "Foegele has been sidelined since late October, and he initially carried a return timetable of 3-4 weeks. While he hasn't yet entered that window, the fact that he hasn't yet resumed skating suggests that he isn't particularly close to returning to game action. A better idea of the 30-year-old's timetable to return will likely come into focus once he's cleared to return to the ice."
-  },
-  {
-   "team": "OTT",
-   "teamName": "Ottawa Senators",
-   "name": "Nick Cousins",
-   "pos": "C",
-   "status": "Out",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-19",
-   "updated": "2026-11-11",
-   "note": "out",
-   "detail": "out"
   },
   {
    "team": "OTT",
@@ -903,28 +942,15 @@
   {
    "team": "SJ",
    "teamName": "San Jose Sharks",
-   "name": "Alexander Wennberg",
-   "pos": "C",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
-   "team": "SJ",
-   "teamName": "San Jose Sharks",
    "name": "Kiefer Sherwood",
    "pos": "LW",
-   "status": "Day-To-Day",
+   "status": "Out",
    "ltir": false,
-   "injury": "Arm",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "injury": "Upper Body",
+   "returnDate": "2026-12-01",
+   "updated": "2026-11-17",
+   "note": "out",
+   "detail": "out"
   },
   {
    "team": "SJ",
@@ -1037,24 +1063,11 @@
    "pos": "LW",
    "status": "Day-To-Day",
    "ltir": false,
-   "injury": "Personal",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-16",
-   "note": "Johnston didn't practice Monday due to personal reasons, and his status for Tuesday's game against the Ducks is uncertain, Lou Korac of NHL.com reports.",
-   "detail": "Johnston returned to action in early November after missing seven games due to a lower-body injury, and he's appeared in each of the Blues' last six matchups. However, he'll likely be a game-time decision for Tuesday's contest due to his personal matter. If he's sidelined against Anaheim, Jonatan Berggren is a candidate to return to the lineup."
-  },
-  {
-   "team": "STL",
-   "teamName": "St. Louis Blues",
-   "name": "Aleksanteri Kaskimaki",
-   "pos": "C",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Undisclosed",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "Kaskimaki sustained an undisclosed injury near the end of Saturday's game versus the Panthers, Lou Korac of NHL.com reports.",
-   "detail": "Kaskimaki's status wasn't updated after the contest. The 22-year-old should be considered day-to-day pending an update from the Blues. Jonatan Berggren would likely enter the lineup if Kaskimaki can't play Tuesday versus the Ducks."
+   "injury": "Upper Body",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
   },
   {
    "team": "STL",
@@ -1090,7 +1103,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Knee",
-   "returnDate": "2026-11-17",
+   "returnDate": "2026-11-28",
    "updated": "2026-09-30",
    "note": "Tucker had arthroscopic knee surgery and will be re-assessed in six weeks, the team announced Wednesday.",
    "detail": "Based on Tucker's timeline, he shouldn't be expected back until mid-November, though it could certainly be longer. With Logan Mailloux (hand) also sidelined long-term, Adam Jiricek could see an extended run on the blue line. For his part, even once cleared to play, Tucker is unlikely to offer much in the way of fantasy value given his limited offensive upside."
@@ -1098,39 +1111,39 @@
   {
    "team": "TB",
    "teamName": "Tampa Bay Lightning",
-   "name": "Erik Cernak",
-   "pos": "D",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
-   "team": "TB",
-   "teamName": "Tampa Bay Lightning",
-   "name": "Anthony Cirelli",
-   "pos": "C",
+   "name": "Brandon Hagel",
+   "pos": "LW",
    "status": "Day-To-Day",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-15",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
    "note": "day-to-day",
    "detail": "day-to-day"
   },
   {
    "team": "TB",
    "teamName": "Tampa Bay Lightning",
-   "name": "Brayden Point",
+   "name": "Zemgus Girgensons",
+   "pos": "C",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-18",
+   "note": "day-to-day",
+   "detail": "day-to-day"
+  },
+  {
+   "team": "TB",
+   "teamName": "Tampa Bay Lightning",
+   "name": "Conor Geekie",
    "pos": "C",
    "status": "Injured Reserve",
    "ltir": false,
-   "injury": "Undisclosed",
-   "returnDate": "2026-11-17",
-   "updated": "2026-11-10",
+   "injury": "Upper Body",
+   "returnDate": "2026-11-22",
+   "updated": "2026-11-17",
    "note": "ir",
    "detail": "ir"
   },
@@ -1256,13 +1269,13 @@
    "teamName": "Utah Mammoth",
    "name": "Nick Schmaltz",
    "pos": "C",
-   "status": "Out",
+   "status": "Injured Reserve",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-21",
-   "updated": "2026-11-14",
-   "note": "Schmaltz (lower body) isn't expected to play against San Jose on Saturday, and it's unclear when he will be ready to return, Brogan Houston of the Deseret News reports.",
-   "detail": "Schmaltz is poised to miss his second straight game after being injured in Wednesday's 5-3 loss to Vegas. The Mammoth expect to know more about his timeline soon. Schmaltz has nine goals, 20 points and 48 shots on net in 19 appearances this season."
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-17",
+   "note": "ir",
+   "detail": "ir"
   },
   {
    "team": "UTA",
@@ -1428,7 +1441,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Personal",
-   "returnDate": "2026-11-17",
+   "returnDate": "2026-11-19",
    "updated": "2026-11-08",
    "note": "ir-nr",
    "detail": "ir-nr"
@@ -1468,6 +1481,14 @@
    "pos": "LW",
    "injury": "Knee",
    "since": "2026-11-17"
+  },
+  {
+   "team": "TB",
+   "teamName": "Tampa Bay Lightning",
+   "name": "Brayden Point",
+   "pos": "C",
+   "injury": "Undisclosed",
+   "since": "2026-11-18"
   }
  ]
 }

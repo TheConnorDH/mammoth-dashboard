@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-17",
+ "fetched": "2026-11-18",
  "failed": [],
  "teams": {
   "ANA": [
@@ -4178,6 +4178,12 @@
     "name": "Kailer Yamamoto",
     "pos": "R",
     "number": 56
+   },
+   {
+    "playerId": "8485010",
+    "name": "Gregor Biber",
+    "pos": "D",
+    "number": 94
    },
    {
     "playerId": "8480084",
