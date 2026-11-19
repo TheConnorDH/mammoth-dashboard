@@ -58,6 +58,19 @@
   {
    "team": "BUF",
    "teamName": "Buffalo Sabres",
+   "name": "Mattias Samuelsson",
+   "pos": "D",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-19",
+   "note": "Samuelsson (undisclosed) is considered a game-time decision for Thursday's road clash against the Capitals, per Paul Hamilton of WGR Sports Radio 550.",
+   "detail": "Samuelsson skated Thursday morning and said that it went well, but head coach Lindy Ruff has listed him as a game-time decision. The 26-year-old Samuelsson has posted three goals, 12 points, 30 shots on net, 24 hits and 39 blocked shots over 21 outings this season. If he ultimately can't play Thursday, Zach Metsa will likely join the Sabres' lineup in either the second or third defensive pairing."
+  },
+  {
+   "team": "BUF",
+   "teamName": "Buffalo Sabres",
    "name": "Konsta Helenius",
    "pos": "C",
    "status": "Injured Reserve",
@@ -138,13 +151,13 @@
    "teamName": "Chicago Blackhawks",
    "name": "Connor Bedard",
    "pos": "C",
-   "status": "Day-To-Day",
+   "status": "Out",
    "ltir": false,
    "injury": "Shoulder",
-   "returnDate": "2026-11-19",
-   "updated": "2026-11-18",
-   "note": "Bedard is being evaluated for a shoulder injury, Emily Kaplan of ESPN reports Wednesday.",
-   "detail": "Bedard suffered the injury during Tuesday's game against Toronto. He has seven goals and 18 points in 15 outings in 2026-27. Bedard missed the first six games of the season while recovering from shoulder surgery, but it's not clear if his current issue is related."
+   "returnDate": "2026-11-27",
+   "updated": "2026-11-19",
+   "note": "out",
+   "detail": "out"
   },
   {
    "team": "CHI",
@@ -422,6 +435,19 @@
   {
    "team": "FLA",
    "teamName": "Florida Panthers",
+   "name": "Jonah Gadjovich",
+   "pos": "LW",
+   "status": "Injured Reserve",
+   "ltir": true,
+   "injury": "Neck",
+   "returnDate": "2026-11-28",
+   "updated": "2026-11-19",
+   "note": "Gadjovich (neck) took the ice Thursday in a non-contact sweater, George Richards of Florida Hockey Now reports.",
+   "detail": "It's a step in the right direction for Gadjovich, who hasn't played since Oct. 25, 2025, against the Golden Knights, missing over a year of action. Given his extended layoff, the winger's return to practice doesn't mean he will be returning soon. Still, Gadjovich should slot into a bottom-six role for the club once given the all-clear."
+  },
+  {
+   "team": "FLA",
+   "teamName": "Florida Panthers",
    "name": "Brad Marchand",
    "pos": "LW",
    "status": "Injured Reserve",
@@ -440,23 +466,10 @@
    "status": "Injured Reserve",
    "ltir": true,
    "injury": "Knee",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-21",
    "updated": "2026-11-06",
    "note": "Head coach Paul Maurice said Friday that Barkov (knee) will travel with the Panthers during their upcoming three-game road trip, Jameson Olive of the Panthers' official site reports.",
    "detail": "Barkov isn't expected to return to game action during the road trip, which begins Saturday in Washington and concludes Tuesday in Columbus, but the Panthers aren't slated to have many practices in November, so the 31-year-old could join the team for morning skate prior to Florida's game against the Blue Jackets. Maurice said last week that Barkov was still believed to be approximately four weeks away from returning to game action, so it seems unlikely that he'll be in the mix to return until at least mid-to-late November."
-  },
-  {
-   "team": "FLA",
-   "teamName": "Florida Panthers",
-   "name": "Jonah Gadjovich",
-   "pos": "LW",
-   "status": "Injured Reserve",
-   "ltir": true,
-   "injury": "Neck",
-   "returnDate": "2026-11-28",
-   "updated": "2026-09-17",
-   "note": "Gadjovich (upper body) is out indefinitely, the team announced Thursday.",
-   "detail": "Gadjovich hasn't played since Oct. 25, 2025 because of the injury. He had three assists, seven PIM and 30 hits in 10 regular-season appearances last campaign. Gadjovich is expected to see time on the fourth line once he's available."
   },
   {
    "team": "LA",
@@ -466,10 +479,10 @@
    "status": "Out",
    "ltir": false,
    "injury": "Personal",
-   "returnDate": "2026-11-23",
+   "returnDate": "2026-11-21",
    "updated": "2026-11-19",
-   "note": "out",
-   "detail": "out"
+   "note": "Panarin (personal), who has been ruled out for Thursday's game against the Maple Leafs, is expected to return Saturday against the Senators, John Hoven of SiriusXM NHL Network Radio reports.",
+   "detail": "Panarin isn't with the Kings to begin their five-game road trip, but he's slated to return to action with three matchups remaining in the trip. Across 17 appearances this season, the 35-year-old has recorded eight goals, 11 assists, 14 PIM, six hits and three blocked shots while averaging 21:27 of ice time."
   },
   {
    "team": "LA",
@@ -662,9 +675,9 @@
    "ltir": false,
    "injury": "Lower Body",
    "returnDate": "2026-11-19",
-   "updated": "2026-11-18",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "updated": "2026-11-19",
+   "note": "Pageau (lower body) will be a game-time call against the Jets on Thursday, Andrew Gross of Newsday reports.",
+   "detail": "Pageau has missed the last three games due to his lower-body problem, but he could get back into action Thursday. If Pageau does suit up, it will likely be in a fourth-line role, which could make it difficult for him to break out of his 12-game goalless streak."
   },
   {
    "team": "NYI",
@@ -873,6 +886,19 @@
    "updated": "2026-10-10",
    "note": "Grebenkin (back) underwent successful surgery and is expected to miss at least four months.",
    "detail": "Grebenkin's upper-body injury has been revealed to be an issue with his back, which he has successfully had repaired. The 23-year-old winger is expected to miss the majority of the 2026-27 campaign, but his current timeline for return, barring any setbacks, projects him back sometime after the All-Star break in mid-February. When he does return, Grebenkin will look to build off a positive rookie campaign, where he compiled four goals, 14 points, 32 shots on net, 86 hits and 17 blocked shots across 55 regular-season outings in 2025-26."
+  },
+  {
+   "team": "PIT",
+   "teamName": "Pittsburgh Penguins",
+   "name": "Nick Robertson",
+   "pos": "LW",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-11-19",
+   "updated": "2026-11-19",
+   "note": "Robertson left Thursday's morning skate early, raising doubts regarding his availability against St. Louis, Seth Rorabaugh of Tribune-Review Sports reports.",
+   "detail": "Head coach Dan Muse was rather vague when asked about Robertson's availability, so fantasy managers will need to take a wait-and-see approach. If the 25-year-old winger can't give it a go versus the Blues, it would likely mean a return to the lineup for Justin Brazeau or Andrei Kuzmenko."
   },
   {
    "team": "PIT",
@@ -1384,6 +1410,19 @@
   {
    "team": "WPG",
    "teamName": "Winnipeg Jets",
+   "name": "Dylan DeMelo",
+   "pos": "D",
+   "status": "Injured Reserve",
+   "ltir": false,
+   "injury": "Lower Body",
+   "returnDate": "2026-12-26",
+   "updated": "2026-11-19",
+   "note": "DeMelo (lower body) is expected to be out of action for 4-6 weeks, Mitchell Clinton of the Jets' official site reports Thursday.",
+   "detail": "DeMelo has already been placed on injured reserve, but this latest update provides a clearer recovery timeline. The blueliner hasn't scored a goal since Opening Night versus Boston, a stretch of 19 games without finding the back of the net. During that stretch, DeMelo did chip in seven helpers, 27 hits and 22 blocks, giving him decent category coverage in banger formats."
+  },
+  {
+   "team": "WPG",
+   "teamName": "Winnipeg Jets",
    "name": "Isak Rosen",
    "pos": "RW",
    "status": "Injured Reserve",
@@ -1393,19 +1432,6 @@
    "updated": "2026-11-17",
    "note": "ir",
    "detail": "ir"
-  },
-  {
-   "team": "WPG",
-   "teamName": "Winnipeg Jets",
-   "name": "Dylan DeMelo",
-   "pos": "D",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-21",
-   "updated": "2026-11-13",
-   "note": "DeMelo (lower body) was placed on injured reserve Friday.",
-   "detail": "DeMelo was deemed week-to-week after exiting Thursday's game against the Stars due to his lower-body injury, so it isn't particularly surprising to see him land on injured reserve. Haydn Fleury is a candidate to return to the lineup in DeMelo's absence, while Henry Thrun was called up from AHL Manitoba to provide additional depth."
   },
   {
    "team": "WPG",
