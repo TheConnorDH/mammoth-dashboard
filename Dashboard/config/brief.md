@@ -1,19 +1,19 @@
-## Utah hasn't played since Nov 16, a 2-3 home loss to Vancouver despite a large edge in chance quality
+## Utah beats Colorado 4-1 behind a strong goaltending night and a power-play goal
 
-Utah has not played since Nov 16, when it lost 2-3 at home to the Vancouver Canucks. The record is now 10-9-3 (23 points in 22 games), and the current streak is L1. Utah is 5th in the Central Division. Shots on goal were Utah 37, VAN 24, and expected goals were Utah 6.0, VAN 2.8. Replaying every shot by its quality, Utah wins this game 88% of the time.
+Utah (11-9-3, 25 points, W1 streak, 5th in the Central) beat the Colorado Avalanche 4-1 at home on Nov 18. Shots on goal were close, Utah 29 and Colorado 31. Total expected goals favored Utah, 3.0 to 2.3. Replaying every shot by its quality, Utah wins 63% of the time. Goal scorers were Vincent Trocheck (who also had an assist and a power-play goal), Liam O'Brien, Kevin Stenlund and Dmitri Simashev.
 
 What the numbers showed:
-- **Lineup changes.** Logan Cooley and Nick DeSimone came in. Artem Duda and Ben McCartney came out.
-- **Goaltending vs. expected.** Karel Vejmelka allowed 3 goals on 24 shots worth 2.8 expected goals, 0.2 goals worse than expected. Vancouver's Nikita Tolopilo allowed 2 on 37 shots worth 6.0 expected goals, 4.0 goals better than expected.
-- **Special teams.** Power-play goals were Utah 1, VAN 2. Vincent Trocheck scored Utah's power-play goal, and Barrett Hayton scored the other Utah goal.
-- **Player Impact.** The best in goals were Hayton (+0.69), MacKenzie Weegar (+0.60) and Kailer Yamamoto (+0.59). The lowest were Clayton Keller (-0.77), Mikhail Sergachev (-0.74) and Trocheck (-0.53).
-- **Season process vs. results.** Utah has 23 points vs. 28.6 expected from shot quality. Season expected goals are 78.8 for and 64.3 against.
+- **Goaltending.** Sebastian Cossa made 30 saves on 31 shots. The shots were worth 2.3 expected goals, so he was 1.3 goals better than expected. Colorado's Mackenzie Blackwood allowed 3 on shots worth 3.0 expected goals, 0.0 goals better than expected.
+- **Chance quality.** Utah had 11 dangerous shots (10% or higher chance of scoring) to Colorado's 7. At 5v5 alone, expected goals favored Colorado, 1.7 to 1.1.
+- **Special teams.** Utah scored 1 power-play goal. Colorado scored none.
+- **Player Impact.** The best in goals were Cossa (+1.29), Zac Jones (+0.64) and Liam O'Brien (+0.58). The lowest were Clayton Keller (-0.83), Andrew Peeke (-0.60) and Mikhail Sergachev (-0.57).
+- **Season process vs. results.** Utah has 25 points against 30.1 expected from shot quality. Season expected goals are 82.7 for and 66.6 against.
 
-**Where Utah stands:** 9th in the power rankings (likely range 5th-20th), up from 12th, in Tier 3. The rating is +6.4 standings points per 84 games vs. an average team. The projection is 97 points, with an 80% range of 85-110. Playoff odds are 69%, down from 72%.
+**Where Utah stands:** Power rank 9th (likely range 4th-20th), unchanged from the previous 9th. Tier 3, with a rating of +7.0 standings points per 84 games vs. an average team. Projection: 99 points, 80% range 87-111. Playoff odds are 74%, up from 69%.
 
 **What to watch next:**
-- Wednesday, Nov 18, home vs. the Colorado Avalanche (power rank 2nd, division game): Utah win chance 46%.
-- Saturday, Nov 21, home vs. the Anaheim Ducks (24th): 63%.
-- Monday, Nov 23, at the Winnipeg Jets (22nd, division game): 53%.
+- Saturday, Nov 21: home vs. Anaheim Ducks (power rank 23rd). Utah win chance 64%.
+- Monday, Nov 23: away at Winnipeg Jets (22nd), a division game. Utah win chance 54%.
+- Wednesday, Nov 25: away at Minnesota Wild (4th), a division game. Utah win chance 40%.
 
-*Data note: MoneyPuck data through Nov 16; NHL results through Nov 17.*
+*Data note: MoneyPuck data through Nov 18; NHL results through Nov 18.*

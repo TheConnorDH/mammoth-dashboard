@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-18",
+ "fetched": "2026-11-19",
  "failed": [],
  "teams": {
   "ANA": [
@@ -652,6 +652,12 @@
     "name": "Steven Lorentz",
     "pos": "C",
     "number": 18
+   },
+   {
+    "playerId": "8480806",
+    "name": "Isac Lundeström",
+    "pos": "C",
+    "number": 21
    },
    {
     "playerId": "8477497",
@@ -2618,12 +2624,6 @@
     "number": 21
    },
    {
-    "playerId": "8484221",
-    "name": "Calum Ritchie",
-    "pos": "C",
-    "number": 64
-   },
-   {
     "playerId": "8475170",
     "name": "Brayden Schenn",
     "pos": "C",
@@ -3804,6 +3804,12 @@
     "number": 38
    },
    {
+    "playerId": "8478424",
+    "name": "Jansen Harkins",
+    "pos": "C",
+    "number": 10
+   },
+   {
     "playerId": "8480995",
     "name": "Pontus Holmberg",
     "pos": "R",
@@ -4178,12 +4184,6 @@
     "name": "Kailer Yamamoto",
     "pos": "R",
     "number": 56
-   },
-   {
-    "playerId": "8485010",
-    "name": "Gregor Biber",
-    "pos": "D",
-    "number": 94
    },
    {
     "playerId": "8480084",
