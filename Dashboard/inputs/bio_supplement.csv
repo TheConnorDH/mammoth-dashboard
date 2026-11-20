@@ -60,3 +60,4 @@ playerId,name,position,team,birthDate,weight,height,nationality,shootsCatches,pr
 8483442,Jagger Firkus,R,SEA,2004-04-29,177,"5' 11""",CAN,R,57,R,NHL API player landing 2026-11-15
 8482942,Alex Gagne,D,COL,2002-08-12,205,"6' 4""",USA,L,28,D,NHL API player landing 2026-11-15
 8482674,Tyler Boucher,R,OTT,2003-01-16,216,"6' 2""",USA,R,54,R,NHL API player landing 2026-11-18
+8484859,Stian Solberg,D,ANA,2005-12-29,204,"6' 2""",NOR,L,50,D,NHL API player landing 2026-11-20

@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-19",
+ "fetched": "2026-11-20",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1134,12 +1134,6 @@
     "number": 84
    },
    {
-    "playerId": "8482942",
-    "name": "Alex Gagne",
-    "pos": "D",
-    "number": 28
-   },
-   {
     "playerId": "8478454",
     "name": "Noah Juulsen",
     "pos": "D",
@@ -2002,6 +1996,12 @@
     "name": "Michael McCarron",
     "pos": "C",
     "number": 47
+   },
+   {
+    "playerId": "8475752",
+    "name": "Tyler Pitlick",
+    "pos": "C",
+    "number": 19
    },
    {
     "playerId": "8485702",
@@ -2874,6 +2874,18 @@
     "number": 19
    },
    {
+    "playerId": "8478104",
+    "name": "Sammy Blais",
+    "pos": "L",
+    "number": 79
+   },
+   {
+    "playerId": "8482674",
+    "name": "Tyler Boucher",
+    "pos": "R",
+    "number": 54
+   },
+   {
     "playerId": "8477444",
     "name": "Andre Burakovsky",
     "pos": "L",
@@ -2938,6 +2950,12 @@
     "name": "Tim Stützle",
     "pos": "C",
     "number": 18
+   },
+   {
+    "playerId": "8481577",
+    "name": "Philip Tomasino",
+    "pos": "R",
+    "number": 62
    },
    {
     "playerId": "8480188",
@@ -3172,6 +3190,12 @@
     "number": 19
    },
    {
+    "playerId": "8482993",
+    "name": "Avery Hayes",
+    "pos": "R",
+    "number": 85
+   },
+   {
     "playerId": "8485414",
     "name": "Ben Kindel",
     "pos": "C",
@@ -3364,12 +3388,6 @@
     "name": "Ben Meyers",
     "pos": "C",
     "number": 59
-   },
-   {
-    "playerId": "8483497",
-    "name": "Jani Nyman",
-    "pos": "R",
-    "number": 38
    },
    {
     "playerId": "8485383",
