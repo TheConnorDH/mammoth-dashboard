@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-20",
+ "fetched": "2026-11-21",
  "failed": [],
  "teams": {
   "ANA": [
@@ -134,6 +134,12 @@
     "name": "Ian Moore",
     "pos": "D",
     "number": 3
+   },
+   {
+    "playerId": "8484859",
+    "name": "Stian Solberg",
+    "pos": "D",
+    "number": 50
    },
    {
     "playerId": "8483521",
@@ -1998,12 +2004,6 @@
     "number": 47
    },
    {
-    "playerId": "8475752",
-    "name": "Tyler Pitlick",
-    "pos": "C",
-    "number": 19
-   },
-   {
     "playerId": "8485702",
     "name": "Maxim Shabanov",
     "pos": "R",
@@ -2386,12 +2386,6 @@
     "number": 71
    },
    {
-    "playerId": "8484987",
-    "name": "Anton Silaev",
-    "pos": "D",
-    "number": 52
-   },
-   {
     "playerId": "8474596",
     "name": "Jake Allen",
     "pos": "G",
@@ -2764,10 +2758,22 @@
     "number": 94
    },
    {
+    "playerId": "8479390",
+    "name": "Taylor Raddysh",
+    "pos": "R",
+    "number": 14
+   },
+   {
     "playerId": "8482460",
     "name": "Matt Rempe",
     "pos": "C",
     "number": 73
+   },
+   {
+    "playerId": "8484136",
+    "name": "Max Sasson",
+    "pos": "C",
+    "number": 63
    },
    {
     "playerId": "8483669",
@@ -4356,12 +4362,6 @@
     "number": 23
    },
    {
-    "playerId": "8484136",
-    "name": "Max Sasson",
-    "pos": "C",
-    "number": 63
-   },
-   {
     "playerId": "8478465",
     "name": "Guillaume Brisebois",
     "pos": "D",
@@ -4518,6 +4518,12 @@
     "name": "Dylan Coghlan",
     "pos": "D",
     "number": 52
+   },
+   {
+    "playerId": "8482141",
+    "name": "Lukas Cormier",
+    "pos": "D",
+    "number": 51
    },
    {
     "playerId": "8478396",
