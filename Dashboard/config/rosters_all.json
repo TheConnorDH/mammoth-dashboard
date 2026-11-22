@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-21",
+ "fetched": "2026-11-22",
  "failed": [],
  "teams": {
   "ANA": [
@@ -56,6 +56,12 @@
     "name": "Roger McQueen",
     "pos": "C",
     "number": 95
+   },
+   {
+    "playerId": "8484201",
+    "name": "Nico Myatovic",
+    "pos": "L",
+    "number": 48
    },
    {
     "playerId": "8481754",
@@ -2108,12 +2114,6 @@
     "number": 62
    },
    {
-    "playerId": "8482132",
-    "name": "Brett Berard",
-    "pos": "L",
-    "number": 37
-   },
-   {
     "playerId": "8482737",
     "name": "Zachary Bolduc",
     "pos": "R",
@@ -2226,12 +2226,6 @@
     "name": "Mike Matheson",
     "pos": "D",
     "number": 8
-   },
-   {
-    "playerId": "8484220",
-    "name": "David Reinbacher",
-    "pos": "D",
-    "number": 64
    },
    {
     "playerId": "8482964",
@@ -3354,12 +3348,6 @@
     "number": 7
    },
    {
-    "playerId": "8483442",
-    "name": "Jagger Firkus",
-    "pos": "R",
-    "number": 57
-   },
-   {
     "playerId": "8477919",
     "name": "Frederick Gaudreau",
     "pos": "C",
@@ -4010,6 +3998,12 @@
     "number": 20
    },
    {
+    "playerId": "8482691",
+    "name": "Aatu Räty",
+    "pos": "C",
+    "number": null
+   },
+   {
     "playerId": "8478458",
     "name": "Jack Roslovic",
     "pos": "C",
@@ -4210,6 +4204,12 @@
     "number": 56
    },
    {
+    "playerId": "8485010",
+    "name": "Gregor Biber",
+    "pos": "D",
+    "number": 94
+   },
+   {
     "playerId": "8480084",
     "name": "Nick DeSimone",
     "pos": "D",
@@ -4332,6 +4332,12 @@
     "number": 88
    },
    {
+    "playerId": "8484406",
+    "name": "Ty Mueller",
+    "pos": "C",
+    "number": 39
+   },
+   {
     "playerId": "8482055",
     "name": "Drew O'Connor",
     "pos": "L",
@@ -4426,6 +4432,12 @@
     "name": "Leevi Meriläinen",
     "pos": "G",
     "number": 31
+   },
+   {
+    "playerId": "8484268",
+    "name": "Nikita Tolopilo",
+    "pos": "G",
+    "number": 60
    }
   ],
   "VGK": [
@@ -4696,6 +4708,12 @@
     "number": 4
    },
    {
+    "playerId": "8483510",
+    "name": "Elias Salomonsson",
+    "pos": "D",
+    "number": 57
+   },
+   {
     "playerId": "8480049",
     "name": "Dylan Samberg",
     "pos": "D",
@@ -4718,12 +4736,6 @@
     "name": "Stuart Skinner",
     "pos": "G",
     "number": 74
-   },
-   {
-    "playerId": "8483532",
-    "name": "Clay Stevenson",
-    "pos": "G",
-    "number": 33
    }
   ],
   "WSH": [
