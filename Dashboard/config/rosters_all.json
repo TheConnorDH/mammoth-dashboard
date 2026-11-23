@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-22",
+ "fetched": "2026-11-23",
  "failed": [],
  "teams": {
   "ANA": [
@@ -660,12 +660,6 @@
     "number": 94
    },
    {
-    "playerId": "8478904",
-    "name": "Steven Lorentz",
-    "pos": "C",
-    "number": 18
-   },
-   {
     "playerId": "8480806",
     "name": "Isac Lundeström",
     "pos": "C",
@@ -688,6 +682,12 @@
     "name": "Mathieu Olivier",
     "pos": "R",
     "number": 24
+   },
+   {
+    "playerId": "8482451",
+    "name": "Mikael Pyyhtia",
+    "pos": "L",
+    "number": 82
    },
    {
     "playerId": "8482705",
@@ -812,6 +812,12 @@
     "number": 43
    },
    {
+    "playerId": "8484821",
+    "name": "Sam Morton",
+    "pos": "C",
+    "number": 45
+   },
+   {
     "playerId": "8482747",
     "name": "Brennan Othmann",
     "pos": "L",
@@ -922,12 +928,6 @@
     "number": 59
    },
    {
-    "playerId": "8485554",
-    "name": "Dillon Boucher",
-    "pos": "L",
-    "number": 36
-   },
-   {
     "playerId": "8477987",
     "name": "Ryan Donato",
     "pos": "C",
@@ -938,6 +938,12 @@
     "name": "Anton Frondell",
     "pos": "C",
     "number": 16
+   },
+   {
+    "playerId": "8476822",
+    "name": "Luke Glendening",
+    "pos": "C",
+    "number": 23
    },
    {
     "playerId": "8483450",
@@ -992,6 +998,12 @@
     "name": "Teuvo Teravainen",
     "pos": "C",
     "number": 86
+   },
+   {
+    "playerId": "8476952",
+    "name": "Dominic Toninato",
+    "pos": "C",
+    "number": 25
    },
    {
     "playerId": "8481524",
@@ -1390,16 +1402,16 @@
     "number": 18
    },
    {
+    "playerId": "8481523",
+    "name": "Kirby Dach",
+    "pos": "C",
+    "number": null
+   },
+   {
     "playerId": "8479337",
     "name": "Alex DeBrincat",
     "pos": "R",
     "number": 93
-   },
-   {
-    "playerId": "8480326",
-    "name": "Sheldon Dries",
-    "pos": "C",
-    "number": 15
    },
    {
     "playerId": "8484471",
@@ -1490,6 +1502,12 @@
     "name": "John Gibson",
     "pos": "G",
     "number": 36
+   },
+   {
+    "playerId": "8478470",
+    "name": "Samuel Montembeault",
+    "pos": "G",
+    "number": null
    },
    {
     "playerId": "8480193",
@@ -1716,12 +1734,6 @@
     "name": "Brad Marchand",
     "pos": "L",
     "number": 63
-   },
-   {
-    "playerId": "8481133",
-    "name": "Cole Reinhardt",
-    "pos": "L",
-    "number": 29
    },
    {
     "playerId": "8477933",
@@ -2126,12 +2138,6 @@
     "number": 13
    },
    {
-    "playerId": "8481523",
-    "name": "Kirby Dach",
-    "pos": "C",
-    "number": 77
-   },
-   {
     "playerId": "8476479",
     "name": "Phillip Danault",
     "pos": "C",
@@ -2160,6 +2166,12 @@
     "name": "Chris Kreider",
     "pos": "L",
     "number": 22
+   },
+   {
+    "playerId": "8477946",
+    "name": "Dylan Larkin",
+    "pos": "C",
+    "number": 89
    },
    {
     "playerId": "8481618",
@@ -2244,12 +2256,6 @@
     "name": "Jacob Fowler",
     "pos": "G",
     "number": 32
-   },
-   {
-    "playerId": "8478470",
-    "name": "Samuel Montembeault",
-    "pos": "G",
-    "number": 35
    }
   ],
   "NJD": [
@@ -2714,12 +2720,6 @@
     "name": "Glenn Gawdin",
     "pos": "C",
     "number": 15
-   },
-   {
-    "playerId": "8476822",
-    "name": "Luke Glendening",
-    "pos": "C",
-    "number": 43
    },
    {
     "playerId": "8481789",
@@ -3578,6 +3578,12 @@
     "number": 6
    },
    {
+    "playerId": "8479333",
+    "name": "Libor Hajek",
+    "pos": "D",
+    "number": 24
+   },
+   {
     "playerId": "8480891",
     "name": "Michael Kesselring",
     "pos": "D",
@@ -3816,12 +3822,6 @@
     "number": 38
    },
    {
-    "playerId": "8478424",
-    "name": "Jansen Harkins",
-    "pos": "C",
-    "number": 10
-   },
-   {
     "playerId": "8480995",
     "name": "Pontus Holmberg",
     "pos": "R",
@@ -4001,7 +4001,7 @@
     "playerId": "8482691",
     "name": "Aatu Räty",
     "pos": "C",
-    "number": null
+    "number": 26
    },
    {
     "playerId": "8478458",
@@ -4362,6 +4362,12 @@
     "number": 62
    },
    {
+    "playerId": "8481133",
+    "name": "Cole Reinhardt",
+    "pos": "L",
+    "number": null
+   },
+   {
     "playerId": "8482079",
     "name": "Marco Rossi",
     "pos": "C",
@@ -4432,12 +4438,6 @@
     "name": "Leevi Meriläinen",
     "pos": "G",
     "number": 31
-   },
-   {
-    "playerId": "8484268",
-    "name": "Nikita Tolopilo",
-    "pos": "G",
-    "number": 60
    }
   ],
   "VGK": [
