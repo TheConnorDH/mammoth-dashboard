@@ -78,8 +78,8 @@
    "injury": "Undisclosed",
    "returnDate": "2026-11-25",
    "updated": "2026-11-24",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "note": "Kozak (undisclosed) did not practice Tuesday and is considered day-to-day, per Paul Hamilton of WGR Sports Radio 550.",
+   "detail": "Kozak was revealed to have picked up an undisclosed injury in Saturday's 4-3 loss to the Panthers, and it ultimately kept him out of the lineup Sunday against Tampa Bay. Because he's considered day-to-day, he's currently considered questionable to play in Wednesday's clash against the Rangers. Prior to going down, the 23-year-old center posted a goal, four points, six shots on net, 19 hits and eight blocked shots over 15 outings this season."
   },
   {
    "team": "BUF",
@@ -240,6 +240,19 @@
   {
    "team": "COL",
    "teamName": "Colorado Avalanche",
+   "name": "Cale Makar",
+   "pos": "D",
+   "status": "Injured Reserve",
+   "ltir": false,
+   "injury": "Lower Body",
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-24",
+   "note": "Makar (lower body) was on the ice in a regular sweater ahead of Wednesday's clash with Montreal, Evan Rawal of the Denver Gazette reports.",
+   "detail": "Makar being cleared for practice doesn't guarantee he'll be ready to play versus the Habs on Wednesday, but the fact that he was skating with a regular partner in Brett Kulak could be a good indication. In order to suit up, Makar will need to be activated off injured reserve, which will be the final step in his return-to-play process."
+  },
+  {
+   "team": "COL",
+   "teamName": "Colorado Avalanche",
    "name": "Gavin Brindley",
    "pos": "C",
    "status": "Out",
@@ -262,19 +275,6 @@
    "updated": "2026-11-21",
    "note": "MacKinnon (lower body) has been evaluated by a specialist and is expected to miss the next 12 weeks, Aarif Deen of Colorado Hockey Now reports Saturday.",
    "detail": "MacKinnon wouldn't be ready until mid-February if that timetable proves to be accurate. It can't be overstated how important MacKinnon is to the Avalanche. He finished each of the previous four regular seasons with over 110 points, and he was well on his way towards another elite campaign after scoring 10 goals and 30 points through 20 appearances. Brock Nelson and Nazem Kadri are serving as the Avalanche's top two centers while MacKinnon is unavailable."
-  },
-  {
-   "team": "COL",
-   "teamName": "Colorado Avalanche",
-   "name": "Cale Makar",
-   "pos": "D",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-28",
-   "updated": "2026-11-19",
-   "note": "ir",
-   "detail": "ir"
   },
   {
    "team": "COL",
@@ -337,9 +337,9 @@
    "ltir": false,
    "injury": "Upper Body",
    "returnDate": "2026-11-25",
-   "updated": "2026-11-23",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "updated": "2026-11-24",
+   "note": "Myers (upper body) has a chance to return in Wednesday's home clash against the Predators, per Robert Tiffin of NHL.com.",
+   "detail": "Head coach Glen Gulutzan mentioned that if Myers can't play on Wednesday, then the 36-year-old blueliner will likely make his return Friday against the Blues. Myers has been sidelined for each of Dallas' past three games due to an upper-body issue. When healthy, he's posted two points, 13 shots on net, 17 hits and 36 blocked shots over 20 appearances this season. If he can't go Wednesday, Kyle Burroughs will likely remain in the lineup."
   },
   {
    "team": "DAL",
@@ -362,7 +362,7 @@
    "status": "Injured Reserve",
    "ltir": true,
    "injury": "Leg",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-12-01",
    "updated": "2026-11-14",
    "note": "Capobianco (leg) was moved to long-term injured reserve Saturday.",
    "detail": "Dallas also recalled Kyle Burroughs from AHL Texas on Saturday and placed Lian Bichsel (lower body) on injured reserve. Capobianco hasn't played since Oct. 27 against New Jersey. He hasn't earned a point in five appearances this season, but he has registered three shots on net, three blocked shots and two hits."
@@ -375,10 +375,23 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-12-09",
    "updated": "2026-11-14",
    "note": "Bichsel (lower body) was placed on injured reserve Saturday.",
    "detail": "Dallas also recalled Kyle Burroughs from AHL Texas on Saturday and moved Kyle Capobianco (leg) to long-term injured reserve. Bichsel is week-to-week after being injured in Thursday's 8-3 loss to Winnipeg. He has one assist, 10 shots on net, 24 blocked shots and 39 hits in 18 appearances this season."
+  },
+  {
+   "team": "DAL",
+   "teamName": "Dallas Stars",
+   "name": "Matt Duchene",
+   "pos": "C",
+   "status": "Injured Reserve",
+   "ltir": true,
+   "injury": "Abdomen",
+   "returnDate": "2027-01-12",
+   "updated": "2026-10-12",
+   "note": "Duchene will be out for approximately three months after undergoing surgery to repair a core injury, the team announced Monday.",
+   "detail": "The Stars placed Duchene on long-term injured reserve just before the start of the 2026-27 campaign. It remains unclear when he will return, but his new timeline could keep him out until at least mid-January. Duchene posted 16 goals, 45 points and 89 shots on net in 57 regular-season appearances for Dallas in 2025-26."
   },
   {
    "team": "DET",
@@ -492,7 +505,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Knee",
-   "returnDate": "2026-11-28",
+   "returnDate": "2026-11-25",
    "updated": "2026-11-21",
    "note": "Marchand (knee) is close to returning to the lineup, but he won't play against Buffalo on Saturday, per Jameson Olive of the Panthers' official site.",
    "detail": "Marchand is slightly behind Aleksander Barkov (knee) in terms of his potential return date. Barkov should be back in the fold within the next three games, per head coach Paul Maurice on Saturday. The 38-year-old Marchand has appeared in only two games this season and hasn't been in the lineup since Oct. 6 against the Kings."
@@ -734,6 +747,19 @@
   {
    "team": "NYR",
    "teamName": "New York Rangers",
+   "name": "Pavel Dorofeyev",
+   "pos": "RW",
+   "status": "Injured Reserve",
+   "ltir": false,
+   "injury": "Lower Body",
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-24",
+   "note": "Dorofeyev (lower body) will join the Rangers for their two-game road trip, Mollie Walker of the New York Post reports Tuesday.",
+   "detail": "Dorofeyev's status against the Sabres and Blackhawks on Wednesday and Friday, respectively, remains up in the air, but the fact that he is making the trip is certainly a step in the right direction. The 26-year-old winger has notched four goals and four assists, including a trio of power-play points, in his last 11 outings. Once given the all-clear, Dorofeyev should reclaim a middle-six role with the Rangers."
+  },
+  {
+   "team": "NYR",
+   "teamName": "New York Rangers",
    "name": "Oliver Bjorkstrand",
    "pos": "RW",
    "status": "Injured Reserve",
@@ -756,19 +782,6 @@
    "updated": "2026-11-21",
    "note": "Smits (upper body) is expected to miss 2-3 months, Peter Baugh of The Athletic reported Saturday.",
    "detail": "Smits landed on injured reserve in early November, which has caused him to miss the Rangers' last five games. The 18-year-old blueliner appeared in 17 contests prior to going down, where posted a minus-2 rating, eight shots on net, 16 hits and 10 blocked shots while averaging 14:29 of ice time. Given his current time line, he's expected to return sometime between late January and March. In his absence, Matthew Robertson and Scott Morrow should continue to see depth roles on the blue line."
-  },
-  {
-   "team": "NYR",
-   "teamName": "New York Rangers",
-   "name": "Pavel Dorofeyev",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-25",
-   "updated": "2026-11-21",
-   "note": "ir",
-   "detail": "ir"
   },
   {
    "team": "NYR",
@@ -1061,13 +1074,52 @@
    "teamName": "St. Louis Blues",
    "name": "Connor McMichael",
    "pos": "LW",
-   "status": "Day-To-Day",
+   "status": "Out",
    "ltir": false,
    "injury": "Lower Body",
+   "returnDate": "2026-11-27",
+   "updated": "2026-11-24",
+   "note": "McMichael (lower body) isn't expected to play against the Islanders on Wednesday, according to Lou Korac of NHL.com.",
+   "detail": "McMichael skated before Tuesday's practice, but he didn't join his teammates for the main on-ice session. He will likely miss his third straight game with a lower-body injury. He has contributed three goals, 11 points, 32 shots on net and 15 hits in 22 appearances this season."
+  },
+  {
+   "team": "STL",
+   "teamName": "St. Louis Blues",
+   "name": "Brandon Carlo",
+   "pos": "D",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
    "returnDate": "2026-11-25",
-   "updated": "2026-11-23",
+   "updated": "2026-11-24",
    "note": "day-to-day",
    "detail": "day-to-day"
+  },
+  {
+   "team": "STL",
+   "teamName": "St. Louis Blues",
+   "name": "Pavel Buchnevich",
+   "pos": "LW",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-24",
+   "note": "day-to-day",
+   "detail": "day-to-day"
+  },
+  {
+   "team": "STL",
+   "teamName": "St. Louis Blues",
+   "name": "Jimmy Snuggerud",
+   "pos": "RW",
+   "status": "Day-To-Day",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-11-25",
+   "updated": "2026-11-24",
+   "note": "Snuggerud (undisclosed) is questionable for Wednesday's game against the Islanders, per Lou Korac of NHL.com.",
+   "detail": "Snuggerud didn't participate in Tuesday's practice because of a soft-tissue injury. He has heated up, posting four goals and two assists over his current four-game point streak. Snuggerud has registered 14 goals, 20 points, 53 shots on net and 17 hits in 24 appearances this season."
   },
   {
    "team": "STL",
@@ -1631,14 +1683,6 @@
    "name": "Dylan Guenther",
    "pos": "RW",
    "injury": "Upper Body",
-   "since": "2026-11-24"
-  },
-  {
-   "team": "DAL",
-   "teamName": "Dallas Stars",
-   "name": "Matt Duchene",
-   "pos": "C",
-   "injury": "Abdomen",
    "since": "2026-11-24"
   }
  ]
