@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-23",
+ "fetched": "2026-11-24",
  "failed": [],
  "teams": {
   "ANA": [
@@ -1405,7 +1405,7 @@
     "playerId": "8481523",
     "name": "Kirby Dach",
     "pos": "C",
-    "number": null
+    "number": 17
    },
    {
     "playerId": "8479337",
@@ -3948,12 +3948,6 @@
     "name": "Brandon Duhaime",
     "pos": "L",
     "number": 24
-   },
-   {
-    "playerId": "8480870",
-    "name": "Bo Groulx",
-    "pos": "C",
-    "number": 29
    },
    {
     "playerId": "8478057",
