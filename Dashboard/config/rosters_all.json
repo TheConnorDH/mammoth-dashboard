@@ -1507,7 +1507,7 @@
     "playerId": "8478470",
     "name": "Samuel Montembeault",
     "pos": "G",
-    "number": null
+    "number": 32
    },
    {
     "playerId": "8480193",
@@ -2126,6 +2126,12 @@
     "number": 62
    },
    {
+    "playerId": "8482132",
+    "name": "Brett Berard",
+    "pos": "L",
+    "number": 37
+   },
+   {
     "playerId": "8482737",
     "name": "Zachary Bolduc",
     "pos": "R",
@@ -2238,6 +2244,12 @@
     "name": "Mike Matheson",
     "pos": "D",
     "number": 8
+   },
+   {
+    "playerId": "8484220",
+    "name": "David Reinbacher",
+    "pos": "D",
+    "number": 64
    },
    {
     "playerId": "8482964",
@@ -2992,12 +3004,6 @@
     "name": "Jordan Spence",
     "pos": "D",
     "number": 10
-   },
-   {
-    "playerId": "8484759",
-    "name": "Carter Yakemchuk",
-    "pos": "D",
-    "number": 26
    },
    {
     "playerId": "8482245",
@@ -4016,12 +4022,6 @@
     "number": 91
    },
    {
-    "playerId": "8482525",
-    "name": "Ryan Tverberg",
-    "pos": "C",
-    "number": 77
-   },
-   {
     "playerId": "8477425",
     "name": "Miles Wood",
     "pos": "L",
@@ -4359,7 +4359,7 @@
     "playerId": "8481133",
     "name": "Cole Reinhardt",
     "pos": "L",
-    "number": null
+    "number": 29
    },
    {
     "playerId": "8482079",
@@ -4658,12 +4658,6 @@
     "name": "Brayden Yager",
     "pos": "C",
     "number": 29
-   },
-   {
-    "playerId": "8483526",
-    "name": "Danil Zhilkin",
-    "pos": "C",
-    "number": 53
    },
    {
     "playerId": "8482459",

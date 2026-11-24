@@ -1,15 +1,19 @@
-## Utah beats Anaheim 3-2 in a game the chance data rates as even
+## Utah loses 2-4 at Winnipeg despite leading in shots and chance quality
 
-Utah hasn't played since Nov 21, when it beat the Anaheim Ducks 3-2 at home. The win moved Utah to 12-9-3 (27 points) and extended its streak to W2. Anaheim had the shot advantage, 31 shots on goal to Utah's 12. Shot quality was level at 2.1 expected goals each. Replaying every shot by its quality, Utah wins 51% of the time.
+Utah is 12-10-3 (27 points) and lost its latest game 2-4 at the Winnipeg Jets on Nov 23. Utah led in shots on goal, 35 to 15, and in expected goals (the quality of chances), 2.5 to 1.9. Replaying every shot by its quality, Utah wins 63% of the time.
 
 What the numbers showed:
-- **Lineup:** Ben McCartney came in and Clayton Keller came out compared with the previous game.
-- **Chances:** Dangerous shots (10% or better) were 7 for each team. At 5v5, expected goals were Utah 2.1 and Anaheim 1.8. Neither team scored on the power play.
-- **Goaltending:** Sebastian Cossa stopped 29 of 31 shots. He allowed 2 goals on shots worth 2.1 expected goals, 0.1 goals better than expected.
-- **Player Impact:** The best marks in goals were Logan Cooley (+0.64), Daniil But (+0.51) and Vincent Trocheck (+0.47). The lowest were Mikhail Sergachev (-0.53), Michael Carcone (-0.44) and Jack McBain (-0.44).
-- **Season process vs. results:** Utah has 27 points against 31.3 expected from shot quality. Season expected goals are 84.9 for and 68.7 against.
+- **Lineup changes.** Clayton Keller and Dylan Guenther came in. Ben McCartney and Michael Carcone came out.
+- **Goaltending vs. expected.** Sebastian Cossa allowed 3 goals on shots worth 1.9 expected goals, 1.1 goals worse than expected. Winnipeg's Stuart Skinner allowed 2 on 2.5 expected, 0.5 goals better than expected.
+- **Special teams.** Neither team scored on the power play.
+- **Player Impact.** Best in goals: Anders Lee (+0.46) and Barrett Hayton (+0.37). Lowest: Cossa (-1.14) and Keller (-0.55).
+- **Season process vs. results.** Utah has 27 points against 32.4 expected from shot quality.
 
-**Where Utah stands:** Utah is 10th in the power rankings (previously 9th), with a likely range of 4th to 20th. It is in Tier 3 with a rating of +6.5 standings points per 84 games against an average team. The projection is 100 points, with an 80% range of 88 to 111. Playoff odds are 73%, up from 72%. Utah is 6th in the Central Division.
+**Where Utah stands:** Power rank 12th (likely range 5th-20th), previously 10th. Tier 3, with a rating of +6.0 standings points per 84 games vs. an average team. Projection: 97 points, 80% range 85-109. Playoff odds: 65%, previously 73%.
 
-**What to watch next:** All three upcoming games are away and against Central Division opponents. None is a back-to-back.
-- Nov 23 at Winnipeg (22nd
+**What to watch next:** Three away games, all against Central Division opponents.
+- Wed, Nov 25 at Minnesota: 40% win chance.
+- Fri, Nov 27 at Nashville: 52%.
+- Sat, Nov 28 at Dallas: 41%. It is the second night of a back-to-back for both teams.
+
+*Data note: MoneyPuck data through Nov 23; NHL results through Nov 23.*
