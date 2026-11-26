@@ -1110,6 +1110,12 @@
     "number": 29
    },
    {
+    "playerId": "8482953",
+    "name": "Taylor Makar",
+    "pos": "L",
+    "number": 16
+   },
+   {
     "playerId": "8480039",
     "name": "Martin Necas",
     "pos": "C",
@@ -2764,6 +2770,12 @@
     "number": 10
    },
    {
+    "playerId": "8481704",
+    "name": "Juuso Parssinen",
+    "pos": "C",
+    "number": 71
+   },
+   {
     "playerId": "8484210",
     "name": "Gabe Perreault",
     "pos": "R",
@@ -3524,10 +3536,10 @@
     "number": 51
    },
    {
-    "playerId": "8481517",
-    "name": "Brett Leason",
-    "pos": "R",
-    "number": 17
+    "playerId": "8483481",
+    "name": "Cam Lund",
+    "pos": "C",
+    "number": 46
    },
    {
     "playerId": "8478975",
@@ -3584,16 +3596,16 @@
     "number": 5
    },
    {
+    "playerId": "8484152",
+    "name": "Luca Cagnoni",
+    "pos": "D",
+    "number": 42
+   },
+   {
     "playerId": "8484806",
     "name": "Sam Dickinson",
     "pos": "D",
     "number": 6
-   },
-   {
-    "playerId": "8479333",
-    "name": "Libor Hajek",
-    "pos": "D",
-    "number": 24
    },
    {
     "playerId": "8480891",
@@ -4126,6 +4138,12 @@
   ],
   "UTA": [
    {
+    "playerId": "8485594",
+    "name": "Yegor Borikov",
+    "pos": "R",
+    "number": 65
+   },
+   {
     "playerId": "8484388",
     "name": "Daniil But",
     "pos": "L",
@@ -4178,12 +4196,6 @@
     "name": "Jack McBain",
     "pos": "C",
     "number": 22
-   },
-   {
-    "playerId": "8481827",
-    "name": "Ben McCartney",
-    "pos": "L",
-    "number": 62
    },
    {
     "playerId": "8477070",

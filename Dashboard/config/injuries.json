@@ -32,19 +32,6 @@
   {
    "team": "ANA",
    "teamName": "Anaheim Ducks",
-   "name": "Beckett Sennecke",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-25",
-   "note": "Sennecke (upper body) is now considered day-to-day, Zach Cavanagh of The Sporting Tribune reports Wednesday.",
-   "detail": "Sennecke was put on injured reserve Saturday, but it sounds like he might not miss too much more time. He has 12 goals, 26 points and 24 PIM in 22 appearances in 2026-27. Sennecke is expected to reclaim his top-six role and receive power-play ice time once he's healthy."
-  },
-  {
-   "team": "ANA",
-   "teamName": "Anaheim Ducks",
    "name": "A.J. Greer",
    "pos": "LW",
    "status": "Injured Reserve",
@@ -307,26 +294,13 @@
    "teamName": "Columbus Blue Jackets",
    "name": "Denton Mateychuk",
    "pos": "D",
-   "status": "Day-To-Day",
+   "status": "Out",
    "ltir": false,
    "injury": "Concussion",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-30",
    "updated": "2026-11-26",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
-   "team": "CBJ",
-   "teamName": "Columbus Blue Jackets",
-   "name": "Mathieu Olivier",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-12-03",
-   "updated": "2026-11-24",
-   "note": "ir",
-   "detail": "ir"
+   "note": "out",
+   "detail": "out"
   },
   {
    "team": "DAL",
@@ -617,19 +591,6 @@
   {
    "team": "MTL",
    "teamName": "Montreal Canadiens",
-   "name": "Bryce Pickford",
-   "pos": "D",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Undisclosed",
-   "returnDate": "2026-11-30",
-   "updated": "2026-09-29",
-   "note": "ir-nr",
-   "detail": "ir-nr"
-  },
-  {
-   "team": "MTL",
-   "teamName": "Montreal Canadiens",
    "name": "Lucas Condotta",
    "pos": "LW",
    "status": "Injured Reserve",
@@ -639,6 +600,19 @@
    "updated": "2026-09-29",
    "note": "ir-nr",
    "detail": "ir-nr"
+  },
+  {
+   "team": "NJ",
+   "teamName": "New Jersey Devils",
+   "name": "Brenden Dillon",
+   "pos": "D",
+   "status": "Suspension",
+   "ltir": false,
+   "injury": "Suspension",
+   "returnDate": "2026-12-05",
+   "updated": "2026-11-26",
+   "note": "suspension",
+   "detail": "suspension"
   },
   {
    "team": "NJ",
@@ -717,6 +691,19 @@
    "updated": "2026-10-19",
    "note": "ir",
    "detail": "ir"
+  },
+  {
+   "team": "NYR",
+   "teamName": "New York Rangers",
+   "name": "Gabe Perreault",
+   "pos": "RW",
+   "status": "Injured Reserve",
+   "ltir": false,
+   "injury": "Lower Body",
+   "returnDate": "2026-12-31",
+   "updated": "2026-11-26",
+   "note": "Perreault (lower body) was put on injured reserve Thursday, per Mollie Walker of the New York Post.",
+   "detail": "Perreault is expected to miss the next 4-6 weeks, so it's not surprising to see the Rangers move him to IR. He has seven goals and 11 points in 24 appearances in 2026-27. Jaroslav Chmelar might serve in a middle-six capacity while the Rangers are missing Perreault."
   },
   {
    "team": "NYR",
@@ -1176,6 +1163,19 @@
   {
    "team": "TOR",
    "teamName": "Toronto Maple Leafs",
+   "name": "Jack Roslovic",
+   "pos": "C",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-11-28",
+   "updated": "2026-11-26",
+   "note": "Roslovic (upper body) is expected to miss Friday's road clash against the Bruins, per Mark Masters of TSN.",
+   "detail": "Roslovic is in line to miss his second consecutive game after sustaining his upper-body injury in Saturday's 4-3 loss to the Blue Jackets. Prior to going down, the 29-year-old winger posted nine goals, 23 points, a plus-2 rating, 61 shots on net, 18 hits and 10 blocked shots over 24 appearances this season. If the Maple Leafs aren't able to activate either Kirill Marchenko (lower body) or Colton Sissons (lower body) from injured reserve prior to Friday's game, Toronto will likely have to call up an additional forward for the road test in Boston."
+  },
+  {
+   "team": "TOR",
+   "teamName": "Toronto Maple Leafs",
    "name": "Kirill Marchenko",
    "pos": "RW",
    "status": "Injured Reserve",
@@ -1185,19 +1185,6 @@
    "updated": "2026-11-25",
    "note": "Marchenko (lower body) is expected back in the lineup against the Bruins on Friday after telling reporters, \"My leg feels perfect and I'm ready to go,\" Mark Masters of TSN reports.",
    "detail": "Marchenko will need to be activated off injured reserve prior to puck drop, but that appears to be a formality at this point. Prior to getting hurt, the Russian winger had tallied a point in 12 of 14 games this year, racking up a combined six games and eight assists, including eight power-play points. Marchenko should be back in a first-line role in addition to linking up with the No. 1 power-play unit."
-  },
-  {
-   "team": "TOR",
-   "teamName": "Toronto Maple Leafs",
-   "name": "Jack Roslovic",
-   "pos": "C",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-24",
-   "note": "day-to-day",
-   "detail": "day-to-day"
   },
   {
    "team": "TOR",
@@ -1710,6 +1697,30 @@
    "name": "Oskar Back",
    "pos": "C",
    "injury": "Finger",
+   "since": "2026-11-26"
+  },
+  {
+   "team": "ANA",
+   "teamName": "Anaheim Ducks",
+   "name": "Beckett Sennecke",
+   "pos": "RW",
+   "injury": "Upper Body",
+   "since": "2026-11-26"
+  },
+  {
+   "team": "CBJ",
+   "teamName": "Columbus Blue Jackets",
+   "name": "Mathieu Olivier",
+   "pos": "RW",
+   "injury": "Upper Body",
+   "since": "2026-11-26"
+  },
+  {
+   "team": "MTL",
+   "teamName": "Montreal Canadiens",
+   "name": "Bryce Pickford",
+   "pos": "D",
+   "injury": "Undisclosed",
    "since": "2026-11-26"
   }
  ]

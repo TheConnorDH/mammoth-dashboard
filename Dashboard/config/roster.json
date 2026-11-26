@@ -2,6 +2,15 @@
  "source": "NHL API roster, 2026-11-26",
  "players": [
   {
+   "name": "Yegor Borikov",
+   "pos": "R",
+   "number": 65,
+   "shoots": "L",
+   "height": "6' 1\"",
+   "weight": 187,
+   "playerId": "8485594"
+  },
+  {
    "name": "Daniil But",
    "pos": "L",
    "number": 50,
@@ -81,15 +90,6 @@
    "height": "6' 4\"",
    "weight": 219,
    "playerId": "8480855"
-  },
-  {
-   "name": "Ben McCartney",
-   "pos": "L",
-   "number": 62,
-   "shoots": "L",
-   "height": "6' 0\"",
-   "weight": 182,
-   "playerId": "8481827"
   },
   {
    "name": "Liam O'Brien",
