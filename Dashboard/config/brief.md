@@ -1,18 +1,19 @@
-## Utah lost 2-4 at Winnipeg despite creating more chances
+## Utah edges Minnesota 4-3 despite a slightly lower expected-goals total
 
-Utah hasn't played since Nov 23, when the Mammoth lost 2-4 away to the Winnipeg Jets. The record is 12-10-3 (27 points, streak L1), 7th in the Central. Shots on goal were Utah 35, WPG 15. Expected goals were Utah 2.5, WPG 1.9, and at 5v5 they were Utah 2.1, WPG 1.8. Dangerous shots (10% chance or better) were Utah 9, WPG 5. Replaying every shot by its quality, Utah wins this game 63% of the time with average finishing and goaltending.
+Utah is 13-10-3 with 29 points after winning 4-3 at Minnesota on Nov 25. The team's current streak is W1. Utah had 21 shots on goal to Minnesota's 25. Expected goals, which measure the quality of chances, were Utah 2.0 and Minnesota 2.2. Replaying every shot by its quality, Utah wins 46% of the time.
 
 What the numbers showed:
+- **Chance quality.** Expected goals at 5v5 were Utah 1.5 and Minnesota 1.6. Dangerous shots (10% or higher) were Utah 9, Minnesota 7.
+- **Scoring.** Dylan Guenther (1G 1A), Lawson Crouse (1G), Logan Cooley (1G 1A) and Dmitri Simashev (1G) scored. Vincent Trocheck, Daniil But, Anders Lee, Andrew Peeke and Mikhail Sergachev each had an assist.
+- **Goaltending.** Karel Vejmelka started and made 22 saves on 25 shots. The packet has no goaltending-versus-expected figure for this game.
+- **Special teams.** Power-play goals were Utah 1, Minnesota 1. Cooley scored Utah's.
+- **Season process vs. results.** Utah has 29 points against 33.5 expected from shot quality. Season expected goals are 89.3 for and 73.6 against.
 
-- **Lineup.** Clayton Keller and Dylan Guenther came in, and Ben McCartney and Michael Carcone came out. Lawson Crouse and Andrew Peeke scored.
-- **Goaltending vs. expected.** Sebastian Cossa allowed 3 goals on 14 shots worth 1.9 expected goals, which is 1.1 goals worse than expected. Stuart Skinner allowed 2 on 35 shots worth 2.4 expected goals, which is 0.4 goals better than expected.
-- **Special teams.** Power play goals were Utah 0, WPG 0.
-- **Player Impact.** Best in goals: Anders Lee (+0.42), Barrett Hayton (+0.31), Kevin Stenlund (+0.28). Lowest: Cossa (-1.14), Keller (-0.53), Logan Cooley (-0.45).
-- **Season process vs. results.** Utah has 27 points vs. 32.4 expected from shot quality. Season expected goals are 87.3 for and 71.4 against.
+**Where Utah stands:** Utah is 11th in the power rankings (likely range 6th-22nd), up from 12th, in Tier 3. Its rating is +4.6 standings points per 84 games vs. an average team. The projection is 97 points, with an 80% range of 85-108. Playoff odds are 58%, down from 64%. Utah is 7th in the Central Division.
 
-**Where Utah stands:** Power rank 12th (previously 10th), likely range 5th-20th, Tier 3. The rating is +6.0 standings points per 84 games vs. an average team. The projection is 97 points, with an 80% range of 85-109. Playoff odds are 64%, down from 73%.
+**What to watch next:**
+- **Friday, Nov 27:** at Nashville (power rank 18th), a division game. Utah's win chance is 48%.
+- **Saturday, Nov 28:** at Dallas (8th), a division game. Both teams are on the second night of a back-to-back. Utah's win chance is 42%.
+- **Monday, Nov 30:** home vs. Montréal (13th). Utah's win chance is 55%.
 
-**What to watch next:** All three games are away and against Central Division opponents.
-- Wednesday, Nov 25, at the Minnesota Wild (power rank 4th): Utah win chance 40%.
-- Friday, Nov 27, at the Nashville Predators (22nd): Utah win chance 52%.
-- Saturday, Nov 28, at the Dallas Stars (5th):
+*Data note: MoneyPuck data through Nov 25; NHL results through Nov 25.*
