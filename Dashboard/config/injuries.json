@@ -8,13 +8,13 @@
    "teamName": "Anaheim Ducks",
    "name": "Leo Carlsson",
    "pos": "C",
-   "status": "Day-To-Day",
+   "status": "Injured Reserve",
    "ltir": false,
    "injury": "Upper Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-26",
-   "note": "day-to-day",
-   "detail": "day-to-day"
+   "returnDate": "2026-12-01",
+   "updated": "2026-11-27",
+   "note": "ir",
+   "detail": "ir"
   },
   {
    "team": "ANA",
@@ -24,7 +24,7 @@
    "status": "Injured Reserve",
    "ltir": true,
    "injury": "Knee",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-28",
    "updated": "2026-11-25",
    "note": "Poehling (knee) is expected back in the short term, with head coach Joel Quenneville telling reporters, \"He's close. Would love to see him in by the weekend. We'll see,\" Derek Lee of The Hockey News reports.",
    "detail": "Based on Quenneville's timeline, it seems like Poehling could be back in action against the Kings on either Friday or Saturday. In five games this year, the 27-year-old Minnesota native notched one goal and one assist. Whenever Poehling is given the all-clear, he figures to jump into a bottom-six role that includes time on the penalty kill."
@@ -50,10 +50,36 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Back",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-29",
    "updated": "2026-11-24",
    "note": "Hagens (back) is wearing a non-contact sweater ahead of Tuesday's practice, Steve Conroy of the Boston Herald reports.",
    "detail": "Considering Hagens hasn't been cleared for contact yet, fantasy managers probably shouldn't be expecting him back in the lineup versus the Jets on Wednesday. Still, the 20-year-old's return to practice, even in a limited capacity, is a step in the right direction, which should clear the way for Hagens to return sooner rather than later."
+  },
+  {
+   "team": "BUF",
+   "teamName": "Buffalo Sabres",
+   "name": "Noah Ostlund",
+   "pos": "C",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Undisclosed",
+   "returnDate": "2026-12-01",
+   "updated": "2026-11-27",
+   "note": "Ostlund (undisclosed) is expected to miss Friday's game against Pittsburgh, per Rachel Lenzi of The Buffalo News.",
+   "detail": "Ostlund has five goals and 15 points in 25 appearances in 2026-27. If Tyson Kozak (undisclosed) is also unavailable Friday, then Buffalo might dress 11 forwards and seven defensemen, which would result in Zach Metsa playing against the Penguins."
+  },
+  {
+   "team": "BUF",
+   "teamName": "Buffalo Sabres",
+   "name": "Zach Benson",
+   "pos": "LW",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-12-01",
+   "updated": "2026-11-27",
+   "note": "Benson (upper body) will not play in Friday's home clash against the Penguins, per Rachel Lenzi of The Buffalo News.",
+   "detail": "Benson will miss his first game of the 2026-27 campaign with an upper-body injury. The 21-year-old winger has begun to find his role offensively this season, as he's currently on a five-game point streak. Prior to being ruled out, he compiled five goals, 23 points, a plus-18 rating, 61 shots on net, 30 hits and 12 blocked shots over 25 appearances this season. In his absence, Josh Doan is expected to be elevated to the top line."
   },
   {
    "team": "BUF",
@@ -84,19 +110,6 @@
   {
    "team": "BUF",
    "teamName": "Buffalo Sabres",
-   "name": "Justin Danforth",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-12-01",
-   "updated": "2026-10-29",
-   "note": "Danforth (upper body) was placed on injured reserve Thursday, per the NHL media site.",
-   "detail": "Danforth's move to IR allowed the Sabres to activate Sam Carrick (middle body) ahead of Thursday's game versus the Ducks. Danforth remains without a clear timeline to return to action. He will miss his fourth straight game Thursday and will be eligible to return whenever ready, as long as he doesn't later end up on long-term injured reserve."
-  },
-  {
-   "team": "BUF",
-   "teamName": "Buffalo Sabres",
    "name": "Matt Grzelcyk",
    "pos": "D",
    "status": "Injured Reserve",
@@ -106,19 +119,6 @@
    "updated": "2026-10-13",
    "note": "Grzelcyk (lower body) suffered a \"flare-up\" and could be out for at least \"a few days,\" head coach Lindy Ruff told Rachel Lenzi of The Buffalo News on Tuesday.",
    "detail": "Buffalo placed Grzelcyk on injured reserve Tuesday. He hasn't played since Opening Night against Columbus on Oct. 1. With Rasmus Dahlin (upper body) and Grzelcyk unavailable, the Sabres recalled Dennis Gilbert from AHL Rochester to play against Montreal on Tuesday."
-  },
-  {
-   "team": "CGY",
-   "teamName": "Calgary Flames",
-   "name": "Morgan Frost",
-   "pos": "C",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-26",
-   "note": "day-to-day",
-   "detail": "day-to-day"
   },
   {
    "team": "CGY",
@@ -173,19 +173,6 @@
    "detail": "day-to-day"
   },
   {
-   "team": "CAR",
-   "teamName": "Carolina Hurricanes",
-   "name": "K'Andre Miller",
-   "pos": "D",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Illness",
-   "returnDate": "2026-11-28",
-   "updated": "2026-11-26",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
    "team": "CHI",
    "teamName": "Chicago Blackhawks",
    "name": "Tyler Bertuzzi",
@@ -232,7 +219,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Upper Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-30",
    "updated": "2026-11-21",
    "note": "Byram (upper body) didn't accompany his teammates on Chicago's three-game road trip, per Mark Lazerus of The Athletic on Saturday.",
    "detail": "Byram was previously ruled out for Saturday's matchup against Calgary, and he won't be available for Sunday's matchup against Vancouver. It's also doubtful that he will join the team for Wednesday's contest against Seattle. It remains unclear when he will be ready to return."
@@ -284,7 +271,7 @@
    "status": "Injured Reserve",
    "ltir": true,
    "injury": "Upper Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-12-08",
    "updated": "2026-10-23",
    "note": "ir-lt",
    "detail": "ir-lt"
@@ -400,7 +387,7 @@
    "pos": "C",
    "status": "Day-To-Day",
    "ltir": false,
-   "injury": "Lower Body",
+   "injury": "Knee",
    "returnDate": "2026-11-27",
    "updated": "2026-11-25",
    "note": "day-to-day",
@@ -604,6 +591,19 @@
   {
    "team": "NJ",
    "teamName": "New Jersey Devils",
+   "name": "Declan Chisholm",
+   "pos": "D",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Illness",
+   "returnDate": "2026-11-28",
+   "updated": "2026-11-27",
+   "note": "Chisholm (illness) is expected to miss Friday's game against Calgary, per Amanda Stein of the Devils' official site.",
+   "detail": "Chisholm has three goals and six points in 23 appearances in 2026-27. Anton Silaev, who was summoned from AHL Utica on Friday, is set to draw into the lineup versus Calgary as a result of Chisholm's absence."
+  },
+  {
+   "team": "NJ",
+   "teamName": "New Jersey Devils",
    "name": "Brenden Dillon",
    "pos": "D",
    "status": "Suspension",
@@ -660,11 +660,11 @@
    "pos": "C",
    "status": "Injured Reserve",
    "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-12-01",
-   "updated": "2026-11-24",
-   "note": "ir",
-   "detail": "ir"
+   "injury": "Knee",
+   "returnDate": "2027-06-01",
+   "updated": "2026-11-27",
+   "note": "Palmieri is expected to miss the next 6-8 months with a torn ACL and meniscus in his right knee, the team announced Friday.",
+   "detail": "Palmieri is done for the season based on that timetable. If the Islanders have a very deep playoff run, there might be a small chance of Palmieri participating towards the end of it, but even in that scenario, it's more likely that he won't play again until the 2027-28 campaign. The 35-year-old has four goals and nine points in 23 appearances this campaign. He has now finished with 25 or fewer games played in two straight regular seasons."
   },
   {
    "team": "NYI",
@@ -713,7 +713,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-28",
    "updated": "2026-11-24",
    "note": "Dorofeyev (lower body) will join the Rangers for their two-game road trip, Mollie Walker of the New York Post reports Tuesday.",
    "detail": "Dorofeyev's status against the Sabres and Blackhawks on Wednesday and Friday, respectively, remains up in the air, but the fact that he is making the trip is certainly a step in the right direction. The 26-year-old winger has notched four goals and four assists, including a trio of power-play points, in his last 11 outings. Once given the all-clear, Dorofeyev should reclaim a middle-six role with the Rangers."
@@ -793,32 +793,6 @@
    "injury": "Lower Body",
    "returnDate": "2027-01-25",
    "updated": "2026-09-29",
-   "note": "ir",
-   "detail": "ir"
-  },
-  {
-   "team": "OTT",
-   "teamName": "Ottawa Senators",
-   "name": "Andre Burakovsky",
-   "pos": "LW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-30",
-   "updated": "2026-11-25",
-   "note": "Burakovsky (lower body) will be with the Senators for their four-game road trip and is expected to play at some point, Bruce Garrioch of Postmedia reports Wednesday.",
-   "detail": "When exactly Burakovsky gets into the lineup isn't totally clear, but at least fantasy managers have a rough timeline to work with. In his eight outings this season, the 31-year-old winger has yet to register a point while producing just three shots, three hits and two PIM. Whenever Burakovsky does return, it figures to be in a bottom-six role."
-  },
-  {
-   "team": "OTT",
-   "teamName": "Ottawa Senators",
-   "name": "Hayden Hodgson",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Groin",
-   "returnDate": "2026-11-28",
-   "updated": "2026-11-24",
    "note": "ir",
    "detail": "ir"
   },
@@ -1051,7 +1025,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-12-02",
    "updated": "2026-11-24",
    "note": "ir",
    "detail": "ir"
@@ -1163,6 +1137,19 @@
   {
    "team": "TOR",
    "teamName": "Toronto Maple Leafs",
+   "name": "Dakota Joshua",
+   "pos": "C",
+   "status": "Out",
+   "ltir": false,
+   "injury": "Illness",
+   "returnDate": "2026-11-28",
+   "updated": "2026-11-27",
+   "note": "out",
+   "detail": "out"
+  },
+  {
+   "team": "TOR",
+   "teamName": "Toronto Maple Leafs",
    "name": "Jack Roslovic",
    "pos": "C",
    "status": "Out",
@@ -1172,32 +1159,6 @@
    "updated": "2026-11-26",
    "note": "Roslovic (upper body) is expected to miss Friday's road clash against the Bruins, per Mark Masters of TSN.",
    "detail": "Roslovic is in line to miss his second consecutive game after sustaining his upper-body injury in Saturday's 4-3 loss to the Blue Jackets. Prior to going down, the 29-year-old winger posted nine goals, 23 points, a plus-2 rating, 61 shots on net, 18 hits and 10 blocked shots over 24 appearances this season. If the Maple Leafs aren't able to activate either Kirill Marchenko (lower body) or Colton Sissons (lower body) from injured reserve prior to Friday's game, Toronto will likely have to call up an additional forward for the road test in Boston."
-  },
-  {
-   "team": "TOR",
-   "teamName": "Toronto Maple Leafs",
-   "name": "Kirill Marchenko",
-   "pos": "RW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-25",
-   "note": "Marchenko (lower body) is expected back in the lineup against the Bruins on Friday after telling reporters, \"My leg feels perfect and I'm ready to go,\" Mark Masters of TSN reports.",
-   "detail": "Marchenko will need to be activated off injured reserve prior to puck drop, but that appears to be a formality at this point. Prior to getting hurt, the Russian winger had tallied a point in 12 of 14 games this year, racking up a combined six games and eight assists, including eight power-play points. Marchenko should be back in a first-line role in addition to linking up with the No. 1 power-play unit."
-  },
-  {
-   "team": "TOR",
-   "teamName": "Toronto Maple Leafs",
-   "name": "Colton Sissons",
-   "pos": "C",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-22",
-   "note": "Sissons (lower body) is day-to-day, per David Alter of The Hockey News on Sunday.",
-   "detail": "Sissons still needs to be cleared for contact, but he will participate in Sunday's practice. He has missed the last six games, but he has been making progress in his recovery. Sissons has two goals, six points, 19 shots on net, 38 hits and 11 blocked shots in 19 appearances this season."
   },
   {
    "team": "TOR",
@@ -1220,7 +1181,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Upper Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-30",
    "updated": "2026-11-21",
    "note": "Blankenburg (upper body) is day-to-day, according to David Alter of The Hockey News on Saturday.",
    "detail": "Blankenburg is expected to participate in Saturday's morning skate, but it's unclear when he will be ready to return to the lineup. He is currently on injured reserve and hasn't played since Oct. 22. Blankenburg has one goal, six shots on net, six hits and two blocked shots in six appearances this campaign."
@@ -1389,7 +1350,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Lower Body",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-12-01",
    "updated": "2026-11-21",
    "note": "Gallagher (lower body) was placed on injured reserve Saturday.",
    "detail": "Gallagher will miss at least the next three games, starting with Saturday's matchup against Minnesota, but it's unclear when he will be ready to return. He has collected three assists, 26 shots on net, eight blocked shots and 32 hits in 21 appearances this campaign."
@@ -1449,15 +1410,15 @@
   {
    "team": "WSH",
    "teamName": "Washington Capitals",
-   "name": "Vincent Desharnais",
-   "pos": "D",
+   "name": "Jordan Kyrou",
+   "pos": "RW",
    "status": "Injured Reserve",
    "ltir": false,
-   "injury": "Abdomen",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-25",
-   "note": "Desharnais (appendectomy) is slated to miss Wednesday's game against the Flyers, Tarik El-Bashir of Monumental Sports Network reports.",
-   "detail": "Desharnais has been upgraded to day-to-day after fully participating in Tuesday's practice session, but he skated with the scratches during Wednesday's morning skate, signaling that he'll be unavailable for a 13th consecutive game. The 30-year-old's next opportunity to return to game action will be Friday against the Panthers."
+   "injury": "Upper Body",
+   "returnDate": "2026-12-01",
+   "updated": "2026-11-27",
+   "note": "Kyrou (upper body) was put on injured reserve Friday.",
+   "detail": "Kyrou has five goals and 14 points in 21 appearances this season. He hasn't played since last Saturday due to the injury. Kyrou is expected to resume serving in a middle-six capacity with power-play ice time once he's healthy."
   },
   {
    "team": "WSH",
@@ -1471,19 +1432,6 @@
    "updated": "2026-11-24",
    "note": "Sandin (knee) has been cleared to start taking contact, Sammi Silber of The District Standard reports Tuesday.",
    "detail": "Sandin still seems unlikely to suit up versus the Flyers on Wednesday, considering he has just started taking contact, but he hasn't been officially ruled out. IN 73 regular-season games last year, the 23-year-old blueliner notched five goals and 24 assists, just missing the 30-point threshold. Given his extended layoff, Sandin will face an uphill battle to get to 30 points this season as well."
-  },
-  {
-   "team": "WSH",
-   "teamName": "Washington Capitals",
-   "name": "Jordan Kyrou",
-   "pos": "RW",
-   "status": "Out",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-12-01",
-   "updated": "2026-11-23",
-   "note": "out",
-   "detail": "out"
   },
   {
    "team": "WPG",
@@ -1506,7 +1454,7 @@
    "status": "Injured Reserve",
    "ltir": false,
    "injury": "Undisclosed",
-   "returnDate": "2026-11-27",
+   "returnDate": "2026-11-30",
    "updated": "2026-11-17",
    "note": "ir",
    "detail": "ir"
@@ -1722,6 +1670,54 @@
    "pos": "D",
    "injury": "Undisclosed",
    "since": "2026-11-26"
+  },
+  {
+   "team": "BUF",
+   "teamName": "Buffalo Sabres",
+   "name": "Justin Danforth",
+   "pos": "RW",
+   "injury": "Upper Body",
+   "since": "2026-11-27"
+  },
+  {
+   "team": "OTT",
+   "teamName": "Ottawa Senators",
+   "name": "Andre Burakovsky",
+   "pos": "LW",
+   "injury": "Lower Body",
+   "since": "2026-11-27"
+  },
+  {
+   "team": "OTT",
+   "teamName": "Ottawa Senators",
+   "name": "Hayden Hodgson",
+   "pos": "RW",
+   "injury": "Groin",
+   "since": "2026-11-27"
+  },
+  {
+   "team": "TOR",
+   "teamName": "Toronto Maple Leafs",
+   "name": "Kirill Marchenko",
+   "pos": "RW",
+   "injury": "Lower Body",
+   "since": "2026-11-27"
+  },
+  {
+   "team": "TOR",
+   "teamName": "Toronto Maple Leafs",
+   "name": "Colton Sissons",
+   "pos": "C",
+   "injury": "Lower Body",
+   "since": "2026-11-27"
+  },
+  {
+   "team": "WSH",
+   "teamName": "Washington Capitals",
+   "name": "Vincent Desharnais",
+   "pos": "D",
+   "injury": "Abdomen",
+   "since": "2026-11-27"
   }
  ]
 }

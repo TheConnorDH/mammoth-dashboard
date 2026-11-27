@@ -916,6 +916,12 @@
     "number": 59
    },
    {
+    "playerId": "8485554",
+    "name": "Dillon Boucher",
+    "pos": "L",
+    "number": 36
+   },
+   {
     "playerId": "8477987",
     "name": "Ryan Donato",
     "pos": "C",
@@ -976,6 +982,12 @@
     "number": 91
    },
    {
+    "playerId": "8482172",
+    "name": "Landon Slaggert",
+    "pos": "L",
+    "number": 84
+   },
+   {
     "playerId": "8482062",
     "name": "Cole Smith",
     "pos": "R",
@@ -986,12 +998,6 @@
     "name": "Teuvo Teravainen",
     "pos": "C",
     "number": 86
-   },
-   {
-    "playerId": "8476952",
-    "name": "Dominic Toninato",
-    "pos": "C",
-    "number": 25
    },
    {
     "playerId": "8481524",
@@ -2314,12 +2320,6 @@
     "number": 81
    },
    {
-    "playerId": "8484177",
-    "name": "Lenni Hameenaho",
-    "pos": "R",
-    "number": 29
-   },
-   {
     "playerId": "8480002",
     "name": "Nico Hischier",
     "pos": "C",
@@ -2402,6 +2402,12 @@
     "name": "Jonas Siegenthaler",
     "pos": "D",
     "number": 71
+   },
+   {
+    "playerId": "8484987",
+    "name": "Anton Silaev",
+    "pos": "D",
+    "number": 52
    },
    {
     "playerId": "8474596",
@@ -2904,18 +2910,6 @@
     "number": 19
    },
    {
-    "playerId": "8478104",
-    "name": "Sammy Blais",
-    "pos": "L",
-    "number": 79
-   },
-   {
-    "playerId": "8482674",
-    "name": "Tyler Boucher",
-    "pos": "R",
-    "number": 54
-   },
-   {
     "playerId": "8477444",
     "name": "Andre Burakovsky",
     "pos": "L",
@@ -3194,6 +3188,12 @@
     "name": "Justin Brazeau",
     "pos": "R",
     "number": 16
+   },
+   {
+    "playerId": "8483833",
+    "name": "Atley Calvert",
+    "pos": "C",
+    "number": 84
    },
    {
     "playerId": "8482475",
@@ -4852,12 +4852,6 @@
     "name": "Martin Fehérváry",
     "pos": "D",
     "number": 42
-   },
-   {
-    "playerId": "8475718",
-    "name": "Justin Holl",
-    "pos": "D",
-    "number": 4
    },
    {
     "playerId": "8484873",
