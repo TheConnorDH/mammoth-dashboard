@@ -994,41 +994,28 @@
   {
    "team": "STL",
    "teamName": "St. Louis Blues",
+   "name": "Jimmy Snuggerud",
+   "pos": "RW",
+   "status": "Injured Reserve",
+   "ltir": false,
+   "injury": "Upper Body",
+   "returnDate": "2026-12-02",
+   "updated": "2026-11-27",
+   "note": "ir",
+   "detail": "ir"
+  },
+  {
+   "team": "STL",
+   "teamName": "St. Louis Blues",
    "name": "Pavel Buchnevich",
    "pos": "LW",
    "status": "Day-To-Day",
    "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-27",
+   "injury": "",
+   "returnDate": null,
    "updated": "2026-11-26",
    "note": "day-to-day",
    "detail": "day-to-day"
-  },
-  {
-   "team": "STL",
-   "teamName": "St. Louis Blues",
-   "name": "Jimmy Snuggerud",
-   "pos": "RW",
-   "status": "Day-To-Day",
-   "ltir": false,
-   "injury": "Upper Body",
-   "returnDate": "2026-11-27",
-   "updated": "2026-11-26",
-   "note": "day-to-day",
-   "detail": "day-to-day"
-  },
-  {
-   "team": "STL",
-   "teamName": "St. Louis Blues",
-   "name": "Connor McMichael",
-   "pos": "LW",
-   "status": "Injured Reserve",
-   "ltir": false,
-   "injury": "Lower Body",
-   "returnDate": "2026-12-02",
-   "updated": "2026-11-24",
-   "note": "ir",
-   "detail": "ir"
   },
   {
    "team": "STL",
@@ -1717,6 +1704,14 @@
    "name": "Vincent Desharnais",
    "pos": "D",
    "injury": "Abdomen",
+   "since": "2026-11-27"
+  },
+  {
+   "team": "STL",
+   "teamName": "St. Louis Blues",
+   "name": "Connor McMichael",
+   "pos": "LW",
+   "injury": "Lower Body",
    "since": "2026-11-27"
   }
  ]
