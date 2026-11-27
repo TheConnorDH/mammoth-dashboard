@@ -1,5 +1,5 @@
 {
- "fetched": "2026-11-26",
+ "fetched": "2026-11-27",
  "source": "ESPN injuries feed",
  "ok": true,
  "players": [
@@ -242,13 +242,13 @@
    "teamName": "Colorado Avalanche",
    "name": "Gavin Brindley",
    "pos": "C",
-   "status": "Out",
+   "status": "Injured Reserve",
    "ltir": false,
    "injury": "Concussion",
-   "returnDate": "2026-12-01",
-   "updated": "2026-11-21",
-   "note": "out",
-   "detail": "out"
+   "returnDate": "2026-12-08",
+   "updated": "2026-11-27",
+   "note": "ir",
+   "detail": "ir"
   },
   {
    "team": "COL",

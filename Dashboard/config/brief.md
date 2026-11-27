@@ -1,18 +1,20 @@
-## Utah beats Minnesota 4-3 in a game the chances had slightly in Minnesota's favor
+## Utah beats Minnesota 4-3 in a game where chance quality was close
 
-Utah (13-10-3, 29 points, one-game win streak) won 4-3 at Minnesota on Nov 25. Shots on goal were Utah 21, Minnesota 25. Expected goals were Utah 2.0 and Minnesota 2.2, and at 5v5 they were Utah 1.5 and Minnesota 1.6. Utah had 9 dangerous shots (10% or higher chance) to Minnesota's 7. Replaying every shot by its quality, Utah wins this game 46% of the time.
+Utah hasn't played since Nov 25, when it won 4-3 away against the Minnesota Wild. The win moves the Mammoth to 13-10-3 with 29 points after 26 games, a streak of W1, and 7th place in the Central Division. Minnesota had more shots on goal (25 to 21) and slightly higher expected goals (2.2 to 2.0). Utah had more dangerous shots, 9 to 7. Replaying every shot by its quality, Utah wins 46% of the time.
 
 What the numbers showed:
-- **Scoring.** Dylan Guenther (1G 1A), Lawson Crouse (1G), Logan Cooley (1G 1A) and Dmitri Simashev (1G) scored. Vincent Trocheck, Daniil But, Anders Lee, Andrew Peeke and Mikhail Sergachev each had an assist.
-- **Goaltending.** Karel Vejmelka started and made 22 saves on 25 shots. The packet has no goaltending-versus-expected figure for this game.
-- **Special teams.** Each team scored one power-play goal. Utah's came from Cooley.
+
+- **Chance quality.** At 5v5, expected goals were Utah 1.5 and Minnesota 1.6, so the game was close at even strength.
+- **Goaltending.** Karel Vejmelka started and made 22 saves on 25 shots. The packet has no goalie-versus-expected figure for this game.
+- **Special teams.** Each team scored one power-play goal. Logan Cooley's goal for Utah came on the power play.
+- **Scoring.** Dylan Guenther (1G 1A), Lawson Crouse (1G), Cooley (1G 1A) and Dmitri Simashev (1G) scored for Utah.
 - **Season process vs. results.** Utah has 29 points against 33.5 expected from shot quality. Season expected goals are 89.3 for and 73.6 against.
 
-**Where Utah stands:** Power rank 11th (likely range 6th-22nd), up from 12th, in Tier 3. The rating is +4.6 standings points per 84 games vs. an average team. Utah projects to 97 points (80% range 85-109). Playoff odds are 59%, down from 64%. Utah is 7th in the Central.
+**Where Utah stands:** Utah is 11th in the power rankings (likely range 6th-22nd), up from 12th, in Tier 3. Its rating is +4.6 standings points per 84 games vs. an average team. The projection is 97 points, with an 80% range of 85-109. Playoff odds are 59%, down from 64%.
 
 **What to watch next:**
-- Fri, Nov 27 at Nashville (18th in power rank): Utah win chance 49%. Division game.
-- Sat, Nov 28 at Dallas (8th): Utah win chance 42%. Division game, and the second night of a back-to-back for both Utah and Dallas.
-- Mon, Nov 30 vs. Montréal (13th): Utah win chance 56%.
+- **Friday, Nov 27:** at the Nashville Predators (power rank 18th), a Central Division game. Utah's win chance is 49%.
+- **Saturday, Nov 28:** at the Dallas Stars (8th), a Central Division game. It is the second night of a back-to-back for both teams. Utah's win chance is 42%.
+- **Monday, Nov 30:** home against the Montréal Canadiens (13th). Utah's win chance is 56%.
 
 *Data note: MoneyPuck data through Nov 25; NHL results through Nov 25.*
